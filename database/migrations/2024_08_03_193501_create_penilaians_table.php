@@ -13,11 +13,8 @@ return new class extends Migration
     {
         Schema::create('penilaians', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('guide_id'); // Foreign key ke tabel guides
+            $table->string('nama_kandidat');
             $table->timestamps();
-
-            // Foreign key constraint
-            $table->foreign('guide_id')->references('id')->on('guides')->onDelete('cascade');
         });
     }
 
