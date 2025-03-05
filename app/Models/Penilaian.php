@@ -9,13 +9,16 @@ class Penilaian extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'nama_kandidat',
-    ];
+    protected $fillable = ['guide_id']; // Pastikan ada guide_id
 
     // Relasi dengan `DetailPenilaian`
     public function detailPenilaians()
     {
         return $this->hasMany(DetailPenilaian::class);
     }
+
+    public function guide()
+{
+    return $this->belongsTo(Guide::class, 'guide_id');
+}
 }

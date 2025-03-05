@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('id');
             $table->string('nama_guide', 100);
             $table->decimal('salary', 10, 2);
-            $table->unsignedBigInteger('kriteria_id')->nullable(); //tidak usah di isi pada saat create tapi ditampilkan saja kriteria nya
+            // $table->unsignedBigInteger('kriteria_id')->nullable(); //tidak usah di isi pada saat create tapi ditampilkan saja kriteria nya
             $table->text('deskripsi_guide')->nullable();
             $table->string('nomer_hp', 20);
             $table->boolean('status')->default(1);
@@ -26,7 +26,7 @@ return new class extends Migration
             $table->timestamps();
 
             // Foreign key constraint
-            $table->foreign('kriteria_id')->references('id')->on('kriterias')->onDelete('cascade');
+            // $table->foreign('kriteria_id')->references('id')->on('kriterias')->onDelete('cascade');
         });
     }
 

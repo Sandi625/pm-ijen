@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use App\Models\Guide;
 use App\Models\Kriteria;
 use App\Models\Penilaian;
-use App\Services\ProfileMatchingService;
-use Barryvdh\DomPDF\Facade\Pdf;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Collection;
+use App\Services\ProfileMatchingService;
 
 class PenilaianController extends Controller
 {
@@ -21,47 +23,52 @@ class PenilaianController extends Controller
 
     public function index()
     {
-        $penilaians = Penilaian::all();
+        $penilaians = Penilaian::with('guide')->get(); // Pastikan relasi di-load
         return view('penilaian.index', compact('penilaians'));
     }
 
+
+
     public function create()
-    {
-        $kriterias = Kriteria::with('subkriterias')->get();
-        return view('penilaian.create', compact('kriterias'));
-    }
+{
+    $kriterias = Kriteria::with('subkriterias')->get();
+    $guides = Guide::all(); // Ambil semua guide dari database
+    return view('penilaian.create', compact('kriterias', 'guides'));
+}
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'nama_kandidat' => 'required',
-            'nilai' => 'required|array',
-            'nilai.*' => 'required|integer|min:1|max:5',
+public function store(Request $request)
+{
+    // dd($request->all()); // Debugging, cek apakah guide_id terkirim
+
+    $request->validate([
+        'guide_id' => 'required|exists:guides,id',
+        'nilai' => 'required|array',
+        'nilai.*' => 'required|integer|min:1|max:5',
+    ]);
+
+    $penilaian = Penilaian::create([
+        'guide_id' => $request->guide_id,
+    ]);
+
+    foreach ($request->nilai as $subkriteriaId => $nilai) {
+        $penilaian->detailPenilaians()->create([
+            'subkriteria_id' => $subkriteriaId,
+            'nilai' => $nilai,
         ]);
-
-        $penilaian = Penilaian::create([
-            'nama_kandidat' => $request->nama_kandidat,
-        ]);
-
-        foreach ($request->nilai as $subkriteriaId => $nilai) {
-            $penilaian->detailPenilaians()->create([
-                'subkriteria_id' => $subkriteriaId,
-                'nilai' => $nilai,
-            ]);
-        }
-
-        return redirect()->route('penilaian.index')->with('success', 'Penilaian berhasil ditambahkan.');
     }
 
-    public function show(Penilaian $penilaian)
-    {
-        $penilaian->load('detailPenilaians.subkriteria.kriteria');
-        $hasil = $this->hitungProfileMatching($penilaian);
+    return redirect()->route('penilaian.index')->with('success', 'Penilaian berhasil ditambahkan.');
+}
 
-       
 
-        return view('penilaian.show', compact('penilaian','hasil',));
-    }
+public function show(Penilaian $penilaian)
+{
+    $penilaian->load(['guide', 'detailPenilaians.subkriteria.kriteria']); // Tambahkan 'guide'
+    $hasil = $this->hitungProfileMatching($penilaian);
+
+    return view('penilaian.show', compact('penilaian', 'hasil'));
+}
+
 
     private function hitungProfileMatching(Penilaian $penilaian)
 {
@@ -86,7 +93,7 @@ class PenilaianController extends Controller
 
         $faktorKey = $subkriteria->is_core_factor ? 'core_factor' : 'secondary_factor';
         $hasilPerhitungan[$kriteria->id][$faktorKey][] = $bobotNilai;
-        
+
         $hasilPerhitungan[$kriteria->id]['detail'][] = [
             'subkriteria_id' => $subkriteria->id,
             'nama_subkriteria' => $subkriteria->nama,
@@ -101,9 +108,9 @@ class PenilaianController extends Controller
     foreach ($hasilPerhitungan as $kriteriaId => $hasil) {
         $nilaiCoreFactor = !empty($hasil['core_factor']) ? array_sum($hasil['core_factor']) / count($hasil['core_factor']) : 0;
         $nilaiSecondaryFactor = !empty($hasil['secondary_factor']) ? array_sum($hasil['secondary_factor']) / count($hasil['secondary_factor']) : 0;
-        
+
         $nilaiTotalKriteria[$kriteriaId] = $this->profileMatchingService->hitungNilaiTotalKriteria($nilaiCoreFactor, $nilaiSecondaryFactor);
-        
+
         $hasilPerhitungan[$kriteriaId]['nilai_cf'] = $nilaiCoreFactor;
         $hasilPerhitungan[$kriteriaId]['nilai_sf'] = $nilaiSecondaryFactor;
         $hasilPerhitungan[$kriteriaId]['nilai_total'] = $nilaiTotalKriteria[$kriteriaId];
@@ -111,7 +118,7 @@ class PenilaianController extends Controller
 
     $nilaiAkhir = $this->profileMatchingService->hitungNilaiAkhir($nilaiTotalKriteria);
 
-    
+
 
     return [
         'detail' => $hasilPerhitungan,
@@ -119,24 +126,26 @@ class PenilaianController extends Controller
     ];
 }
 
-    public function edit(Penilaian $penilaian)
-    {
-        $kriterias = Kriteria::with('subkriterias')->get();
-        $penilaian->load('detailPenilaians');
-        return view('penilaian.edit', compact('penilaian', 'kriterias'));
-    }
+public function edit(Penilaian $penilaian)
+{
+    $kriterias = Kriteria::with('subkriterias')->get();
+    $guides = Guide::all(); // Ambil daftar guide
+    $penilaian->load('detailPenilaians', 'guide'); // Tambahkan relasi guide
+    return view('penilaian.edit', compact('penilaian', 'kriterias', 'guides'));
+}
+
 
     public function update(Request $request, Penilaian $penilaian)
     {
         $request->validate([
-            'nama_kandidat' => 'required',
+            // 'nama_kandidat' => 'required',
             'nilai' => 'required|array',
             'nilai.*' => 'required|integer|min:1|max:5',
         ]);
 
-        $penilaian->update([
-            'nama_kandidat' => $request->nama_kandidat,
-        ]);
+        // $penilaian->update([
+        //     'nama_kandidat' => $request->nama_kandidat,
+        // ]);
 
         foreach ($request->nilai as $subkriteriaId => $nilai) {
             $penilaian->detailPenilaians()->updateOrCreate(
@@ -155,59 +164,62 @@ class PenilaianController extends Controller
     }
 
     public function all()
-    {
-        $penilaians = Penilaian::with('detailPenilaians.subkriteria.kriteria')->get();
-        $kriterias = Kriteria::with('subkriterias')->get();
+{
+    $penilaians = Penilaian::with(['detailPenilaians.subkriteria.kriteria', 'guide'])->get(); // Tambah guide
+    $kriterias = Kriteria::with('subkriterias')->get();
 
-        $hasilPenilaians = $penilaians->map(function ($penilaian) {
-            return [
-                'penilaian' => $penilaian,
-                'hasil' => $this->hitungProfileMatching($penilaian)
-            ];
-        });
+    $hasilPenilaians = $penilaians->map(function ($penilaian) {
+        return [
+            'penilaian' => $penilaian,
+            'hasil' => $this->hitungProfileMatching($penilaian)
+        ];
+    });
 
-        $hasilPerKriteria = $this->groupHasilByKriteria($hasilPenilaians, $kriterias);
+    $hasilPerKriteria = $this->groupHasilByKriteria($hasilPenilaians, $kriterias);
 
-        $rankingKandidat = $hasilPenilaians->sortByDesc(function ($item) {
-            return $item['hasil']['nilai_akhir'];
-        })->values();
+    $rankingKandidat = $hasilPenilaians->sortByDesc(function ($item) {
+        return $item['hasil']['nilai_akhir'];
+    })->values();
 
-        return view('penilaian.all', compact('hasilPerKriteria', 'rankingKandidat', 'kriterias'));
-    }
+    return view('penilaian.all', compact('hasilPerKriteria', 'rankingKandidat', 'kriterias'));
+}
+
 
     private function groupHasilByKriteria(Collection $hasilPenilaians, Collection $kriterias)
-{
-    $hasilPerKriteria = [];
+    {
+        $hasilPerKriteria = [];
 
-    foreach ($kriterias as $kriteria) {
-        $hasilPerKriteria[$kriteria->id] = [
-            'nama_kriteria' => $kriteria->nama,
-            'subkriterias' => $kriteria->subkriterias,
-            'kandidat_results' => []
-        ];
+        foreach ($kriterias as $kriteria) {
+            $hasilPerKriteria[$kriteria->id] = [
+                'nama_kriteria' => $kriteria->nama,
+                'subkriterias' => $kriteria->subkriterias,
+                'kandidat_results' => []
+            ];
 
-        foreach ($hasilPenilaians as $hasil) {
-            $kriteriaResult = $hasil['hasil']['detail'][$kriteria->id] ?? null;
-            if ($kriteriaResult) {
-                $hasilPerKriteria[$kriteria->id]['kandidat_results'][] = [
-                    'nama_kandidat' => $hasil['penilaian']->nama_kandidat,
-                    'nilai_cf' => $kriteriaResult['nilai_cf'],
-                    'nilai_sf' => $kriteriaResult['nilai_sf'],
-                    'nilai_total' => $kriteriaResult['nilai_total'],
-                    'detail' => $kriteriaResult['detail']
-                ];
+            foreach ($hasilPenilaians as $hasil) {
+                $kriteriaResult = $hasil['hasil']['detail'][$kriteria->id] ?? null;
+                if ($kriteriaResult) {
+                    $hasilPerKriteria[$kriteria->id]['kandidat_results'][] = [
+                        'nama_guide' => $hasil['penilaian']->guide->nama_guide ?? 'Tidak Diketahui', // Ubah di sini
+                        'nilai_cf' => $kriteriaResult['nilai_cf'],
+                        'nilai_sf' => $kriteriaResult['nilai_sf'],
+                        'nilai_total' => $kriteriaResult['nilai_total'],
+                        'detail' => $kriteriaResult['detail']
+                    ];
+                }
             }
         }
+
+        return $hasilPerKriteria;
     }
 
-    return $hasilPerKriteria;
-}
+
 
 public function generateCandidatesReport()
 {
     // Retrieve all candidates from the penilaian table
     $penilaians = Penilaian::with('detailPenilaians.subkriteria.kriteria')->get();
-        
+
     $hasilPenilaians = $penilaians->map(function ($penilaian) {
             return [
                 'penilaian' => $penilaian,
@@ -217,7 +229,7 @@ public function generateCandidatesReport()
 
     $rankingKandidat = $hasilPenilaians->sortByDesc(function ($item) {
             return $item['hasil']['nilai_akhir'];
-        })->values();    
+        })->values();
 
     // Generate filename based on current date and time
     $filename = 'laporan_kandidat_' . Carbon::now()->format('d-m-Y_His') . '.pdf';

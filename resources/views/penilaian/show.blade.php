@@ -3,10 +3,10 @@
 
 @section('content')
 <div class="container mx-auto mt-8">
-    <h1 class="text-2xl font-bold mb-4">Detail Penilaian: {{ $penilaian->nama_kandidat }}</h1>
-    
+    <h1 class="text-2xl font-bold mb-4">Detail Penilaian: {{ optional($penilaian->guide)->nama_guide ?? 'Tidak Diketahui' }}</h1>
+
     <h2 class="text-xl font-bold mt-4 mb-2">Hasil Perhitungan Profile Matching</h2>
-    
+
     @foreach($hasil['detail'] as $kriteriaId => $detailKriteria)
         <h3 class="text-lg font-semibold mt-3">{{ $detailKriteria['nama'] }}</h3>
         <p>Nilai Core Factor: {{ number_format($detailKriteria['nilai_cf'], 2) }}</p>

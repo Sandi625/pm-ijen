@@ -35,7 +35,7 @@
                         @foreach($kriteriaData['kandidat_results'] as $index => $kandidatResult)
                             <tr>
                                 <td class="border border-gray-300 px-4 py-2">{{ $index + 1 }}</td>
-                                <td class="border border-gray-300 px-4 py-2">{{ $kandidatResult['nama_kandidat'] }}</td>
+                                <td class="border border-gray-300 px-4 py-2">{{ $kandidatResult['nama_guide'] }}</td>
                                 <td class="border border-gray-300 px-4 py-2">{{ $kriteriaData['nama_kriteria'] }}</td>
                                 @foreach($kriteriaData['subkriterias'] as $subkriteria)
                                     @php
@@ -56,7 +56,7 @@
                         @foreach($kriteriaData['kandidat_results'] as $index => $kandidatResult)
                             <tr>
                                 <td class="border border-gray-300 px-4 py-2">{{ $index + 1 }}</td>
-                                <td class="border border-gray-300 px-4 py-2">{{ $kandidatResult['nama_kandidat'] }}</td>
+                                <td class="border border-gray-300 px-4 py-2">{{ $kandidatResult['nama_guide'] }}</td>
                                 <td class="border border-gray-300 px-4 py-2">{{ $kriteriaData['nama_kriteria'] }}</td>
                                 @foreach($kriteriaData['subkriterias'] as $subkriteria)
                                     @php
@@ -69,6 +69,7 @@
                             </tr>
                         @endforeach
                     </tbody>
+
                 </table>
             </div>
 
@@ -90,7 +91,7 @@
                         @foreach($kriteriaData['kandidat_results'] as $index => $kandidatResult)
                             <tr>
                                 <td class="border border-gray-300 px-4 py-2">{{ $index + 1 }}</td>
-                                <td class="border border-gray-300 px-4 py-2">{{ $kandidatResult['nama_kandidat'] }}</td>
+                                <td class="border border-gray-300 px-4 py-2">{{ $kandidatResult['nama_guide'] }}</td>
                                 <td class="border border-gray-300 px-4 py-2">{{ $kriteriaData['nama_kriteria'] }}</td>
 
                                 @php
@@ -140,7 +141,7 @@
                         @foreach($kriteriaData['kandidat_results'] as $index => $kandidatResult)
                             <tr>
                                 <td class="border border-gray-300 px-4 py-2">{{ $index + 1 }}</td>
-                                <td class="border border-gray-300 px-4 py-2">{{ $kandidatResult['nama_kandidat'] }}</td>
+                                <td class="border border-gray-300 px-4 py-2">{{ $kandidatResult['nama_guide'] }}</td>
                                 @foreach($kriteriaData['subkriterias'] as $subkriteria)
                                     @php
                                         $subkriteriaResult = collect($kandidatResult['detail'])->firstWhere('subkriteria_id', $subkriteria->id);
@@ -178,7 +179,7 @@
                         @foreach($kriteriaData['kandidat_results'] as $index => $kandidatResult)
                             <tr>
                                 <td class="border border-gray-300 px-4 py-2">{{ $index + 1 }}</td>
-                                <td class="border border-gray-300 px-4 py-2">{{ $kandidatResult['nama_kandidat'] }}</td>
+                                <td class="border border-gray-300 px-4 py-2">{{ $kandidatResult['nama_guide'] }}</td>
                                 <td class="border border-gray-300 px-4 py-2">{{ number_format($kandidatResult['nilai_cf'], 2) }}</td>
                                 <td class="border border-gray-300 px-4 py-2">{{ number_format($kandidatResult['nilai_sf'], 2) }}</td>
                                 <td class="border border-gray-300 px-4 py-2">{{ number_format($kandidatResult['nilai_total'], 2) }}</td>
@@ -208,7 +209,7 @@
                 @endphp
                 <tr>
                     <td class="border border-gray-300 px-4 py-2">{{ $index + 1 }}</td>
-                    <td class="border border-gray-300 px-4 py-2">{{ $item['penilaian']->nama_kandidat }}</td>
+                    <td class="border border-gray-300 px-4 py-2">{{ $item['penilaian']->guide->nama_guide ?? '-' }}</td>
                     <td class="border border-gray-300 px-4 py-2">{{ number_format($item['hasil']['nilai_akhir'], 2) }}</td>
                     <td class="border border-gray-300 px-4 py-2 {{ $keputusanClass }}">
                         {{ $index === 0 ? 'Diterima' : 'Ditolak' }}

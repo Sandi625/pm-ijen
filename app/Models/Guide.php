@@ -16,5 +16,10 @@ class Guide extends Model
         'nama_guide', 'salary', 'kriteria_id', 'deskripsi_guide',
         'nomer_hp', 'status', 'alamat', 'email', 'foto', 'bahasa'
     ];
+
+    public function penilaians()
+    {
+        return $this->hasMany(Penilaian::class, 'guide_id');
+    }
 }
 
