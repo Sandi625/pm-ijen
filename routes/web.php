@@ -1,14 +1,15 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\GuideController;
-use App\Http\Controllers\PenilaianController;
-use App\Http\Controllers\SubKriteriaController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\GuideController;
+use App\Http\Controllers\PaketController;
+use App\Http\Controllers\PesananController;
 use App\Http\Controllers\KriteriaController;
 
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PenilaianController;
+use App\Http\Controllers\SubKriteriaController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -40,5 +41,12 @@ route::get('/pdf/penilaian/rejected', [PenilaianController::class, 'generatePeni
 // Guide route
 
 Route::resource('guide', GuideController::class);
+
+// Paket
+Route::resource('paket', PaketController::class);
+
+// Pesanan
+Route::resource('pesanan', PesananController::class);
+
 
 

@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('pesanans', function (Blueprint $table) {
             $table->id('id');
+            $table->string('nama', 150); // Menambahkan kolom nama
+            $table->string('email', 150)->unique(); // Menambahkan kolom email
+            $table->string('nomor_telp', 20); // Menambahkan kolom nomor telepon
             $table->unsignedBigInteger('id_kriteria');
             $table->unsignedBigInteger('id_paket');
             $table->date('tanggal_pesan');

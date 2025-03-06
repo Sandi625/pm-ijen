@@ -41,7 +41,7 @@
             <tbody>
                 @foreach($recentPenilaians as $penilaian)
                     <tr>
-                        <td class="border border-gray-300 px-4 py-2">{{ $penilaian->nama_kandidat }}</td>
+                        <td class="border border-gray-300 px-4 py-2">{{ $penilaian->guide->nama_guide ?? '-' }}</td>
                         <td class="border border-gray-300 px-4 py-2">{{ $penilaian->created_at->format('d-m-Y') }}</td>
                         <td class="border border-gray-300 px-4 py-2">
                             <a href="{{ route('penilaian.show', $penilaian) }}" class="inline-block text-blue-500 hover:text-blue-700">

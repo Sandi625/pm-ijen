@@ -30,6 +30,8 @@
                     <a href="{{url('/penilaian')}}" class="py-2 px-2 font-medium text-gray-500 rounded hover:bg-gray-200 transition duration-300">Penilaian</a>
                     <a href="{{url('/penilaian/all')}}" class="py-2 px-2 font-medium text-gray-500 rounded hover:bg-gray-200 transition duration-300">Hasil Penilaian</a>
                     <a href="{{url('/guide')}}" class="py-2 px-2 font-medium text-gray-500 rounded hover:bg-gray-200 transition duration-300">Guide</a>
+                    <a href="{{url('/paket')}}" class="py-2 px-2 font-medium text-gray-500 rounded hover:bg-gray-200 transition duration-300">Paket</a>
+                    <a href="{{url('/pesanan')}}" class="py-2 px-2 font-medium text-gray-500 rounded hover:bg-gray-200 transition duration-300">Pesanan</a>
 
                 </div>
                 @endauth
