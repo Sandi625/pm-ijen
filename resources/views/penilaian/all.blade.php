@@ -13,6 +13,8 @@
         <a href="{{ route('penilaian.pdf.rejected') }}" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
             Cetak Penilaian Ditolak
         </a>
+        <a href="{{ route('penilaian.index') }}" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Kembali</a>
+
     </div>
     @foreach($hasilPerKriteria as $kriteriaId => $kriteriaData)
         <div class="mb-12">
@@ -215,6 +217,8 @@
                         {{ $index === 0 ? 'Diterima' : 'Ditolak' }}
                     </td>
                 </tr>
+
+
             @endforeach
         </tbody>
     </table>

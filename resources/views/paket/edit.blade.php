@@ -76,12 +76,15 @@
             </div>
 
             <!-- Tombol Simpan -->
-            <div class="flex justify-end">
-                <button type="submit"
-                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">
+            <div class="flex justify-end space-x-2">
+                <a href="{{ route('paket.index') }}" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg">
+                    Kembali
+                </a>
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">
                     Simpan Perubahan
                 </button>
             </div>
+
 
         </form>
     </div>

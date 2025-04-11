@@ -16,7 +16,7 @@
                 <!-- Logo -->
                 <div class="flex items-center">
                 <a href="{{ Auth::check() ? route('dashboard') : url('/') }}" class="flex items-center py-4 px-2">
-                    <i class="fas fa-user-md text-green-500 text-2xl mr-2"></i>
+                    <i class=""></i>
                     <span class="font-semibold text-gray-500 text-lg">SPK Profile Matching </span>
                 </a>
                 </div>
@@ -24,7 +24,7 @@
 
                 @auth
                 <!-- Menu Items -->
-                <div class="flex items-center space-x-4">
+                {{-- <div class="flex items-center space-x-4">
                     <a href="{{url('/kriteria')}}" class="py-2 px-2 font-medium text-gray-500 rounded hover:bg-gray-200 transition duration-300">Kriteria</a>
                     <a href="{{url('/subkriteria')}}" class="py-2 px-2 font-medium text-gray-500 rounded hover:bg-gray-200 transition duration-300">Sub Kriteria</a>
                     <a href="{{url('/penilaian')}}" class="py-2 px-2 font-medium text-gray-500 rounded hover:bg-gray-200 transition duration-300">Penilaian</a>
@@ -33,7 +33,7 @@
                     <a href="{{url('/paket')}}" class="py-2 px-2 font-medium text-gray-500 rounded hover:bg-gray-200 transition duration-300">Paket</a>
                     <a href="{{url('/pesanan')}}" class="py-2 px-2 font-medium text-gray-500 rounded hover:bg-gray-200 transition duration-300">Pesanan</a>
 
-                </div>
+                </div> --}}
                 @endauth
 
 

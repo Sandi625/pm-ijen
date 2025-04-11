@@ -19,7 +19,7 @@ class PenilaiansSeeder extends Seeder
             ],
             [
                 'id' => 3,
-                'nama_kandidat' => 'Nur',
+                'nama_kandidat' => 'Agung',
                 'created_at' => Carbon::parse('2024-08-03 07:53:01'),
                 'updated_at' => Carbon::parse('2024-08-03 07:53:01'),
             ],

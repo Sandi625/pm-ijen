@@ -1,66 +1,97 @@
-@extends('layouts.app')
+@extends('layouts.base')
 
-@section('title', 'Daftar Kriteria')
+@section('title', 'Daftar Guide')
 
 @section('content')
-<div class="container mx-auto mt-8 px-4">
-    <div class="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4">
+<div class="container-fluid min-vh-100 d-flex flex-column">
+    <div class="bg-white shadow-md rounded-lg p-4 flex-grow-1 d-flex flex-column">
         <h1 class="text-3xl font-bold mb-4 text-gray-800">Daftar Guide</h1>
 
         @if(session('success'))
-            <div class="bg-green-100 text-green-700 p-4 rounded mb-4">
+            <div class="alert alert-success">
                 {{ session('success') }}
             </div>
         @endif
 
-        <a href="{{ route('guide.create') }}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mb-4 inline-block">Tambah Guide</a>
+        <div class="text-start mb-4">
+            <a href="{{ route('guide.create') }}" class="btn btn-success">
+                <i class="fa-solid fa-plus"></i> Tambah Guide
+            </a>
+        </div>
 
-        <table class="min-w-full bg-white border border-gray-200">
-            <thead>
-                <tr>
-                    <th class="py-2 px-4 border-b">NO</th>
-                    <th class="py-2 px-4 border-b">Nama Guide</th>
-                    <th class="py-2 px-4 border-b">Salary</th>
-                    <th class="py-2 px-4 border-b">Kriteria</th>
-                    <th class="py-2 px-4 border-b">Deskripsi</th>
-                    <th class="py-2 px-4 border-b">Nomor HP</th>
-                    <th class="py-2 px-4 border-b">Status</th>
-                    <th class="py-2 px-4 border-b">Alamat</th>
-                    <th class="py-2 px-4 border-b">Email</th>
-                    <th class="py-2 px-4 border-b">Bahasa</th>
-                    <th class="py-2 px-4 border-b">Aksi</th>
-                </tr>
-            </thead>
-            <tbody class="text-center">
-                @foreach ($guides as $index => $guide)
+        <div class="overflow-auto flex-grow-1">
+            <table class="table table-bordered w-100">
+                <thead class="table-light">
                     <tr>
-                        <td class="py-2 px-4 border-b">{{ $index + 1 }}</td>
-                        <td class="py-2 px-4 border-b">{{ $guide->nama_guide }}</td>
-                        <td class="py-2 px-4 border-b">Rp {{ number_format($guide->salary, 2, ',', '.') }}</td>
-                        <td class="py-2 px-4 border-b">{{ $guide->kriteria->nama_kriteria ?? '-' }}</td>
-                        <td class="py-2 px-4 border-b">{{ $guide->deskripsi_guide ?? '-' }}</td>
-                        <td class="py-2 px-4 border-b">{{ $guide->nomer_hp }}</td>
-                        <td class="py-2 px-4 border-b">
-                            <span class="{{ $guide->status ? 'text-green-500' : 'text-red-500' }}">
-                                {{ $guide->status ? 'Aktif' : 'Nonaktif' }}
-                            </span>
-                        </td>
-                        <td class="py-2 px-4 border-b">{{ $guide->alamat ?? '-' }}</td>
-                        <td class="py-2 px-4 border-b">{{ $guide->email }}</td>
-                        <td class="py-2 px-4 border-b">{{ $guide->bahasa }}</td>
-                        <td class="py-2 px-4 border-b">
-                            <a href="{{ route('guide.edit', $guide->id) }}" class="text-blue-500">Edit</a> |
-                            <form action="{{ route('guide.destroy', $guide->id) }}" method="POST" class="inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="text-red-500" onclick="return confirm('Yakin ingin menghapus?')">Hapus</button>
-                            </form>
-                        </td>
+                        <th>NO</th>
+                        <th>Nama Guide</th>
+                        <th>Salary</th>
+                        <th>Kriteria</th>
+                        <th>Deskripsi</th>
+                        <th>Nomor HP</th>
+                        <th>Status</th>
+                        <th>Alamat</th>
+                        <th>Email</th>
+                        <th>Bahasa</th>
+                        <th class="text-center">Aksi</th>
                     </tr>
-                @endforeach
-            </tbody>
-
-        </table>
+                </thead>
+                <tbody>
+                    @foreach ($guides as $index => $guide)
+                        <tr>
+                            <td>{{ $index + 1 }}</td>
+                            <td>{{ $guide->nama_guide }}</td>
+                            <td>Rp {{ number_format($guide->salary, 2, ',', '.') }}</td>
+                            <td>{{ $guide->kriteria->nama_kriteria ?? '-' }}</td>
+                            <td>{{ $guide->deskripsi_guide ?? '-' }}</td>
+                            <td>{{ $guide->nomer_hp }}</td>
+                            <td>
+                                <span class="{{ $guide->status ? 'text-success' : 'text-danger' }}">
+                                    {{ $guide->status ? 'Aktif' : 'Nonaktif' }}
+                                </span>
+                            </td>
+                            <td>{{ $guide->alamat ?? '-' }}</td>
+                            <td>{{ $guide->email }}</td>
+                            <td>{{ $guide->bahasa }}</td>
+                            <td class="text-center">
+                                <div class="btn-group">
+                                    <a href="{{ route('guide.edit', $guide->id) }}" class="btn btn-primary btn-sm">
+                                        <i class="fa-solid fa-pen-to-square"></i> Edit
+                                    </a>
+                                    <button onclick="confirmDelete({{ $guide->id }})" class="btn btn-danger btn-sm">
+                                        <i class="fa-solid fa-trash"></i> Hapus
+                                    </button>
+                                </div>
+                                <form id="delete-form-{{ $guide->id }}" action="{{ route('guide.destroy', $guide->id) }}" method="POST" class="d-none">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function confirmDelete(id) {
+        Swal.fire({
+            title: "Yakin ingin menghapus?",
+            text: "Data guide ini akan dihapus secara permanen!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Ya, hapus!",
+            cancelButtonText: "Batal"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('delete-form-' + id).submit();
+            }
+        });
+    }
+</script>
 @endsection

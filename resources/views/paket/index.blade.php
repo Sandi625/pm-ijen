@@ -1,67 +1,93 @@
-@extends('layouts.app')
+@extends('layouts.base')
 
 @section('title', 'Daftar Paket')
 
 @section('content')
-<div class="container mx-auto mt-8 px-4">
-    <div class="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4">
+<div class="container-fluid vh-100 d-flex flex-column">
+    <div class="bg-white shadow-md rounded-lg p-4 flex-grow-1">
         <h1 class="text-3xl font-bold mb-4 text-gray-800">Daftar Paket</h1>
 
         @if(session('success'))
-            <div class="bg-green-100 text-green-700 p-4 rounded mb-4">
+            <div class="alert alert-success">
                 {{ session('success') }}
             </div>
         @endif
 
-        <a href="{{ route('paket.create') }}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mb-4 inline-block">Tambah Paket</a>
+        <a href="{{ route('paket.create') }}" class="btn btn-success mb-4">
+            <i class="fa-solid fa-plus"></i> Tambah Paket
+        </a>
 
-        <table class="min-w-full bg-white border border-gray-200">
-            <thead>
-                <tr class="bg-gray-100">
-                    <th class="py-2 px-4 border-b">NO</th>
-                    <th class="py-2 px-4 border-b">Nama Paket</th>
-                    <th class="py-2 px-4 border-b">Deskripsi</th>
-                    <th class="py-2 px-4 border-b">Harga</th>
-                    <th class="py-2 px-4 border-b">Durasi</th>
-                    <th class="py-2 px-4 border-b">Destinasi</th>
-                    <th class="py-2 px-4 border-b">Include / Exclude</th>
-                    <th class="py-2 px-4 border-b">Foto</th>
-                    {{-- <th class="py-2 px-4 border-b">Dibuat</th>
-                    <th class="py-2 px-4 border-b">Diperbarui</th> --}}
-                    <th class="py-2 px-4 border-b">Aksi</th>
-                </tr>
-            </thead>
-            <tbody class="text-center">
-                @foreach ($pakets as $index => $paket)
+        <div class="overflow-auto">
+            <table class="table table-bordered w-100">
+                <thead class="table-light">
                     <tr>
-                        <td class="py-2 px-4 border-b">{{ $index + 1 }}</td>
-                        <td class="py-2 px-4 border-b">{{ $paket->nama_paket }}</td>
-                        <td class="py-2 px-4 border-b">{{ Str::limit($paket->deskripsi_paket, 50) }}</td>
-                        <td class="py-2 px-4 border-b">Rp {{ number_format($paket->harga, 2, ',', '.') }}</td>
-                        <td class="py-2 px-4 border-b">{{ $paket->durasi }} Hari</td>
-                        <td class="py-2 px-4 border-b">{{ $paket->destinasi }}</td>
-                        <td class="py-2 px-4 border-b">{{ Str::limit($paket->include_exclude, 50) }}</td>
-                        <td class="py-2 px-4 border-b">
-                            @if($paket->foto)
-                                <img src="{{ asset('storage/' . $paket->foto) }}" alt="Foto Paket" class="w-16 h-16 object-cover rounded">
-                            @else
-                                Tidak ada foto
-                            @endif
-                        </td>
-                        {{-- <td class="py-2 px-4 border-b">{{ $paket->created_at ? $paket->created_at->format('d M Y') : '-' }}</td>
-                        <td class="py-2 px-4 border-b">{{ $paket->updated_at ? $paket->updated_at->format('d M Y') : '-' }}</td> --}}
-                        <td class="py-2 px-4 border-b">
-                            <a href="{{ route('paket.edit', $paket->id) }}" class="text-blue-500">Edit</a> |
-                            <form action="{{ route('paket.destroy', $paket->id) }}" method="POST" class="inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="text-red-500" onclick="return confirm('Yakin ingin menghapus?')">Hapus</button>
-                            </form>
-                        </td>
+                        <th>NO</th>
+                        <th>Nama Paket</th>
+                        <th>Deskripsi</th>
+                        <th>Harga</th>
+                        <th>Durasi</th>
+                        <th>Destinasi</th>
+                        <th>Include / Exclude</th>
+                        <th>Foto</th>
+                        <th class="text-center">Aksi</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach ($pakets as $index => $paket)
+                        <tr>
+                            <td>{{ $index + 1 }}</td>
+                            <td>{{ $paket->nama_paket }}</td>
+                            <td>{{ Str::limit($paket->deskripsi_paket, 50) }}</td>
+                            <td>Rp {{ number_format($paket->harga, 2, ',', '.') }}</td>
+                            <td>{{ $paket->durasi }} Hari</td>
+                            <td>{{ $paket->destinasi }}</td>
+                            <td>{{ Str::limit($paket->include_exclude, 50) }}</td>
+                            <td>
+                                @if($paket->foto)
+                                    <img src="{{ asset('storage/' . $paket->foto) }}" alt="Foto Paket" class="img-thumbnail" style="width: 60px; height: 60px; object-fit: cover;">
+                                @else
+                                    Tidak ada foto
+                                @endif
+                            </td>
+                            <td class="text-center">
+                                <div class="btn-group">
+                                    <a href="{{ route('paket.edit', $paket->id) }}" class="btn btn-primary btn-sm">
+                                        <i class="fa-solid fa-pen-to-square"></i> Edit
+                                    </a>
+                                    <button onclick="confirmDelete({{ $paket->id }})" class="btn btn-danger btn-sm">
+                                        <i class="fa-solid fa-trash"></i> Hapus
+                                    </button>
+                                </div>
+                                <form id="delete-form-{{ $paket->id }}" action="{{ route('paket.destroy', $paket->id) }}" method="POST" class="d-none">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function confirmDelete(id) {
+        Swal.fire({
+            title: "Apakah Anda yakin?",
+            text: "Data ini akan dihapus secara permanen!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Ya, hapus!",
+            cancelButtonText: "Batal"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('delete-form-' + id).submit();
+            }
+        });
+    }
+</script>
 @endsection
