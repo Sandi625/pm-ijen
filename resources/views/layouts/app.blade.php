@@ -8,6 +8,7 @@
     <link href="{{asset('assets/all.min.css')}}" rel="stylesheet">
     <link href="{{asset('assets/fa-solid-900.woff2')}}" rel="stylesheet">
     <link href="{{asset('assets/fa-solid-900.ttf')}}" rel="stylesheet">
+
 </head>
 <body class="bg-gray-100 flex flex-col min-h-screen">
     <nav class="bg-white shadow-lg">
@@ -17,7 +18,7 @@
                 <div class="flex items-center">
                 <a href="{{ Auth::check() ? route('dashboard') : url('/') }}" class="flex items-center py-4 px-2">
                     <i class=""></i>
-                    <span class="font-semibold text-gray-500 text-lg">SPK Profile Matching </span>
+                    <span class="font-semibold text-gray-500 text-lg">Ijen Crater Tour Indonesia </span>
                 </a>
                 </div>
 
@@ -60,5 +61,8 @@
         <p>&copy; 2024 Sistem Pakar Rekrutmen Bidan. Hak Cipta Dilindungi.</p>
     </footer> --}}
 </body>
+<!-- Tambahkan sebelum </body> -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     @yield('script')
 </html>

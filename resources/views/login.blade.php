@@ -6,9 +6,9 @@
 <div class="flex flex-col items-center justify-center">
     <div class="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 max-w-md w-full">
         <h1 class="text-3xl font-bold mb-4 text-gray-800 text-center">Login</h1>
-        
+
         <div class="flex justify-center">
-            <img src="{{asset('assets/logo.png')}}" width="200" height="200" alt="">
+            <img src="{{asset('assets/img/logo.jpg')}}" width="200" height="200" alt="">
         </div>
         @if (session('status'))
             <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">

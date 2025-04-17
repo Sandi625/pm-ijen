@@ -38,7 +38,7 @@
             <!-- Durasi -->
             <div class="mb-4">
                 <label class="block text-gray-700 font-bold mb-2" for="durasi">Durasi (hari)</label>
-                <input type="number" name="durasi" id="durasi" value="{{ old('durasi', $paket->durasi) }}"
+                <input type="text" name="durasi" id="durasi" value="{{ old('durasi', $paket->durasi) }}"
                     class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                 @error('durasi') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
             </div>
@@ -53,10 +53,33 @@
 
             <!-- Include & Exclude -->
             <div class="mb-4">
-                <label class="block text-gray-700 font-bold mb-2" for="include_exclude">Include & Exclude</label>
-                <textarea name="include_exclude" id="include_exclude" rows="3"
-                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">{{ old('include_exclude', $paket->include_exclude) }}</textarea>
-                @error('include_exclude') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
+                <label class="block text-gray-700 font-bold mb-2" for="include">Include</label>
+                <textarea name="include" id="include" rows="2"
+                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">{{ old('include', $paket->include) }}</textarea>
+                @error('include') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-gray-700 font-bold mb-2" for="exclude">Exclude</label>
+                <textarea name="exclude" id="exclude" rows="2"
+                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">{{ old('exclude', $paket->exclude) }}</textarea>
+                @error('exclude') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
+            </div>
+
+            <!-- Information Trip -->
+            <div class="mb-4">
+                <label class="block text-gray-700 font-bold mb-2" for="information_trip">Informasi Trip</label>
+                <textarea name="information_trip" id="information_trip" rows="4"
+                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">{{ old('information_trip', $paket->information_trip) }}</textarea>
+                @error('information_trip') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
+            </div>
+
+            <!-- Itinerary -->
+            <div class="mb-4">
+                <label class="block text-gray-700 font-bold mb-2" for="itinerary">Itenerary</label>
+                <textarea name="itinerary" id="itinerary" rows="4"
+                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">{{ old('itinerary', $paket->itinerary) }}</textarea>
+                @error('itinerary') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
             </div>
 
             <!-- Foto -->
@@ -66,27 +89,29 @@
                     class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                 @error('foto') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
 
-                <!-- Tampilkan foto lama jika ada -->
                 @if ($paket->foto)
                     <div class="mt-2">
                         <p class="text-gray-700 text-sm">Foto saat ini:</p>
-                        <img src="{{ asset('storage/' . $paket->foto) }}" alt="Foto Paket" class="w-32 h-32 object-cover rounded-lg mt-1">
+                        <img src="{{ asset('storage/' . $paket->foto) }}" alt="Foto Paket"
+                             class="w-32 h-32 object-cover rounded-lg mt-1">
                     </div>
                 @endif
             </div>
 
             <!-- Tombol Simpan -->
             <div class="flex justify-end space-x-2">
-                <a href="{{ route('paket.index') }}" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg">
+                <a href="{{ route('paket.index') }}"
+                   class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg">
                     Kembali
                 </a>
-                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">
+                <button type="submit"
+                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">
                     Simpan Perubahan
                 </button>
             </div>
-
-
         </form>
     </div>
 </div>
+
+
 @endsection

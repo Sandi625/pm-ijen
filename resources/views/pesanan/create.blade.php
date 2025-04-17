@@ -3,6 +3,7 @@
 @section('title', 'Tambah Pesanan')
 
 @section('content')
+
 <div class="container mx-auto mt-8 px-4">
     <div class="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4">
         <h1 class="text-3xl font-bold mb-4 text-gray-800">Tambah Pesanan</h1>
@@ -39,16 +40,27 @@
                 </select>
             </div>
 
-            <!-- Paket -->
+
+
+           <!-- Paket -->
             <div class="mb-4">
                 <label class="block text-gray-700 font-bold mb-2" for="id_paket">Paket</label>
-                <select name="id_paket" id="id_paket" class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                <select name="id_paket" id="id_paket" class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required readonly>
                     <option value="">Pilih Paket</option>
                     @foreach ($pakets as $paket)
-                        <option value="{{ $paket->id }}">{{ $paket->nama_paket }}</option>
+                        <option value="{{ $paket->id }}" {{ $paket->id == $selectedPaketId ? 'selected' : '' }}>
+                            {{ $paket->nama_paket }}
+                        </option>
                     @endforeach
                 </select>
+                <!-- Input tersembunyi untuk mengirimkan id_paket -->
+                <input type="hidden" name="id_paket" value="{{ $selectedPaketId }}">
             </div>
+
+
+
+
+
 
             <!-- Tanggal Pesan -->
             <div class="mb-4">
@@ -77,4 +89,27 @@
         </form>
     </div>
 </div>
+
+@if(session('success'))
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            Swal.fire({
+                icon: 'success',
+                title: 'Succed',
+                text: '{{ session('success') }}',
+                confirmButtonText: 'Back',
+                allowOutsideClick: false,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '{{ route("home") }}';
+                }
+            });
+        });
+    </script>
+@endif
+
+
+
+
 @endsection

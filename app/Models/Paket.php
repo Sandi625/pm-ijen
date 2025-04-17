@@ -21,7 +21,11 @@ class Paket extends Model
         'harga',
         'durasi',
         'destinasi',
-        'include_exclude',
+        'include',
+        'exclude',
+        'itinerary',
+        'information_trip',
         'foto'
     ];
+
 }

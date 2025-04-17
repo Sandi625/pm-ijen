@@ -9,6 +9,7 @@ use App\Http\Controllers\KriteriaController;
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PenilaianController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\SubKriteriaController;
 
 Route::get('/', function () {
@@ -39,14 +40,55 @@ route::get('/pdf/penilaian/rejected', [PenilaianController::class, 'generatePeni
 
 
 // Guide route
-
 Route::resource('guide', GuideController::class);
 
 // Paket
 Route::resource('paket', PaketController::class);
 
 // Pesanan
-Route::resource('pesanan', PesananController::class);
+Route::resource('pesanan', controller: PesananController::class);
+// Route::get('pesanan/create/{paket_id}', [PesananController::class, 'create'])->name('pesanan.create');
+Route::get('/pesanan/create/{id_paket?}', [PesananController::class, 'create'])->name('pesanan.create');
+// web.php
+// Route::get('/pesanan/create/{id}', action: [PesananController::class, 'create'])->name('pesanan.create');
+
+
+
+
+
+
+
+
+
+
+
+
+
+//route landing page
+Route::get('/galeri', function () {
+    return view('galeri.galeri');
+})->name('galeri');
+
+Route::get('/reviews', function () {
+    return view('review.review');
+})->name('review');
+
+
+
+
+Route::get('/review', [ReviewController::class, 'index'])->name('review.review');
+
+Route::post('/review/store', [ReviewController::class, 'store'])->name('review.store');
+
+
+//paket
+Route::get('/', [PaketController::class, 'showPakets'])->name('home');
+// Route::get('/', [PesananController::class, 'showPakets']);
+
+// Route::get('/', [PaketController::class, 'showPakets']);
+
+
+
 
 
 

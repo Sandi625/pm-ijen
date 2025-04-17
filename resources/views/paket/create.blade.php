@@ -31,7 +31,7 @@
             <!-- Durasi -->
             <div class="mb-4">
                 <label class="block text-gray-700 font-bold mb-2" for="durasi">Durasi (Hari)</label>
-                <input type="number" name="durasi" id="durasi" class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                <input type="text" name="durasi" id="durasi" class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
             </div>
 
             <!-- Destinasi -->
@@ -40,10 +40,28 @@
                 <input type="text" name="destinasi" id="destinasi" class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
             </div>
 
-            <!-- Include & Exclude -->
+            <!-- Include -->
             <div class="mb-4">
-                <label class="block text-gray-700 font-bold mb-2" for="include_exclude">Include & Exclude</label>
-                <textarea name="include_exclude" id="include_exclude" rows="4" class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                <label class="block text-gray-700 font-bold mb-2" for="include">Include</label>
+                <textarea name="include" id="include" rows="3" class="w-full border border-green-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">{{ old('include') }}</textarea>
+            </div>
+
+            <!-- Exclude -->
+            <div class="mb-4">
+                <label class="block text-gray-700 font-bold mb-2" for="exclude">Exclude</label>
+                <textarea name="exclude" id="exclude" rows="3" class="w-full border border-red-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500">{{ old('exclude') }}</textarea>
+            </div>
+
+            <!-- Itenerary -->
+            <div class="mb-4">
+                <label class="block text-gray-700 font-bold mb-2" for="itenerary">Itenerary</label>
+                <textarea name="itenerary" id="itenerary" rows="4" class="w-full border border-yellow-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500">{{ old('itenerary') }}</textarea>
+            </div>
+
+            <!-- Information Trip -->
+            <div class="mb-4">
+                <label class="block text-gray-700 font-bold mb-2" for="information_trip">Informasi Trip</label>
+                <textarea name="information_trip" id="information_trip" rows="4" class="w-full border border-purple-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500">{{ old('information_trip') }}</textarea>
             </div>
 
             <!-- Upload Foto -->
@@ -62,7 +80,7 @@
                 </button>
             </div>
         </form>
-
     </div>
 </div>
+
 @endsection

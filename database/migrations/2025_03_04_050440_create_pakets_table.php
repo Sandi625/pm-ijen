@@ -16,15 +16,17 @@ return new class extends Migration
             $table->string('nama_paket', 150);
             $table->text('deskripsi_paket')->nullable();
             $table->decimal('harga', 10, 2);
-            $table->integer('durasi'); // dalam hari atau jam sesuai kebutuhan
+            $table->string('durasi'); // dalam hari atau jam sesuai kebutuhan
             $table->string('destinasi', 255);
-            $table->text('include_exclude')->nullable();
+            $table->text('include')->nullable();
+            $table->text('exclude')->nullable();
+            $table->text('itinerary')->nullable(); // Tambahan kolom itenerary
+            $table->text('information_trip')->nullable(); // Tambahan kolom informasi trip
             $table->string('foto')->nullable();
             $table->timestamps();
-
-
         });
     }
+
 
 
     /**
