@@ -22,6 +22,9 @@
                     <th class="py-2 px-4 border-b">Nama</th>
                     <th class="py-2 px-4 border-b">Email</th>
                     <th class="py-2 px-4 border-b">Nomor Telepon</th>
+                    <th class="py-2 px-4 border-b">Negara</th> <!-- Kolom baru -->
+                    <th class="py-2 px-4 border-b">Bahasa</th> <!-- Kolom baru -->
+                    <th class="py-2 px-4 border-b">Riwayat Medis</th> <!-- Kolom baru -->
                     <th class="py-2 px-4 border-b">Nama Paket</th>
                     <th class="py-2 px-4 border-b">Nama Kriteria</th>
                     <th class="py-2 px-4 border-b">Tanggal Pesan</th>
@@ -37,6 +40,9 @@
                     <td class="py-2 px-4 border-b">{{ $pesanan->nama }}</td>
                     <td class="py-2 px-4 border-b">{{ $pesanan->email }}</td>
                     <td class="py-2 px-4 border-b">{{ $pesanan->nomor_telp }}</td>
+                    <td class="py-2 px-4 border-b">{{ $pesanan->negara ?? '-' }}</td>
+                    <td class="py-2 px-4 border-b">{{ $pesanan->bahasa ?? '-' }}</td>
+                    <td class="py-2 px-4 border-b">{{ $pesanan->riwayat_medis ?? '-' }}</td>
                     <td class="py-2 px-4 border-b">{{ $pesanan->paket->nama_paket ?? '-' }}</td>
                     <td class="py-2 px-4 border-b">{{ $pesanan->kriteria->nama ?? '-' }}</td>
                     <td class="py-2 px-4 border-b">{{ $pesanan->tanggal_pesan }}</td>
@@ -57,3 +63,4 @@
     </div>
 </div>
 @endsection
+

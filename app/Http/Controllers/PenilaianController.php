@@ -61,13 +61,20 @@ public function store(Request $request)
 }
 
 
+
+
 public function show(Penilaian $penilaian)
 {
-    $penilaian->load(['guide', 'detailPenilaians.subkriteria.kriteria']); // Tambahkan 'guide'
+    $penilaian->load(['guide', 'detailPenilaians.subkriteria.kriteria']);
     $hasil = $this->hitungProfileMatching($penilaian);
 
-    return view('penilaian.show', compact('penilaian', 'hasil'));
+    $kriteriaUnggulan = $this->tentukanKriteriaUnggulanshow($hasil); // tanpa perlu $kriterias
+
+    return view('penilaian.show', compact('penilaian', 'hasil', 'kriteriaUnggulan'));
 }
+
+
+
 
 
     private function hitungProfileMatching(Penilaian $penilaian)
@@ -168,18 +175,26 @@ public function edit(Penilaian $penilaian)
     $penilaians = Penilaian::with(['detailPenilaians.subkriteria.kriteria', 'guide'])->get(); // Tambah guide
     $kriterias = Kriteria::with('subkriterias')->get();
 
-    $hasilPenilaians = $penilaians->map(function ($penilaian) {
+    $hasilPenilaians = $penilaians->map(function ($penilaian) use ($kriterias) {
+        $hasil = $this->hitungProfileMatching($penilaian);
         return [
             'penilaian' => $penilaian,
-            'hasil' => $this->hitungProfileMatching($penilaian)
+            'hasil' => $hasil,
+            'kriteria_unggulan' => $this->tentukanKriteriaUnggulan([
+                'penilaian' => $penilaian,
+                'hasil' => $hasil,
+            ], $kriterias)
         ];
     });
+
 
     $hasilPerKriteria = $this->groupHasilByKriteria($hasilPenilaians, $kriterias);
 
     $rankingKandidat = $hasilPenilaians->sortByDesc(function ($item) {
         return $item['hasil']['nilai_akhir'];
     })->values();
+
+
 
     return view('penilaian.all', compact('hasilPerKriteria', 'rankingKandidat', 'kriterias'));
 }
@@ -274,4 +289,58 @@ public function generatePenilaianPdf($status = 'all')
 
     return $pdf->download($filename);
 }
+
+
+// private function tentukanKriteriaUnggulanshow($hasil)
+// {
+//     $max = null;
+//     $kriteriaUnggul = null;
+
+//     foreach ($hasil['detail'] as $kriteriaId => $kriteriaDetail) {
+//         $nilai = $kriteriaDetail['nilai_total'] ?? null;
+//         if ($nilai !== null && ($max === null || $nilai > $max)) {
+//             $max = $nilai;
+//             $kriteriaUnggul = $kriteriaDetail['nama_kriteria'] ?? 'Tidak Diketahui';
+//         }
+//     }
+
+//     return $kriteriaUnggul;
+// }
+
+
+private function tentukanKriteriaUnggulan($hasil, $kriterias)
+{
+    $max = null;
+    $kriteriaUnggul = null;
+
+    foreach ($kriterias as $kriteria) {
+        $nilai = $hasil['hasil']['detail'][$kriteria->id]['nilai_total'] ?? null;
+        if ($nilai !== null && ($max === null || $nilai > $max)) {
+            $max = $nilai;
+            $kriteriaUnggul = $kriteria->nama;
+        }
+    }
+
+    return $kriteriaUnggul;
+}
+
+
+private function tentukanKriteriaUnggulanshow($hasil)
+{
+    $max = null;
+    $kriteriaUnggul = 'Tidak Diketahui';
+
+    foreach ($hasil['detail'] as $detail) {
+        $nilai = $detail['nilai_total'] ?? null;
+        if ($nilai !== null && ($max === null || $nilai > $max)) {
+            $max = $nilai;
+            $kriteriaUnggul = $detail['nama']; // langsung ambil nama dari detail
+        }
+    }
+
+    return $kriteriaUnggul;
+}
+
+
+
 }

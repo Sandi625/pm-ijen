@@ -18,8 +18,18 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'Admin',
             'email' => 'admin@gmail.com',
-            'password'=> bcrypt('admin'),
+            'password' => bcrypt('admin'),
+            'level' => 'admin', // Menambahkan level admin
         ]);
+
+        // User biasa
+        User::factory()->create([
+            'name' => 'John Doe',
+            'email' => 'user@example.com',
+            'password' => bcrypt('user123'),
+            'level' => 'user', // Menambahkan level user
+        ]);
+
 
         // Menjalankan semua seeder yang telah Anda buat
         $this->call([
@@ -29,6 +39,5 @@ class DatabaseSeeder extends Seeder
             // PenilaiansSeeder::class,
             // DetailPenilaiansSeeder::class,
         ]);
-
     }
 }

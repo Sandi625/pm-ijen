@@ -13,23 +13,28 @@ return new class extends Migration
     {
         Schema::create('pesanans', function (Blueprint $table) {
             $table->id('id');
-            $table->string('nama', 150); // Menambahkan kolom nama
-            $table->string('email', 150)->unique(); // Menambahkan kolom email
-            $table->string('nomor_telp', 20); // Menambahkan kolom nomor telepon
+            $table->string('nama', 150);
+            $table->string('email', 150)->unique();
+            $table->string('nomor_telp', 20);
             $table->unsignedBigInteger('id_kriteria');
             $table->unsignedBigInteger('id_paket');
             $table->date('tanggal_pesan');
             $table->date('tanggal_keberangkatan');
             $table->integer('jumlah_peserta');
+
+            // Kolom tambahan
+            $table->string('negara', 100)->nullable();
+            $table->string('bahasa', 100)->nullable();
+            $table->text('riwayat_medis')->nullable();
+
             $table->timestamps();
 
             // Foreign key constraints
-
             $table->foreign('id_kriteria')->references('id')->on('kriterias')->onDelete('cascade');
-            $table->foreign('id_paket')->references('id')->on('pakets')->onDelete('cascade'); // Tambahkan foreign key ke pakets
-
+            $table->foreign('id_paket')->references('id')->on('pakets')->onDelete('cascade');
         });
     }
+
 
     /**
      * Reverse the migrations.

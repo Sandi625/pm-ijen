@@ -14,14 +14,17 @@ class Pesanan extends Model
     public $timestamps = true; // Mengaktifkan created_at & updated_at
 
     protected $fillable = [
-    'nama',
-    'email',
-    'nomor_telp',
-    'id_kriteria',
-    'id_paket',
-    'tanggal_pesan',
-    'tanggal_keberangkatan',
-    'jumlah_peserta',
+        'nama',
+        'email',
+        'nomor_telp',
+        'id_kriteria',
+        'id_paket',
+        'tanggal_pesan',
+        'tanggal_keberangkatan',
+        'jumlah_peserta',
+        'negara',           // kolom baru
+        'bahasa',           // kolom baru
+        'riwayat_medis',    // kolom baru
     ];
 
     // Relasi ke Kriteria
@@ -36,3 +39,4 @@ class Pesanan extends Model
         return $this->belongsTo(Paket::class, 'id_paket');
     }
 }
+

@@ -80,6 +80,29 @@
                 <input type="number" name="jumlah_peserta" id="jumlah_peserta" class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
             </div>
 
+                        <!-- Negara -->
+            <div class="mb-4">
+                <label class="block text-gray-700 font-bold mb-2" for="negara">Negara</label>
+                <input type="text" name="negara" id="negara"
+                    class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+            </div>
+
+            <!-- Bahasa -->
+            <div class="mb-4">
+                <label class="block text-gray-700 font-bold mb-2" for="bahasa">Bahasa</label>
+                <input type="text" name="bahasa" id="bahasa"
+                    class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+            </div>
+
+            <!-- Riwayat Medis -->
+            <div class="mb-4">
+                <label class="block text-gray-700 font-bold mb-2" for="riwayat_medis">Riwayat Medis</label>
+                <textarea name="riwayat_medis" id="riwayat_medis" rows="4"
+                    class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Contoh: Alergi makanan laut, asma, dll..." required></textarea>
+            </div>
+
+
             <!-- Tombol Submit -->
             <div class="flex justify-end">
                 <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200">

@@ -72,12 +72,35 @@
                     class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
             </div>
 
-            <!-- Jumlah Peserta -->
-            <div class="mb-4">
-                <label class="block text-gray-700 font-bold mb-2" for="jumlah_peserta">Jumlah Peserta</label>
-                <input type="number" name="jumlah_peserta" id="jumlah_peserta" value="{{ old('jumlah_peserta', $pesanan->jumlah_peserta) }}"
-                    class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-            </div>
+                        <!-- Jumlah Peserta -->
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-bold mb-2" for="jumlah_peserta">Jumlah Peserta</label>
+                    <input type="number" name="jumlah_peserta" id="jumlah_peserta" value="{{ old('jumlah_peserta', $pesanan->jumlah_peserta) }}"
+                        class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+
+                <!-- Negara -->
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-bold mb-2" for="negara">Negara</label>
+                    <input type="text" name="negara" id="negara" value="{{ old('negara', $pesanan->negara) }}"
+                        class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+
+                <!-- Bahasa -->
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-bold mb-2" for="bahasa">Bahasa</label>
+                    <input type="text" name="bahasa" id="bahasa" value="{{ old('bahasa', $pesanan->bahasa) }}"
+                        class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+
+                <!-- Riwayat Medis -->
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-bold mb-2" for="riwayat_medis">Riwayat Medis</label>
+                    <textarea name="riwayat_medis" id="riwayat_medis"
+                        class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        rows="4">{{ old('riwayat_medis', $pesanan->riwayat_medis) }}</textarea>
+                </div>
+
 
             <!-- Tombol Submit -->
             <div class="flex justify-end">

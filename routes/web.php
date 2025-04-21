@@ -2,14 +2,15 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\GuideController;
 use App\Http\Controllers\PaketController;
+use App\Http\Controllers\ReviewController;
+
 use App\Http\Controllers\PesananController;
 use App\Http\Controllers\KriteriaController;
-
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PenilaianController;
-use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\SubKriteriaController;
 
 Route::get('/', function () {
@@ -47,7 +48,6 @@ Route::resource('paket', PaketController::class);
 
 // Pesanan
 Route::resource('pesanan', controller: PesananController::class);
-// Route::get('pesanan/create/{paket_id}', [PesananController::class, 'create'])->name('pesanan.create');
 Route::get('/pesanan/create/{id_paket?}', [PesananController::class, 'create'])->name('pesanan.create');
 // web.php
 // Route::get('/pesanan/create/{id}', action: [PesananController::class, 'create'])->name('pesanan.create');
@@ -88,7 +88,10 @@ Route::get('/', [PaketController::class, 'showPakets'])->name('home');
 // Route::get('/', [PaketController::class, 'showPakets']);
 
 
+Route::get('/halguide', function () {
+    return view('halamanguide.index');
+})->name('halg');
 
 
-
+Route::resource('users', UserController::class);
 

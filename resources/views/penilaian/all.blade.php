@@ -26,7 +26,7 @@
                     <thead>
                         <tr class="bg-gray-100">
                             <th class="border border-gray-300 px-4 py-2">No.</th>
-                            <th class="border border-gray-300 px-4 py-2">Nama Calon</th>
+                            <th class="border border-gray-300 px-4 py-2">Nama Guide</th>
                             <th class="border border-gray-300 px-4 py-2">Kriteria</th>
                             @foreach($kriteriaData['subkriterias'] as $index => $subkriteria)
                                 <th class="border border-gray-300 px-4 py-2">K{{ $index + 1 }}</th>
@@ -81,7 +81,7 @@
                     <thead>
                         <tr class="bg-gray-100">
                             <th class="border border-gray-300 px-4 py-2">No.</th>
-                            <th class="border border-gray-300 px-4 py-2">Nama Calon</th>
+                            <th class="border border-gray-300 px-4 py-2">Nama Guide</th>
                             <th class="border border-gray-300 px-4 py-2">Kriteria</th>
                             <th class="border border-gray-300 px-4 py-2">GAP</th>
                             @foreach($kriteriaData['subkriterias'] as $index => $subkriteria)
@@ -131,7 +131,7 @@
                     <thead>
                         <tr class="bg-gray-100">
                             <th class="border border-gray-300 px-4 py-2">No.</th>
-                            <th class="border border-gray-300 px-4 py-2">Nama Calon</th>
+                            <th class="border border-gray-300 px-4 py-2">Nama Guide</th>
                             @foreach($kriteriaData['subkriterias'] as $index => $subkriteria)
                                 <th class="border border-gray-300 px-4 py-2">K{{ $index + 1 }}</th>
                             @endforeach
@@ -171,7 +171,7 @@
                     <thead>
                         <tr class="bg-gray-100">
                             <th class="border border-gray-300 px-4 py-2">No.</th>
-                            <th class="border border-gray-300 px-4 py-2">Nama Kandidat</th>
+                            <th class="border border-gray-300 px-4 py-2">Nama Guide</th>
                             <th class="border border-gray-300 px-4 py-2">Nilai CF</th>
                             <th class="border border-gray-300 px-4 py-2">Nilai SF</th>
                             <th class="border border-gray-300 px-4 py-2">Nilai Total</th>
@@ -193,36 +193,32 @@
         </div>
     @endforeach
 
-    <h2 class="text-xl font-bold mb-4">Ranking Kandidat</h2>
-<div class="overflow-x-auto">
-    <table class="w-full border-collapse border border-gray-300">
-        <thead>
-            <tr class="bg-gray-100">
-                <th class="border border-gray-300 px-4 py-2">Ranking</th>
-                <th class="border border-gray-300 px-4 py-2">Nama Kandidat</th>
-                <th class="border border-gray-300 px-4 py-2">Nilai Akhir</th>
-                <th class="border border-gray-300 px-4 py-2">Keputusan</th>
-            </tr>
-        </thead>
-        <tbody class="text-center">
-            @foreach($rankingKandidat as $index => $item)
-                @php
-                    $keputusanClass = $index === 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
-                @endphp
-                <tr>
-                    <td class="border border-gray-300 px-4 py-2">{{ $index + 1 }}</td>
-                    <td class="border border-gray-300 px-4 py-2">{{ $item['penilaian']->guide->nama_guide ?? '-' }}</td>
-                    <td class="border border-gray-300 px-4 py-2">{{ number_format($item['hasil']['nilai_akhir'], 2) }}</td>
-                    <td class="border border-gray-300 px-4 py-2 {{ $keputusanClass }}">
-                        {{ $index === 0 ? 'Diterima' : 'Ditolak' }}
-                    </td>
+    <h2 class="text-xl font-bold mb-4">Ranking Guide Keseluruhan</h2>
+    <div class="overflow-x-auto">
+        <table class="w-full border-collapse border border-gray-300">
+            <thead>
+                <tr class="bg-gray-100">
+                    <th class="border border-gray-300 px-4 py-2">Ranking</th>
+                    <th class="border border-gray-300 px-4 py-2">Nama Guide</th>
+                    <th class="border border-gray-300 px-4 py-2">Nilai Akhir</th>
+                    <th class="border border-gray-300 px-4 py-2">Unggul di Kriteria</th>
                 </tr>
+            </thead>
+            <tbody class="text-center">
+                @foreach($rankingKandidat as $index => $item)
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">{{ $index + 1 }}</td>
+                        <td class="border border-gray-300 px-4 py-2">{{ $item['penilaian']->guide->nama_guide ?? '-' }}</td>
+                        <td class="border border-gray-300 px-4 py-2">{{ number_format($item['hasil']['nilai_akhir'], 2) }}</td>
+                        <td class="border border-gray-300 px-4 py-2 text-blue-700 font-semibold">
+                            {{ $item['kriteria_unggulan'] ?? '-' }}
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
 
-
-            @endforeach
-        </tbody>
-    </table>
-</div>
 
 </div>
 @endsection

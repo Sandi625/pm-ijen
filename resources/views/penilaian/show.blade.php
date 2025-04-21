@@ -5,6 +5,12 @@
 <div class="container mx-auto mt-8">
     <h1 class="text-2xl font-bold mb-4">Detail Penilaian: {{ optional($penilaian->guide)->nama_guide ?? 'Tidak Diketahui' }}</h1>
 
+    {{-- Tambahan untuk Keunggulan --}}
+    <h3 class="text-lg font-semibold mt-4">Keunggulan di Kriteria:</h3>
+    <p class="text-green-700 font-semibold">{{ $kriteriaUnggulan }}</p>
+
+
+
 
     <h2 class="text-xl font-bold mt-4 mb-2">Hasil Perhitungan Profile Matching</h2>
 
@@ -16,8 +22,7 @@
     @endforeach
 
     <h3 class="text-xl font-bold mt-4 mb-4">Nilai Akhir: {{ number_format($hasil['nilai_akhir'], 2) }}</h3>
-<a href="{{ route('penilaian.index') }}" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded mt-1 inline-block">Kembali</a>
-
+    <a href="{{ route('penilaian.index') }}" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded mt-1 inline-block">Kembali</a>
 
     <h2 class="text-xl font-bold mt-6 mb-2">Detail Penilaian</h2>
     <table class="w-full border-collapse border border-gray-300">
@@ -48,6 +53,6 @@
             @endforeach
         </tbody>
     </table>
-
 </div>
 @endsection
+
