@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -9,22 +8,10 @@ class Pesanan extends Model
 {
     use HasFactory;
 
-    protected $table = 'pesanans';
-    protected $primaryKey = 'id';
-    public $timestamps = true; // Mengaktifkan created_at & updated_at
-
     protected $fillable = [
-        'nama',
-        'email',
-        'nomor_telp',
-        'id_kriteria',
-        'id_paket',
-        'tanggal_pesan',
-        'tanggal_keberangkatan',
-        'jumlah_peserta',
-        'negara',           // kolom baru
-        'bahasa',           // kolom baru
-        'riwayat_medis',    // kolom baru
+        'nama', 'email', 'nomor_telp', 'id_kriteria', 'id_paket', 'id_guide',
+        'tanggal_pesan', 'tanggal_keberangkatan', 'jumlah_peserta',
+        'negara', 'bahasa', 'riwayat_medis', 'paspor', 'special_request'
     ];
 
     // Relasi ke Kriteria
@@ -37,6 +24,12 @@ class Pesanan extends Model
     public function paket()
     {
         return $this->belongsTo(Paket::class, 'id_paket');
+    }
+
+    // Relasi ke Guide
+    public function guide()
+    {
+        return $this->belongsTo(Guide::class, 'id_guide');
     }
 }
 

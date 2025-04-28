@@ -1,66 +1,111 @@
-@extends('layouts.app')
+@extends('layouts.base')
 
 @section('title', 'Daftar Pesanan')
 
 @section('content')
-<div class="container mx-auto mt-8 px-4">
-    <div class="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4">
+<div class="container-fluid vh-100 d-flex flex-column">
+    <div class="bg-white shadow-md rounded-lg p-4 flex-grow-1">
         <h1 class="text-3xl font-bold mb-4 text-gray-800">Daftar Pesanan</h1>
 
         @if(session('success'))
-            <div class="bg-green-100 text-green-700 p-4 rounded mb-4">
+            <div class="alert alert-success">
                 {{ session('success') }}
             </div>
         @endif
 
-        <a href="{{ route('pesanan.create') }}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mb-4 inline-block">Tambah Pesanan</a>
+        <div class="overflow-auto">
+            <table class="table table-bordered w-100">
+                <thead class="table-light">
+                    <tr>
+                        <th>NO</th>
+                        <th>Nama</th>
+                        <th>Email</th>
+                        <th>Nomor Telepon</th>
+                        <th>Nama Guide</th> <!-- Tambahan -->
+                        <th>Negara</th>
+                        <th>Bahasa</th>
+                        <th>Riwayat Medis</th>
+                        <th>Special Request</th>
+                        <th>Nama Paket</th>
+                        <th>Nama Kriteria</th>
+                        <th>Tanggal Pesan</th>
+                        <th>Tanggal Keberangkatan</th>
+                        <th>Jumlah Peserta</th>
+                        <th>Paspor</th>
+                        <th class="text-center">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($pesanans as $index => $pesanan)
+                        <tr>
+                            <td>{{ $index + 1 }}</td>
+                            <td>{{ $pesanan->nama }}</td>
+                            <td>{{ $pesanan->email }}</td>
+                            <td>{{ $pesanan->nomor_telp }}</td>
+                            <td>
+                                {{ $pesanan->guide ? $pesanan->guide->nama_guide : '-' }} <!-- Nama Guide -->
+                            </td>
+                            <td>{{ $pesanan->negara ?? '-' }}</td>
+                            <td>{{ $pesanan->bahasa ?? '-' }}</td>
+                            <td>{{ $pesanan->riwayat_medis ?? '-' }}</td>
+                            <td>{{ $pesanan->special_request ?? '-' }}</td>
+                            <td>{{ $pesanan->paket->nama_paket ?? '-' }}</td>
+                            <td>{{ $pesanan->kriteria->nama ?? '-' }}</td>
 
-        <table class="min-w-full bg-white border border-gray-200">
-            <thead>
-                <tr class="bg-gray-100">
-                    <th class="py-2 px-4 border-b">NO</th>
-                    <th class="py-2 px-4 border-b">Nama</th>
-                    <th class="py-2 px-4 border-b">Email</th>
-                    <th class="py-2 px-4 border-b">Nomor Telepon</th>
-                    <th class="py-2 px-4 border-b">Negara</th> <!-- Kolom baru -->
-                    <th class="py-2 px-4 border-b">Bahasa</th> <!-- Kolom baru -->
-                    <th class="py-2 px-4 border-b">Riwayat Medis</th> <!-- Kolom baru -->
-                    <th class="py-2 px-4 border-b">Nama Paket</th>
-                    <th class="py-2 px-4 border-b">Nama Kriteria</th>
-                    <th class="py-2 px-4 border-b">Tanggal Pesan</th>
-                    <th class="py-2 px-4 border-b">Tanggal Keberangkatan</th>
-                    <th class="py-2 px-4 border-b">Jumlah Peserta</th>
-                    <th class="py-2 px-4 border-b">Aksi</th>
-                </tr>
-            </thead>
-            <tbody class="text-center">
-                @foreach ($pesanans as $index => $pesanan)
-                <tr>
-                    <td class="py-2 px-4 border-b">{{ $index + 1 }}</td>
-                    <td class="py-2 px-4 border-b">{{ $pesanan->nama }}</td>
-                    <td class="py-2 px-4 border-b">{{ $pesanan->email }}</td>
-                    <td class="py-2 px-4 border-b">{{ $pesanan->nomor_telp }}</td>
-                    <td class="py-2 px-4 border-b">{{ $pesanan->negara ?? '-' }}</td>
-                    <td class="py-2 px-4 border-b">{{ $pesanan->bahasa ?? '-' }}</td>
-                    <td class="py-2 px-4 border-b">{{ $pesanan->riwayat_medis ?? '-' }}</td>
-                    <td class="py-2 px-4 border-b">{{ $pesanan->paket->nama_paket ?? '-' }}</td>
-                    <td class="py-2 px-4 border-b">{{ $pesanan->kriteria->nama ?? '-' }}</td>
-                    <td class="py-2 px-4 border-b">{{ $pesanan->tanggal_pesan }}</td>
-                    <td class="py-2 px-4 border-b">{{ $pesanan->tanggal_keberangkatan }}</td>
-                    <td class="py-2 px-4 border-b">{{ $pesanan->jumlah_peserta }}</td>
-                    <td class="py-2 px-4 border-b">
-                        <a href="{{ route('pesanan.edit', $pesanan->id) }}" class="text-blue-500">Edit</a> |
-                        <form action="{{ route('pesanan.destroy', $pesanan->id) }}" method="POST" class="inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="text-red-500" onclick="return confirm('Yakin ingin menghapus?')">Hapus</button>
-                        </form>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+                            <td>{{ $pesanan->tanggal_pesan }}</td>
+                            <td>{{ $pesanan->tanggal_keberangkatan }}</td>
+                            <td>{{ $pesanan->jumlah_peserta }}</td>
+                            <td>
+                                @if ($pesanan->paspor)
+                                    <a href="{{ asset('storage/' . $pesanan->paspor) }}" target="_blank">
+                                        <img src="{{ asset('storage/' . $pesanan->paspor) }}"
+                                            alt="Foto Paspor"
+                                            style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px; box-shadow: 0 0 4px rgba(0,0,0,0.2);">
+                                    </a>
+                                @else
+                                    -
+                                @endif
+                            </td>
+                            <td class="text-center">
+                                <div class="btn-group">
+                                    <a href="{{ route('pesanan.edit', $pesanan->id) }}" class="btn btn-primary btn-sm">
+                                        <i class="fa-solid fa-pen-to-square"></i> Edit
+                                    </a>
+                                    <button onclick="confirmDelete({{ $pesanan->id }})" class="btn btn-danger btn-sm">
+                                        <i class="fa-solid fa-trash"></i> Hapus
+                                    </button>
+                                </div>
+                                <form id="delete-form-{{ $pesanan->id }}" action="{{ route('pesanan.destroy', $pesanan->id) }}" method="POST" class="d-none">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+
     </div>
 </div>
-@endsection
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'Yakin ingin menghapus?',
+            text: "Data yang dihapus tidak bisa dikembalikan!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('delete-form-' + id).submit();
+            }
+        })
+    }
+</script>
+@endsection

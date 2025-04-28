@@ -21,7 +21,7 @@
                 <i class="fa-solid fa-list"></i> Lihat Keseluruhan Penilaian
             </a>
             <a href="{{ route('candidates.report') }}" class="btn btn-info">
-                <i class="fa-solid fa-print"></i> Cetak Pelamar
+                <i class="fa-solid fa-print"></i> Cetak penialai
             </a>
         </div>
 
@@ -29,7 +29,7 @@
             <table class="table table-bordered w-100">
                 <thead class="table-light">
                     <tr>
-                        <th>Nama Kandidat</th>
+                        <th>Nama Guide</th>
                         <th class="text-center">Aksi</th>
                     </tr>
                 </thead>

@@ -74,12 +74,20 @@
                 @error('information_trip') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
             </div>
 
-            <!-- Itinerary -->
+            <!-- Itinerary File Upload -->
             <div class="mb-4">
-                <label class="block text-gray-700 font-bold mb-2" for="itinerary">Itenerary</label>
-                <textarea name="itinerary" id="itinerary" rows="4"
-                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">{{ old('itinerary', $paket->itinerary) }}</textarea>
+                <label class="block text-gray-700 font-bold mb-2" for="itinerary">Itinerary (PDF)</label>
+                <input type="file" name="itinerary" id="itinerary"
+                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                 @error('itinerary') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
+
+                @if ($paket->itinerary)
+                    <div class="mt-2">
+                        <p class="text-gray-700 text-sm">Itinerary saat ini:</p>
+                        <a href="{{ asset('storage/' . $paket->itinerary) }}" target="_blank"
+                           class="text-blue-500">Lihat Itinerary</a>
+                    </div>
+                @endif
             </div>
 
             <!-- Foto -->
@@ -112,6 +120,5 @@
         </form>
     </div>
 </div>
-
-
 @endsection
+

@@ -19,7 +19,8 @@
 
     <!-- Custom fonts for this template-->
     {{-- <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css"> --}}
-    <link href="{{asset('assets/sb-admin/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('assets/sb-admin/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet"
+        type="text/css">
 
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
@@ -27,7 +28,7 @@
 
     <!-- Custom styles for this template-->
     {{-- <link href="css/sb-admin-2.min.css" rel="stylesheet"> --}}
-    <link href="{{asset('assets/sb-admin/css/SB-admin-2.css')}}" rel="stylesheet">
+    <link href="{{ asset('assets/sb-admin/css/SB-admin-2.css') }}" rel="stylesheet">
 
 </head>
 
@@ -75,31 +76,31 @@
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Perhitungan</h6>
-                        <a class="collapse-item" href="{{url('/kriteria')}}">Kriteria</a>
-                        <a class="collapse-item" href="{{url('/subkriteria')}}">Sub Kriteria</a>
-                        <a class="collapse-item" href=" {{url('/penilaian')}}">Penilaian</a>
-                        <a class="collapse-item" href=" {{url('/penilaian/all')}}">Hasil Penilaian</a>
+                        <a class="collapse-item" href="{{ url('/kriteria') }}">Kriteria</a>
+                        <a class="collapse-item" href="{{ url('/subkriteria') }}">Sub Kriteria</a>
+                        <a class="collapse-item" href=" {{ url('/penilaian') }}">Penilaian</a>
+                        <a class="collapse-item" href=" {{ url('/penilaian/all') }}">Hasil Penilaian</a>
 
 
                     </div>
                 </div>
             </li>
 
-          <!-- Guide -->
-<li class="nav-item">
-    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseGuide"
-        aria-expanded="false" aria-controls="collapseGuide">
-        <i class="fas fa-fw fa-cog"></i>
-        <span>Paket And Guide</span>
-    </a>
-    <div id="collapseGuide" class="collapse" aria-labelledby="headingGuide" data-parent="#accordionSidebar">
-        <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Informasi</h6>
-            <a class="collapse-item" href="{{url('/guide')}}">Guide</a>
-            <a class="collapse-item" href="{{url('/paket')}}">Paket Wisata</a>
-        </div>
-    </div>
-</li>
+            <!-- Guide -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseGuide"
+                    aria-expanded="false" aria-controls="collapseGuide">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Paket And Guide</span>
+                </a>
+                <div id="collapseGuide" class="collapse" aria-labelledby="headingGuide" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Informasi</h6>
+                        <a class="collapse-item" href="{{ url('/guide') }}">Guide</a>
+                        <a class="collapse-item" href="{{ url('/paket') }}">Paket Wisata</a>
+                    </div>
+                </div>
+            </li>
 
             <!-- Nav Item - Utilities Collapse Menu -->
             {{-- <li class="nav-item">
@@ -161,9 +162,22 @@
 
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="tables.html">
+                <a class="nav-link" href="{{ route('pesanan.index') }}">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>Tables</span></a>
+                    <span>Pesanan</span></a>
+            </li>
+
+              <!-- Nav Item - Tables -->
+              <li class="nav-item">
+                <a class="nav-link" href="{{ route('galeris.index') }}">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Gallery</span></a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('blogs.index') }}">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Blog</span></a>
             </li>
 
             <!-- Divider -->
@@ -195,8 +209,8 @@
                     <form
                         class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                         <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                aria-label="Search" aria-describedby="basic-addon2">
+                            <input type="text" class="form-control bg-light border-0 small"
+                                placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
                             <div class="input-group-append">
                                 <button class="btn btn-primary" type="button">
                                     <i class="fas fa-search fa-sm"></i>
@@ -254,7 +268,8 @@
                                     </div>
                                     <div>
                                         <div class="small text-gray-500">December 12, 2019</div>
-                                        <span class="font-weight-bold">A new monthly report is ready to download!</span>
+                                        <span class="font-weight-bold">A new monthly report is ready to
+                                            download!</span>
                                     </div>
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
@@ -279,7 +294,8 @@
                                         Spending Alert: We've noticed unusually high spending for your account.
                                     </div>
                                 </a>
-                                <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+                                <a class="dropdown-item text-center small text-gray-500" href="#">Show All
+                                    Alerts</a>
                             </div>
                         </li>
 
@@ -299,7 +315,8 @@
                                 </h6>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="{{asset('/assets/sb-admin/img/undraw_profile_1.svg')}}"
+                                        <img class="rounded-circle"
+                                            src="{{ asset('/assets/sb-admin/img/undraw_profile_1.svg') }}"
                                             alt="">
                                         <div class="status-indicator bg-success"></div>
                                     </div>
@@ -311,7 +328,8 @@
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="{{asset('/assets/sb-admin/img/undraw_profile_2.svg')}}"
+                                        <img class="rounded-circle"
+                                            src="{{ asset('/assets/sb-admin/img/undraw_profile_2.svg') }}"
                                             alt="">
                                         <div class="status-indicator"></div>
                                     </div>
@@ -323,20 +341,22 @@
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="{{asset('/assets/sb-admin/img/undraw_profile_3.svg')}}"
+                                        <img class="rounded-circle"
+                                            src="{{ asset('/assets/sb-admin/img/undraw_profile_3.svg') }}"
                                             alt="">
                                         <div class="status-indicator bg-warning"></div>
                                     </div>
                                     <div>
-                                        <div class="text-truncate">Last month's report looks great, I am very happy with
+                                        <div class="text-truncate">Last month's report looks great, I am very happy
+                                            with
                                             the progress so far, keep up the good work!</div>
                                         <div class="small text-gray-500">Morgan Alvarez · 2d</div>
                                     </div>
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"
-                                            alt="">
+                                        <img class="rounded-circle"
+                                            src="https://source.unsplash.com/Mv9hjnEUHR4/60x60" alt="">
                                         <div class="status-indicator bg-success"></div>
                                     </div>
                                     <div>
@@ -345,7 +365,8 @@
                                         <div class="small text-gray-500">Chicken the Dog · 2w</div>
                                     </div>
                                 </a>
-                                <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
+                                <a class="dropdown-item text-center small text-gray-500" href="#">Read More
+                                    Messages</a>
                             </div>
                         </li>
 
@@ -357,7 +378,7 @@
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">zit-bangla</span>
                                 <img class="img-profile rounded-circle"
-                                    src="{{asset('/assets/sb-admin/img/undraw_profile.svg')}}">
+                                    src="{{ asset('/assets/sb-admin/img/undraw_profile.svg') }}">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -376,15 +397,17 @@
                                 </a>
                                 <div class="dropdown-divider"></div>
                                 <!-- Logout Link -->
-<a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-    Logout
-</a>
+                                <a class="dropdown-item" href="#"
+                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Logout
+                                </a>
 
-<!-- Hidden Logout Form -->
-<form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-    @csrf
-</form>
+                                <!-- Hidden Logout Form -->
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                    class="d-none">
+                                    @csrf
+                                </form>
 
                             </div>
                         </li>
@@ -450,18 +473,18 @@
 
     <!-- Bootstrap core JavaScript-->
     {{-- <script src="vendor/jquery/jquery.min.js"></script> --}}
-    <script src="{{asset('assets/sb-admin/vendor/jquery/jquery.min.js')}}"></script>
+    <script src="{{ asset('assets/sb-admin/vendor/jquery/jquery.min.js') }}"></script>
     {{-- <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script> --}}
-    <script src="{{asset('assets/sb-admin/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+    <script src="{{ asset('assets/sb-admin/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
 
     <!-- Core plugin JavaScript-->
     {{-- <script src="vendor/jquery-easing/jquery.easing.min.js"></script> --}}
-    <script src="{{asset('assets/sb-admin/vendor/jquery-easing/jquery.easing.min.js')}}"></script>
+    <script src="{{ asset('assets/sb-admin/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
 
     <!-- Custom scripts for all pages-->
     {{-- <script src="js/sb-admin-2.min.js"></script> --}}
-    <script src="{{asset('assets/sb-admin/js/sb-admin-2.min.js')}}"></script>
+    <script src="{{ asset('assets/sb-admin/js/sb-admin-2.min.js') }}"></script>
 
 </body>
 

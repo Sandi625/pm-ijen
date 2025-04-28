@@ -2,24 +2,35 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Guide;
 use App\Models\Paket;
 use App\Models\Pesanan;
 use App\Models\Kriteria;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
-use App\Notifications\OrderStoredNotification;
-use Illuminate\Support\Facades\Notification;
-use Illuminate\Support\Facades\Mail;
 use App\Mail\OrderStoredMail;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
+use App\Services\ProfileMatchingService;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\OrderStoredNotification;
+use App\Traits\ProfileMatchingTrait; // Pastikan sudah pakai trait ini di controller!
+use App\Traits\KriteriaTrait;
+
+
 
 class PesananController extends Controller
 {
     public function index()
     {
-        $pesanans = Pesanan::with(['kriteria', 'paket'])->get();
+        // Memuat data pesanan dengan relasi kriteria, paket, dan guide
+        $pesanans = Pesanan::with(['kriteria', 'paket', 'guide'])->get();
+
+        // Mengirim data pesanan ke view
         return view('pesanan.index', compact('pesanans'));
     }
+
 
     public function create($id_paket = null)
     {
@@ -27,8 +38,15 @@ class PesananController extends Controller
         $pakets = Paket::all();
         $selectedPaketId = $id_paket; // Ambil id_paket yang diterima dari URL
 
-        return view('pesanan.create', compact('kriterias', 'pakets', 'selectedPaketId'));
+        // Ambil data paket berdasarkan id_paket yang dipilih
+        $paketDetail = null;
+        if ($id_paket) {
+            $paketDetail = Paket::find($id_paket); // Menyimpan data paket berdasarkan id_paket
+        }
+
+        return view('pesanan.create', compact('kriterias', 'pakets', 'selectedPaketId', 'paketDetail'));
     }
+
 
 
 
@@ -52,16 +70,29 @@ class PesananController extends Controller
             'negara' => 'required|string|max:100',
             'bahasa' => 'required|string|max:100',
             'riwayat_medis' => 'required|string',
+            'paspor' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'special_request' => 'nullable|string',
+            'id_guide' => 'nullable|exists:guides,id',  // Menambahkan validasi id_guide
         ]);
 
+        // Simpan file paspor jika ada
+        if ($request->hasFile('paspor')) {
+            // Menyimpan file paspor dan mendapatkan path
+            $pasporPath = $request->file('paspor')->store('paspor', 'public');
+            $validated['paspor'] = $pasporPath;  // Menambahkan path paspor ke data yang tervalidasi
+        }
+
+        // Tambahkan 'id_guide' ke dalam data yang divalidasi
+        $validated['id_guide'] = $request->id_guide;  // Pastikan id_guide ada di request
+
         // Simpan pesanan ke database
-        $pesanan = Pesanan::create($validated);
+        $pesanan = Pesanan::create($validated);  // Pastikan model pesanan dapat menangani atribut yang diberikan
 
         // Kirim notifikasi ke email
         try {
             Mail::to('sandipermadi625@gmail.com')->send(new OrderStoredMail($pesanan));
         } catch (\Exception $e) {
-            // Optional: log atau tangani error pengiriman email
+            // Log error jika gagal mengirim email
             Log::error('Gagal mengirim email: ' . $e->getMessage());
         }
 
@@ -76,16 +107,56 @@ class PesananController extends Controller
 
 
 
-    public function edit($id)
-    {
-        $pesanan = Pesanan::findOrFail($id);
-        $kriterias = Kriteria::all(); // Mengambil semua data kriteria
-        $pakets = Paket::all(); // Mengambil semua data paket
-        return view('pesanan.edit', compact('pesanan', 'kriterias', 'pakets'));
+
+
+
+
+
+use KriteriaTrait;
+use ProfileMatchingTrait; // <-- pakai trait ini
+
+protected $profileMatchingService; // <-- property untuk service injection
+
+public function __construct(ProfileMatchingService $profileMatchingService)
+{
+    $this->profileMatchingService = $profileMatchingService; // Inject service
+}
+
+public function edit($id)
+{
+    $pesanan = Pesanan::with(['kriteria', 'guide.penilaians.detailPenilaians.subkriteria.kriteria'])->findOrFail($id);
+
+    $kriterias = Kriteria::all();
+    $pakets = Paket::all();
+    $guides = Guide::with(['kriteria', 'penilaians.detailPenilaians.subkriteria.kriteria'])
+    ->where('status', 'aktif')
+    ->get();
+
+    foreach ($guides as $guide) {
+        $penilaian = $guide->penilaians->first();
+
+        if ($penilaian) {
+            $hasil = $this->hitungProfileMatching($penilaian);
+            $kriteriaUnggul = $this->tentukanKriteriaUnggulanshow($hasil);
+        } else {
+            $kriteriaUnggul = 'Belum Dinilai';
+        }
+
+        $guide->kriteria_unggulan = $kriteriaUnggul;
     }
+
+    return view('pesanan.edit', compact('pesanan', 'kriterias', 'pakets', 'guides'));
+}
+
+
+
+
+
+
 
     public function update(Request $request, $id)
     {
+        // Validasi input data
         $request->validate([
             'nama' => 'required|string|max:150',
             'email' => 'required|email|max:150',
@@ -98,9 +169,29 @@ class PesananController extends Controller
             'negara' => 'required|string|max:100',
             'bahasa' => 'required|string|max:100',
             'riwayat_medis' => 'required|string',
+            'paspor' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'special_request' => 'nullable|string',
+            'id_guide' => 'nullable|exists:guides,id',  // Validasi id_guide yang nullable
         ]);
 
+        // Cari pesanan yang ingin diupdate
         $pesanan = Pesanan::findOrFail($id);
+
+        // Jika ada file paspor yang diupload, simpan file dan perbarui path-nya
+        if ($request->hasFile('paspor')) {
+            // Hapus paspor lama jika ada
+            if ($pesanan->paspor && Storage::exists('public/' . $pesanan->paspor)) {
+                Storage::delete('public/' . $pesanan->paspor);
+            }
+
+            // Simpan file paspor yang baru
+            $pasporPath = $request->file('paspor')->store('paspor', 'public');
+        } else {
+            // Jika tidak ada file paspor baru, gunakan path lama
+            $pasporPath = $pesanan->paspor;
+        }
+
+        // Update data pesanan
         $pesanan->update([
             'nama' => $request->nama,
             'email' => $request->email,
@@ -113,10 +204,19 @@ class PesananController extends Controller
             'negara' => $request->negara,
             'bahasa' => $request->bahasa,
             'riwayat_medis' => $request->riwayat_medis,
+            'paspor' => $pasporPath,  // Mempertahankan file paspor yang lama atau menggantinya jika baru
+            'special_request' => $request->special_request,
+            'id_guide' => $request->id_guide,  // Update id_guide jika ada
         ]);
 
-        return redirect()->route('pesanan.index')->with('success', 'Pesanan berhasil diperbarui');
+        // Redirect dengan pesan sukses
+        return redirect()->route('pesanan.index')->with('success', 'Pesanan berhasil diperbarui.');
     }
+
+
+
+
+
 
 
     public function destroy($id)
@@ -126,6 +226,6 @@ class PesananController extends Controller
         // Hapus data pesanan
         $pesanan->delete();
 
-        return redirect()->route('pesanan.index')->with('success', 'Pesanan berhasil dihapus!');
+        return redirect()->route('pesanan.index', $id)->with('success', 'Pesanan berhasil dihapus');
     }
 }

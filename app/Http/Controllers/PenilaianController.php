@@ -307,8 +307,7 @@ public function generatePenilaianPdf($status = 'all')
 //     return $kriteriaUnggul;
 // }
 
-
-private function tentukanKriteriaUnggulan($hasil, $kriterias)
+public function tentukanKriteriaUnggulan($hasil, $kriterias)
 {
     $max = null;
     $kriteriaUnggul = null;
@@ -324,8 +323,7 @@ private function tentukanKriteriaUnggulan($hasil, $kriterias)
     return $kriteriaUnggul;
 }
 
-
-private function tentukanKriteriaUnggulanshow($hasil)
+public function tentukanKriteriaUnggulanshow($hasil)
 {
     $max = null;
     $kriteriaUnggul = 'Tidak Diketahui';
@@ -340,6 +338,7 @@ private function tentukanKriteriaUnggulanshow($hasil)
 
     return $kriteriaUnggul;
 }
+
 
 
 

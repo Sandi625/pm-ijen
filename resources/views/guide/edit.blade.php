@@ -70,10 +70,14 @@
                 <label for="status" class="block font-semibold">Status:</label>
                 <select id="status" name="status" required class="w-full border rounded p-2">
                     <option value="1" {{ old('status', $guide->status) == 1 ? 'selected' : '' }}>Aktif</option>
-                    <option value="0" {{ old('status', $guide->status) == 0 ? 'selected' : '' }}>Non-Aktif</option>
+                    <option value="2" {{ old('status', $guide->status) == 2 ? 'selected' : '' }}>Sedang Guiding</option>
+                    <option value="3" {{ old('status', $guide->status) == 3 ? 'selected' : '' }}>Tidak Aktif</option>
                 </select>
-                @error('status') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                @error('status')
+                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                @enderror
             </div>
+
 
             <div class="flex justify-between">
                 <a href="{{ route('guide.index') }}" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Kembali</a>

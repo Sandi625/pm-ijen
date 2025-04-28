@@ -97,10 +97,12 @@
             <div class="mb-4">
                 <label for="status" class="block text-gray-700 text-sm font-bold mb-2">Status</label>
                 <select id="status" name="status" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                    <option value="1" {{ old('status', 1) == 1 ? 'selected' : '' }}>Aktif</option>
-                    <option value="0" {{ old('status') == 0 ? 'selected' : '' }}>Tidak Aktif</option>
+                    <option value="1" {{ old('status', $guide->status ?? 1) == 1 ? 'selected' : '' }}>Aktif</option>
+                    <option value="2" {{ old('status', $guide->status ?? 1) == 2 ? 'selected' : '' }}>Sedang Guiding</option>
+                    <option value="3" {{ old('status', $guide->status ?? 1) == 3 ? 'selected' : '' }}>Tidak Aktif</option>
                 </select>
             </div>
+
 
             <!-- Tombol Simpan -->
             <div class="flex items-center justify-between">

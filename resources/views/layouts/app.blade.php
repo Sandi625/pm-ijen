@@ -16,7 +16,7 @@
             <div class="flex justify-between">
                 <!-- Logo -->
                 <div class="flex items-center">
-                <a href="{{ Auth::check() ? route('dashboard') : url('/') }}" class="flex items-center py-4 px-2">
+                <a href="{{ Auth::check() ? route('home') : url('/') }}" class="flex items-center py-4 px-2">
                     <i class=""></i>
                     <span class="font-semibold text-gray-500 text-lg">Ijen Crater Tour Indonesia </span>
                 </a>

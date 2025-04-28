@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('nomor_telp', 20);
             $table->unsignedBigInteger('id_kriteria');
             $table->unsignedBigInteger('id_paket');
+            $table->unsignedBigInteger('id_guide')->nullable(); // <<< id_guide nullable
+
             $table->date('tanggal_pesan');
             $table->date('tanggal_keberangkatan');
             $table->integer('jumlah_peserta');
@@ -26,14 +28,19 @@ return new class extends Migration
             $table->string('negara', 100)->nullable();
             $table->string('bahasa', 100)->nullable();
             $table->text('riwayat_medis')->nullable();
+            $table->string('paspor', 255)->nullable();
+            $table->text('special_request')->nullable();            // Tambahan special request
 
             $table->timestamps();
 
             // Foreign key constraints
             $table->foreign('id_kriteria')->references('id')->on('kriterias')->onDelete('cascade');
             $table->foreign('id_paket')->references('id')->on('pakets')->onDelete('cascade');
+            $table->foreign('id_guide')->references('id')->on('guides')->onDelete('cascade'); // << TAMBAH RELASI DI SINI
+
         });
     }
+
 
 
     /**

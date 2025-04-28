@@ -28,7 +28,7 @@ class AuthController extends Controller
         if (Auth::user()->level === 'admin') {
             return redirect()->intended('/dashboard'); // Redirect ke dashboard untuk admin
         } else {
-            return redirect()->intended('/halguide'); // Redirect ke halguide untuk user biasa
+            return redirect()->intended('/halamanguide'); // Redirect ke halguide untuk user biasa
         }
     }
 

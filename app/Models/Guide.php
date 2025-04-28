@@ -21,5 +21,46 @@ class Guide extends Model
     {
         return $this->hasMany(Penilaian::class, 'guide_id');
     }
+
+    // Relasi ke Kriteria
+    // public function kriteria()
+    // {
+    //     return $this->belongsTo(Kriteria::class);
+    // }
+
+
+
+
+    public function kriteria()
+    {
+        return $this->belongsTo(Kriteria::class, 'kriteria_id');  // assuming kriteria_id is a column on guides table
+    }
+
+
+
+
+
+
+
+
+    // Relasi ke Pesanan
+    // public function pesanan()
+    // {
+    //     return $this->hasMany(Pesanan::class);
+    // }
+
+    public function pesanan()
+{
+    return $this->hasMany(Pesanan::class, 'id_guide');
+}
+
+
+
+public function kriteriaUnggulan()
+{
+    return $this->belongsTo(Kriteria::class, 'kriteria_id')->where('is_unggulan', true);  // assuming 'is_unggulan' is a column
+}
+
+
 }
 

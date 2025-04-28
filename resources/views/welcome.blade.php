@@ -45,13 +45,16 @@
                         <a href="#discover" class="nav__link">Destination</a>
                     </li>
                     <li class="nav__item">
-                        <a href="#place" class="nav__link">Tours</a>
+                        <a href="#tour-pakets" class="nav__link">Tours</a>
                     </li>
                     <li class="nav__item">
                         <a href="{{ route('galeri') }}" class="nav__link">Gallery</a>
                     </li>
                     <li class="nav__item">
                         <a href="{{ route('review') }}" class="nav__link">Review</a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="{{ route('blog.list') }}" class="nav__link">Blogs</a>
                     </li>
                     <li class="nav__item">
                         <a href="/login" class="nav__link">Login</a>
@@ -136,7 +139,7 @@
                     <p class="about__description">
                         <!-- Tour Village !! Provide an immersive experience of the life and culture of a village. This tour combines natural exploration, interaction with local residents, and participation in traditional activities. Exploring a tour village is an ideal way to experience authentic village life, learn from local culture, and enjoy the beauty of nature while interacting directly with the local community. -->
                     </p>
-                    <a href="#place" class="button">Reserve a place</a>
+                    <a href="#tour-pakets" class="button">Reserve a place</a>
                 </div>
 
                 <div class="about__img">
@@ -355,7 +358,7 @@
         </section>
 
       <!--==================== TOUR PAKETS ====================-->
-      <section>
+      <section id="tour-pakets">
         <h2 class="section-title">Tour Pakets</h2>
         <div class="bd-container testimonials__container">
             @foreach ($pakets as $paket)
@@ -365,7 +368,6 @@
                         <a href="{{ route('pesanan.create', ['id_paket' => $paket->id]) }}">
                             <img src="{{ asset('storage/' . $paket->foto) }}" alt="Foto Paket" class="w-full h-40 object-cover rounded-lg hover:opacity-90 transition-opacity duration-300">
                         </a>
-
                         @else
                             <p>Foto tidak tersedia</p>
                         @endif
@@ -386,6 +388,47 @@
             @endforeach
         </div>
     </section>
+
+
+
+
+
+    <!-- In your welcome.blade.php -->
+
+
+
+
+
+    {{-- <section class="blogs" id="blogs">
+        <h1 class="heading">Our Daily Blogs</h1>
+
+        <div class="swiper blogs-slider">
+            <div class="swiper-wrapper">
+                @foreach ($blogs as $blog)
+                    <div class="swiper-slide slide">
+                        <!-- Displaying the image -->
+                        @if($blog->image)
+                            <img src="{{ asset('storage/' . $blog->image) }}" alt="{{ $blog->title }}">
+                        @else
+                            <img src="{{ asset('images/default.jpg') }}" alt="Default Image">
+                        @endif
+
+                        <div class="icons">
+                            <a href="#"> <i class="fas fa-calendar"></i> {{ $blog->created_at->format('d F, Y') }}</a>
+                            <a href="#"> <i class="fas fa-user"></i> by admin</a>
+                        </div>
+                        <h3>{{ $blog->title }}</h3>
+                        <p>{{ Str::limit($blog->body, 100) }}</p>
+                        <a href="{{ route('blogs.show', $blog->slug) }}" class="btn">Read More</a>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </section> --}}
+
+
+
+
 
     {{-- @if(session('success'))
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

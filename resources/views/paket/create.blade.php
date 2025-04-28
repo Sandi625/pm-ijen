@@ -54,8 +54,8 @@
 
             <!-- Itenerary -->
             <div class="mb-4">
-                <label class="block text-gray-700 font-bold mb-2" for="itenerary">Itenerary</label>
-                <textarea name="itenerary" id="itenerary" rows="4" class="w-full border border-yellow-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500">{{ old('itenerary') }}</textarea>
+                <label class="block text-gray-700 font-bold mb-2" for="itinerary">Itinerary (Upload PDF)</label>
+                <input type="file" name="itinerary" id="itinerary" class="w-full border border-yellow-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500">
             </div>
 
             <!-- Information Trip -->

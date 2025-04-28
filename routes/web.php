@@ -5,17 +5,26 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\GuideController;
 use App\Http\Controllers\PaketController;
+use App\Http\Controllers\GaleriController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ReviewController;
-
 use App\Http\Controllers\PesananController;
+use App\Http\Controllers\HalguideController;
 use App\Http\Controllers\KriteriaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PenilaianController;
 use App\Http\Controllers\SubKriteriaController;
+use App\Http\Controllers\ShowBlogController;
+
 
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
+
+// Route::get('/homeblog', [BlogController::class, 'showOnWelcome']);
+
+
+// Route::get('/', [ShowBlogController::class, 'index']);
 
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -51,13 +60,19 @@ Route::resource('pesanan', controller: PesananController::class);
 Route::get('/pesanan/create/{id_paket?}', [PesananController::class, 'create'])->name('pesanan.create');
 // web.php
 // Route::get('/pesanan/create/{id}', action: [PesananController::class, 'create'])->name('pesanan.create');
+Route::get('/halamanguide', [HalguideController::class, 'index'])->name('halamanguide.index');
+
+
+Route::resource('galeris', GaleriController::class);
 
 
 
 
 
 
+Route::resource('blogs', BlogController::class);
 
+Route::get('/sblog', [BlogController::class, 'listBlogs'])->name('blog.list');
 
 
 
@@ -88,10 +103,12 @@ Route::get('/', [PaketController::class, 'showPakets'])->name('home');
 // Route::get('/', [PaketController::class, 'showPakets']);
 
 
-Route::get('/halguide', function () {
-    return view('halamanguide.index');
-})->name('halg');
+// Route::get('/halguide', function () {
+//     return view('halamanguide.index');
+// })->name('halg');
 
 
 Route::resource('users', UserController::class);
+
+
 

@@ -1483,3 +1483,44 @@ body.dark-theme {
     position: relative;
     z-index: 1; /* Lower than the modal */
 }
+
+
+
+/*
+.blogs .slide {
+    text-align: center;
+    padding: 2rem;
+  }
+  .blogs .slide img {
+    height: 25rem;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 0.5rem;
+  }
+  .blogs .slide .icons {
+    background: #10221b;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    position: relative;
+    top: -2rem;
+    display: inline-block;
+  }
+  .blogs .slide .icons a {
+    font-size: 1.4rem;
+    color: #fff;
+    margin: 0 1rem;
+  }
+  .blogs .slide .icons i {
+    padding-right: 0.5rem;
+    color: #219150;
+  }
+  .blogs h3 {
+    font-size: 2rem;
+    color: #10221b;
+  }
+  .blogs p {
+    font-size: 1.4rem;
+    padding: 1rem 0;
+    line-height: 2;
+    color: #10221b;
+  } */
