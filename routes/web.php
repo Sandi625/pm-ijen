@@ -21,12 +21,6 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-// Route::get('/homeblog', [BlogController::class, 'showOnWelcome']);
-
-
-// Route::get('/', [ShowBlogController::class, 'index']);
-
-
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -59,13 +53,15 @@ Route::resource('paket', PaketController::class);
 Route::resource('pesanan', controller: PesananController::class);
 Route::get('/pesanan/create/{id_paket?}', [PesananController::class, 'create'])->name('pesanan.create');
 // web.php
-// Route::get('/pesanan/create/{id}', action: [PesananController::class, 'create'])->name('pesanan.create');
 Route::get('/halamanguide', [HalguideController::class, 'index'])->name('halamanguide.index');
 
 
 Route::resource('galeris', GaleriController::class);
 
+// Route::get('/galeri', [GaleriController::class, 'showGaleri'])->name('galeri.page');
 
+Route::get('/galeri', [GaleriController::class, 'showGaleri'])->name('galeri'); // utama
+Route::get('/galeri/video', [GaleriController::class, 'showVideo'])->name('galeri.video');
 
 
 
@@ -79,10 +75,7 @@ Route::get('/sblog', [BlogController::class, 'listBlogs'])->name('blog.list');
 
 
 
-//route landing page
-Route::get('/galeri', function () {
-    return view('galeri.galeri');
-})->name('galeri');
+
 
 Route::get('/reviews', function () {
     return view('review.review');
@@ -94,19 +87,8 @@ Route::get('/reviews', function () {
 Route::get('/review', [ReviewController::class, 'index'])->name('review.review');
 
 Route::post('/review/store', [ReviewController::class, 'store'])->name('review.store');
-
-
 //paket
 Route::get('/', [PaketController::class, 'showPakets'])->name('home');
-// Route::get('/', [PesananController::class, 'showPakets']);
-
-// Route::get('/', [PaketController::class, 'showPakets']);
-
-
-// Route::get('/halguide', function () {
-//     return view('halamanguide.index');
-// })->name('halg');
-
 
 Route::resource('users', UserController::class);
 

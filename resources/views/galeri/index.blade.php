@@ -1,7 +1,35 @@
 @extends('layouts.base')
 
 @section('title', 'Galeri')
+<style>/* Gaya pagination */
+    .pagination {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 20px;
+        gap: 8px;
+    }
 
+    .pagination .page-item .page-link {
+        color: #007bff;
+        border: 1px solid #dee2e6;
+        padding: 6px 12px;
+        border-radius: 4px;
+        transition: all 0.2s ease;
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: #007bff;
+        color: #fff;
+        border-color: #007bff;
+    }
+
+    .pagination .page-item.disabled .page-link {
+        color: #6c757d;
+        pointer-events: none;
+        background-color: #f8f9fa;
+    }
+    </style>
 @section('content')
     <!-- Container for Gallery -->
     <div class="container mt-5">
@@ -23,7 +51,7 @@
                                  style="height: 150px; object-fit: cover;" alt="{{ $galeri->judul }}">
                         @elseif ($galeri->videoyoutube)
                             @php
-                                // Regular expression to extract the video ID from YouTube URL
+                                // Ekstrak ID video YouTube menggunakan regex
                                 $youtubeId = null;
                                 if (
                                     preg_match(
@@ -37,20 +65,14 @@
                             @endphp
 
                             @if ($youtubeId)
-                                <!-- YouTube Video Thumbnail -->
-                                <div class="ratio ratio-16x9 position-relative">
-                                    <img src="https://img.youtube.com/vi/{{ $youtubeId }}/maxresdefault.jpg"
-                                         alt="YouTube video thumbnail" class="img-fluid"
-                                         style="height: 150px; object-fit: cover;">
-                                    <!-- Embed YouTube Video with iframe -->
+                                <!-- Embed YouTube Video with iframe (without thumbnail) -->
+                                <div class="ratio ratio-16x9">
                                     <iframe src="https://www.youtube.com/embed/{{ $youtubeId }}"
                                             title="YouTube video" frameborder="0" allowfullscreen
-                                            class="position-absolute top-0 start-0 w-100 h-100"
-                                            style="opacity: 0;">
+                                            class="w-100 h-100">
                                     </iframe>
                                 </div>
                             @else
-                                <!-- If no valid YouTube ID is found -->
                                 <div class="bg-secondary text-white text-center d-flex align-items-center justify-content-center"
                                      style="height: 150px;">
                                     Video YouTube Tidak Valid
@@ -63,7 +85,6 @@
                                 Your browser does not support the video tag.
                             </video>
                         @else
-                            <!-- No Video or Image -->
                             <div class="bg-secondary text-white text-center d-flex align-items-center justify-content-center"
                                  style="height: 150px;">
                                 No Media
@@ -78,8 +99,6 @@
 
                         <!-- Card Footer -->
                         <div class="card-footer d-flex justify-content-between">
-                            {{-- <a href="{{ route('galeris.edit', $galeri->id) }}" class="btn btn-warning btn-sm">Edit</a> --}}
-                            <!-- Delete Form with confirmation -->
                             <form id="delete-form-{{ $galeri->id }}" action="{{ route('galeris.destroy', $galeri->id) }}" method="POST" style="display: none;">
                                 @csrf
                                 @method('DELETE')
@@ -91,10 +110,13 @@
             @endforeach
         </div>
 
-        <!-- Pagination -->
-        <div class="d-flex justify-content-center mt-4">
-            {{ $galeris->links() }}
-        </div>
+        <!-- Pagination Links -->
+      <!-- Pagination -->
+<div class="d-flex justify-content-center mt-4">
+    {!! $galeris->links('pagination::bootstrap-4') !!}
+</div>
+
+
     </div>
 
     <!-- SweetAlert2 JS -->
@@ -118,3 +140,4 @@
         }
     </script>
 @endsection
+

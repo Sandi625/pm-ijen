@@ -8,6 +8,28 @@
     <link rel="stylesheet" href="https://unpkg.com/remixicon/fonts/remixicon.css">
 
     @include('__js.galeri')
+    <style>
+        .gallery-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Membuat kolom otomatis */
+    gap: 15px; /* Mengatur jarak antar gambar */
+    padding: 20px;
+}
+
+.discover__card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.myImg {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+    </style>
 
     <!-- <link rel="stylesheet" href="bali.css"> -->
 </head>
@@ -47,196 +69,31 @@
         </ul>
     </nav>
 
-
-
     <!-- Main Section -->
     <main class="main">
         <!-- Gallery Options -->
         <section class="section">
-            <h2 class="section__title">Gallery</h2>
+            <h2 class="section__title">Video Gallery</h2>
             <div class="gallery-options">
-                <button onclick="showImages()">Images</button>
-                <button onclick="showVideos()">Videos</button>
+                <a href="{{ route('galeri') }}">
+                    <button>Images</button>
+                </a>
+                <a href="{{ route('galeri.video') }}">
+                    <button>Videos</button>
+                </a>
             </div>
         </section>
 
         <!-- Gallery Images -->
-        <section class="gallery-container">
-            <div class="discover__card">
-                <img id="myImg" src="../assets/img/10.jpg" alt="Snow" style="width:100%;max-width:300px">
-                <!-- <div class="discover__data"> -->
-                    <!-- <h3 class="discover__title">Blue Fire</h3> -->
-                    <!-- <span class="discover__description">A beautiful Blue fire.</span> -->
-                </div>
-            </div>
-            <div class="discover__card">
-                <img id="myImg" src="../assets/img/1qq.jpg" alt="Snow" style="width:100%;max-width:300px">
-                <!-- <div class="discover__data"> -->
-                    <!-- <h3 class="discover__title">Blue Fire</h3> -->
-                    <!-- <span class="discover__description">A beautiful Blue fire.</span> -->
-                </div>
-            </div>
-            <div class="discover__card">
-                <img id="myImg" src="../assets/img/9.png" alt="Snow" style="width:100%;max-width:300px">
-                <!-- <div class="discover__data"> -->
-                    <!-- <h3 class="discover__title">Blue Fire</h3> -->
-                    <!-- <span class="discover__description">A beautiful Blue fire.</span> -->
-                </div>
-            </div>
-            <div class="discover__card">
-                <img id="myImg" src="../assets/img/12.jpg" alt="Snow" style="width:100%;max-width:300px">
-                <!-- <div class="discover__data"> -->
-                    <!-- <h3 class="discover__title">Blue Fire</h3> -->
-                    <!-- <span class="discover__description">A beautiful Blue fire.</span> -->
-                </div>
-            </div>
-            <div class="discover__card">
-                <img id="myImg" src="../assets/img/13qq.jpg" alt="Snow" style="width:100%;max-width:300px">
-                <!-- <div class="discover__data"> -->
-                    <!-- <h3 class="discover__title">Blue Fire</h3> -->
-                    <!-- <span class="discover__description">A beautiful Blue fire.</span> -->
-                </div>
-            </div>
-            <div class="discover__card">
-                <img id="myImg" src="../assets/img/47.jpg" alt="Snow" style="width:100%;max-width:300px">
-                <!-- <div class="discover__data"> -->
-                    <!-- <h3 class="discover__title">Blue Fire</h3> -->
-                    <!-- <span class="discover__description">A beautiful Blue fire.</span> -->
-                </div>
-            </div>
-            <div class="discover__card">
-                <img id="myImg" src="../assets/img/45.jpg" alt="Snow" style="width:100%;max-width:300px">
-                <!-- <div class="discover__data"> -->
-                    <!-- <h3 class="discover__title">Blue Fire</h3> -->
-                    <!-- <span class="discover__description">A beautiful Blue fire.</span> -->
-                </div>
-            </div>
-            <div class="discover__card">
-                <img id="myImg" src="../assets/img/bule1.jpg" alt="Snow" style="width:100%;max-width:300px">
-                <!-- <div class="discover__data"> -->
-                    <!-- <h3 class="discover__title">Blue Fire</h3> -->
-                    <!-- <span class="discover__description">A beautiful Blue fire.</span> -->
-                </div>
-            </div>
-            <div class="discover__card">
-                <img id="myImg" src="../assets/img/bule2.jpg" alt="Snow" style="width:100%;max-width:300px">
-                <!-- <div class="discover__data"> -->
-                    <!-- <h3 class="discover__title">Blue Fire</h3> -->
-                    <!-- <span class="discover__description">A beautiful Blue fire.</span> -->
-                </div>
-            </div>
-            <div class="discover__card">
-                <img id="myImg" src="../assets/img/bule3.jpg" alt="Snow" style="width:100%;max-width:300px">
-                <!-- <div class="discover__data"> -->
-                    <!-- <h3 class="discover__title">Blue Fire</h3> -->
-                    <!-- <span class="discover__description">A beautiful Blue fire.</span> -->
-                </div>
-            </div>
-            <div class="discover__card">
-                <img id="myImg" src="../assets/img/bule4.jpg" alt="Snow" style="width:100%;max-width:300px">
-                <!-- <div class="discover__data"> -->
-                    <!-- <h3 class="discover__title">Blue Fire</h3> -->
-                    <!-- <span class="discover__description">A beautiful Blue fire.</span> -->
-                </div>
-            </div>
-            <div class="discover__card">
-                <img id="myImg" src="../assets/img/bule5.jpg" alt="Snow" style="width:100%;max-width:300px">
-                <!-- <div class="discover__data"> -->
-                    <!-- <h3 class="discover__title">Blue Fire</h3> -->
-                    <!-- <span class="discover__description">A beautiful Blue fire.</span> -->
-                </div>
-            </div>
-            <div class="discover__card">
-                <img id="myImg" src="../assets/img/bule6.jpg" alt="Snow" style="width:100%;max-width:300px">
-                <!-- <div class="discover__data"> -->
-                    <!-- <h3 class="discover__title">Blue Fire</h3> -->
-                    <!-- <span class="discover__description">A beautiful Blue fire.</span> -->
-                </div>
-            </div>
-
+        <section class="gallery-container" id="image-gallery">
+            @foreach ($galeris as $galeri)
+                @if ($galeri->foto && file_exists(public_path('storage/' . $galeri->foto)))
+                    <div class="discover__card image-item">
+                        <img class="myImg" src="{{ asset('storage/' . $galeri->foto) }}" alt="{{ $galeri->judul }}" style="width:100%;max-width:300px">
+                    </div>
+                @endif
+            @endforeach
         </section>
-
-        <div id="myModal" class="modal">
-            <span class="close">&times;</span>
-            <img class="modal-content" id="img01">
-            <div id="caption"></div>
-          </div>
-        <!-- Video Section -->
-       <!-- Video Section -->
-<section class="video-section">
-    <h2 class="section__title">Featured Videos</h2>
-    <div class="container video-container">
-        <!-- Video YouTube -->
-        <div class="video-wrapper">
-            <iframe src="https://www.youtube.com/embed/E0WT1HtB-Sc" title="YouTube video 1" allowfullscreen></iframe>
-        </div>
-        <div class="video-wrapper">
-            <iframe src="https://www.youtube.com/embed/65yoSXHo0KU" title="YouTube video 2" allowfullscreen></iframe>
-        </div>
-
-
-        <!-- Video Lokal -->
-        <div class="video__container container">
-            <p class="video__description">Find out more with our video of the most beautiful and pleasant places for you and your family.</p>
-            <div class="video-grid">
-                <video width="400" controls>
-                    <source src="../assets/video/0.mp4" type="video/mp4">
-                    <source src="../assets/video/0.ogg" type="video/ogg">
-                    Your browser does not support HTML video.
-                </video>
-                <video width="400" controls>
-                    <source src="../assets/video/1.mp4" type="video/mp4">
-                    <source src="../assets/video/1.ogg" type="video/ogg">
-                    Your browser does not support HTML video.
-                </video>
-                <video width="400" controls>
-                    <source src="../assets/video/2.mp4" type="video/mp4">
-                    <source src="../assets/video/2.ogg" type="video/ogg">
-                    Your browser does not support HTML video.
-                </video>
-                <video width="400" controls>
-                    <source src="../assets/video/3.mp4" type="video/mp4">
-                    <source src="../assets/video/3.ogg" type="video/ogg">
-                    Your browser does not support HTML video.
-                </video>
-                <video width="400" controls>
-                    <source src="../assets/video/4.mp4" type="video/mp4">
-                    <source src="../assets/video/4.ogg" type="video/ogg">
-                    Your browser does not support HTML video.
-                </video>
-                <video width="400" controls>
-                    <source src="../assets/video/5.mp4" type="video/mp4">
-                    <source src="../assets/video/5.ogg" type="video/ogg">
-                    Your browser does not support HTML video.
-                </video>
-                <video width="400" controls>
-                    <source src="../assets/video/6.mp4" type="video/mp4">
-                    <source src="../assets/video/6.ogg" type="video/ogg">
-                    Your browser does not support HTML video.
-                </video>
-                <video width="400" controls>
-                    <source src="../assets/video/7.mp4" type="video/mp4">
-                    <source src="../assets/video/7.ogg" type="video/ogg">
-                    Your browser does not support HTML video.
-                </video>
-                <video width="400" controls>
-                    <source src="../assets/video/8.mp4" type="video/mp4">
-                    <source src="../assets/video/8.ogg" type="video/ogg">
-                    Your browser does not support HTML video.
-                </video>
-                <video width="400" controls>
-                    <source src="../assets/video/9.mp4" type="video/mp4">
-                    <source src="../assets/video/9.ogg" type="video/ogg">
-                    Your browser does not support HTML video.
-                </video>
-
-            </div>
-        </div>
-    </div>
-</section>
-
-
-
 
     </main>
 
@@ -248,15 +105,10 @@
                     <h3 class="footer__title">Travel</h3>
                     <p class="footer__description">Travel you choose the <br> destination, we offer you the <br> experience.</p>
                     <div>
-                        <a href="https://www.facebook.com/profile.php?id=100090053510077" target="_blank"
-                            class="footer__social">
+                        <a href="https://www.facebook.com/profile.php?id=100090053510077" target="_blank" class="footer__social">
                             <i class="ri-facebook-box-fill"></i>
                         </a>
-                        <!-- <a href="https://twitter.com/" target="_blank" class="footer__social">
-                                <i class="ri-twitter-fill"></i>
-                            </a> -->
-                        <a href="https://www.instagram.com/ijencratertour.indonesia/" target="_blank"
-                            class="footer__social">
+                        <a href="https://www.instagram.com/ijencratertour.indonesia/" target="_blank" class="footer__social">
                             <i class="ri-instagram-fill"></i>
                         </a>
                         <a href="https://www.youtube.com/@E__AHMADDHANIIRJA" target="_blank" class="footer__social">
@@ -325,4 +177,5 @@
     <script src="bali.js"></script>
 
 </body>
+
 </html>

@@ -12,10 +12,12 @@ class GaleriController extends Controller
 {
     public function index()
     {
-        // Mengambil data galeri dengan pagination
-        $galeris = Galeri::paginate(9); // Menampilkan 9 galeri per halaman
+        // Mengambil data galeri dengan pagination, menampilkan 9 galeri per halaman
+        $galeris = Galeri::paginate(8); // Menampilkan 9 galeri per halaman
         return view('galeri.index', compact('galeris'));
     }
+
+
 
 public function create()
 {
@@ -150,6 +152,24 @@ public function destroy($id)
 
     return redirect()->route('galeris.index')->with('success', 'Galeri berhasil dihapus.');
 }
+
+public function showGaleri()
+{
+    // Mengambil semua data galeri tanpa pagination
+    $galeris = Galeri::all(); // Mengambil semua data galeri
+    return view('galeri.galeri', compact('galeris'));
+}
+
+public function showVideo()
+{
+    // Ambil semua data galeri yang hanya punya video tanpa pagination
+    $galeris = Galeri::whereNotNull('videoyoutube')
+                    ->orWhereNotNull('videolokal')
+                    ->get(); // Mengambil semua video tanpa pagination
+
+    return view('galeri.video', compact('galeris'));
+}
+
 
 
 

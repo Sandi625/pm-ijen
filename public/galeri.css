@@ -1031,6 +1031,20 @@ video {
   cursor: pointer;
 }
 
+.gallery-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+
+
+  .discover__card img {
+    width: 100%;
+    height: 250px; /* Atur tinggi tetap */
+    object-fit: cover; /* Memastikan gambar sesuai dengan container tanpa distorsi */
+  }
+
 /* 100% Image Width on Smaller Screens */
 @media only screen and (max-width: 700px) {
   .modal-content {
@@ -1040,20 +1054,71 @@ video {
 
 
 
+
+
+/* Container galeri video */
 .gallery-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Pusatkan item agar rapi */
+    gap: 16px; /* Jarak antar item */
+    padding: 16px;
 }
 
-.discover__card {
-  flex: 1 1 calc(33.333% - 10px); /* Membuat tiga kolom dengan jarak antara kolom */
-  box-sizing: border-box;
-  margin: 5px; /* Memberikan jarak antar kartu */
+/* Kartu video */
+.video-card {
+    width: 100%;
+    max-width: 300px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease;
 }
 
-.discover__card img {
-  width: 100%;
-  height: 250px; /* Atur tinggi tetap */
-  object-fit: cover; /* Memastikan gambar sesuai dengan container tanpa distorsi */
+/* Hover effect */
+.video-card:hover {
+    transform: translateY(-5px);
 }
+
+/* Wrapper video 16:9 */
+.video-card .video-item {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%; /* Aspect ratio 16:9 */
+    background-color: #000;
+    border-radius: 10px 10px 0 0;
+    overflow: hidden;
+}
+
+/* Video tag dan iframe full size */
+.video-card iframe,
+.video-card video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    object-fit: cover;
+}
+
+/* Konten bawah video */
+.video-card .card-body {
+    padding: 8px;
+    text-align: center;
+}
+
+.video-card .card-body h3 {
+    font-size: 1rem;
+    margin: 4px 0;
+    color: #333;
+}
+
+.video-card .card-body p {
+    font-size: 0.85rem;
+    margin: 0;
+    color: #777;
+}
+
+
