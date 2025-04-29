@@ -28,9 +28,15 @@
                 @enderror
             </div>
 
-            <!-- Video Lokal Upload -->
+             <!-- Message to guide user -->
+             <div class="mb-4 text-base text-red-500">
+                <p class="italic">Pilih dan upload salah satu di bawah ini, jangan upload semua file sekaligus.</p>
+            </div>
+
             <div class="mb-4">
-                <label for="videolokal" class="block text-lg font-medium text-gray-700">Video Lokal (Opsional)</label>
+                <label for="videolokal" class="block text-lg font-medium text-gray-700">Video Lokal (Opsional)
+                    <span class="text-red-500">(Maksimal 50MB)</span>
+                </label>
                 <input type="file" id="videolokal" name="videolokal" class="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
                 @error('videolokal')
                     <div class="text-red-500 text-sm mt-2">{{ $message }}</div>
@@ -48,12 +54,19 @@
 
             <!-- Foto Upload -->
             <div class="mb-4">
-                <label for="foto" class="block text-lg font-medium text-gray-700">Foto (Opsional)</label>
+                <label for="foto" class="block text-lg font-medium text-gray-700">Foto (Opsional)
+                    <span class="text-red-500">(Maksimal 2MB)</span>
+                </label>
                 <input type="file" id="foto" name="foto" class="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
                 @error('foto')
                     <div class="text-red-500 text-sm mt-2">{{ $message }}</div>
                 @enderror
             </div>
+
+
+
+
+
 
             <!-- Submit Button -->
             <div class="text-center">

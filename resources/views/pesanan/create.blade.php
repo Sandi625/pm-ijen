@@ -4,6 +4,7 @@
 
 @section('content')
     <!-- Detail Paket (Deskripsi dan Itinerary) -->
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
 
@@ -244,7 +245,10 @@
 
                 <!-- Paspor -->
                 <div class="mb-4">
-                    <label class="block text-gray-700 font-bold mb-2" for="paspor">Upload Foto Paspor</label>
+                    <label class="block text-gray-700 font-bold mb-2" for="paspor">
+                        Upload Foto Paspor
+                        <span class="text-red-500">(Maksimal 5MB)</span>
+                    </label>
                     <input type="file" name="paspor" id="paspor" accept="image/*"
                         class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         required>
@@ -253,9 +257,10 @@
                     @enderror
                 </div>
 
+
                 <!-- Special Request -->
                 <div class="mb-4">
-                    <label class="block text-gray-700 font-bold mb-2" for="special_request">Permintaan Khusus (Special Request)</label>
+                    <label class="block text-gray-700 font-bold mb-2" for="special_request">Special Request (Optional)</label>
                     <textarea name="special_request" id="special_request" rows="4"
                         class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="Contoh: Vegetarian meal, kebutuhan khusus, dll...">{{ old('special_request') }}</textarea>
@@ -292,6 +297,20 @@
             });
         </script>
     @endif
+
+    @if ($errors->any())
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            Swal.fire({
+                title: 'Terjadi Kesalahan!',
+                html: `{!! implode('<br>', $errors->all()) !!}`,
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        });
+    </script>
+@endif
+
 
     <script>
         const paketData = @json($pakets);
@@ -350,58 +369,7 @@
 
     <img id="previewPaspor" class="mt-2 max-w-xs hidden" alt="Preview Paspor" />
 
-    {{-- <script>
-        document.getElementById('paspor').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            const preview = document.getElementById('previewPaspor');
-            if (file) {
-                preview.src = URL.createObjectURL(file);
-                preview.classList.remove('hidden');
-            } else {
-                preview.src = '';
-                preview.classList.add('hidden');
-            }
-        });
-    </script> --}}
 
-    {{-- <script>
-    async function downloadItineraryPDF() {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-
-        const content = document.getElementById("paket-itinerary").innerText;
-
-        // Split berdasarkan baris atau line break
-        const rows = content.split('\n').filter(line => line.trim() !== '');
-
-        // Siapkan data untuk tabel
-        const tableData = rows.map(row => {
-            const splitIndex = row.indexOf(':');
-            if (splitIndex !== -1) {
-                const day = row.substring(0, splitIndex).trim();
-                const activity = row.substring(splitIndex + 1).trim();
-                return [day, activity];
-            } else {
-                return ['-', row];
-            }
-        });
-
-        // Tambahkan judul
-        doc.setFontSize(16);
-        doc.text("Itinerary Per Hari", 14, 15);
-
-        // Buat tabel
-        doc.autoTable({
-            startY: 20,
-            head: [['Hari', 'Aktivitas']],
-            body: tableData,
-            theme: 'grid',
-            headStyles: { fillColor: [0, 102, 204] },
-        });
-
-        doc.save("itinerary-per-hari.pdf");
-    }
-</script> --}}
 
 
 

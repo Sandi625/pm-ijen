@@ -22,7 +22,7 @@
             <!-- Salary -->
             <div class="mb-4">
                 <label for="salary" class="block text-gray-700 text-sm font-bold mb-2">Salary</label>
-                <input type="number" step="0.01" id="salary" name="salary" value="{{ old('salary') }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('salary') border-red-500 @enderror">
+                <input type="text" id="salary" name="salary" value="{{ old('salary') }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('salary') border-red-500 @enderror" oninput="formatRupiah(this)">
                 @error('salary')
                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                 @enderror
@@ -84,14 +84,22 @@
                 @enderror
             </div>
 
-            <!-- Foto -->
-            <div class="mb-4">
-                <label for="foto" class="block text-gray-700 text-sm font-bold mb-2">Foto</label>
-                <input type="file" id="foto" name="foto" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('foto') border-red-500 @enderror">
-                @error('foto')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                @enderror
-            </div>
+          <!-- Foto -->
+<!-- Foto -->
+<div class="mb-4">
+    <label for="foto" class="block text-gray-700 text-sm font-bold mb-2 inline-block">
+        Foto
+        <span class="text-red-500">(Maksimal 2MB)</span> <!-- Menambahkan teks maksimal ukuran file di samping label dengan warna merah -->
+    </label>
+    <input type="file" id="foto" name="foto" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('foto') border-red-500 @enderror">
+    @error('foto')
+        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+    @enderror
+</div>
+
+
+
+
 
             <!-- Status -->
             <div class="mb-4">
@@ -107,7 +115,7 @@
             <!-- Tombol Simpan -->
             <div class="flex items-center justify-between">
                 <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Simpan</button>
-                <a href="{{ route('kriteria.index') }}" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Kembali</a>
+                <a href="{{ route('guide.index') }}" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Kembali</a>
 
             </div>
 
@@ -119,4 +127,25 @@
 
     </div>
 </div>
+
+<script>
+    function formatRupiah(input) {
+        let value = input.value.replace(/[^,\d]/g, '').toString();
+        let split = value.split(',');
+        let part1 = split[0];
+        let part2 = split.length > 1 ? ',' + split[1] : '';
+
+        part1 = part1.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Format ribuan
+
+        input.value = 'Rp ' + part1 + part2;
+    }
+</script>
+<script>
+    document.querySelector('form').addEventListener('submit', function(event) {
+        var salaryInput = document.getElementById('salary');
+        var value = salaryInput.value.replace(/[^0-9]/g, ''); // Menghapus selain angka
+        salaryInput.value = value; // Set nilai baru pada input
+    });
+</script>
+
 @endsection

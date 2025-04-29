@@ -27,20 +27,20 @@ class GuideController extends Controller
         $guides = Guide::with(['kriteria', 'penilaians.detailPenilaians.subkriteria.kriteria'])->get();
 
         foreach ($guides as $guide) {
-            // Ambil penilaian pertama
+
             $penilaian = $guide->penilaians->first();
 
             if ($penilaian) {
-                // Hitung profile matching untuk penilaian ini
+
                 $hasil = $this->hitungProfileMatching($penilaian);
 
-                // Tentukan kriteria unggulan dari hasil itu
+
                 $kriteriaUnggul = $this->tentukanKriteriaUnggulanshow($hasil);
             } else {
                 $kriteriaUnggul = 'Belum Dinilai';
             }
 
-            // Tambahkan atribut baru ke guide
+
             $guide->kriteria_unggulan = $kriteriaUnggul;
         }
 
@@ -70,10 +70,9 @@ class GuideController extends Controller
             'email' => 'required|email|unique:guides,email',
             'bahasa' => 'required|string',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'status' => 'required|in:1,2,3',  // Validasi untuk status: 1 (Aktif), 2 (Sedang Guiding), 3 (Tidak Aktif)
+            'status' => 'required|in:1,2,3',
         ]);
 
-        // Simpan data guide
         Guide::create([
             'nama_guide' => $request->nama_guide,
             'salary' => $request->salary,
@@ -83,7 +82,7 @@ class GuideController extends Controller
             'email' => $request->email,
             'bahasa' => $request->bahasa,
             'foto' => $request->file('foto') ? $request->file('foto')->store('guides', 'public') : null,
-            'status' => $request->status,  // Menyimpan status sesuai dengan pilihan 1, 2, atau 3
+            'status' => $request->status,
         ]);
 
         return redirect()->route('guide.index')->with('success', 'Guide berhasil ditambahkan!');
@@ -123,23 +122,23 @@ public function update(Request $request, $id)
         'email' => 'required|email|unique:guides,email,' . $id . ',id',
         'bahasa' => 'nullable|string',
         'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-        'status' => 'required|in:1,2,3',  // Mengubah validasi untuk status agar mendukung 1 (Aktif), 2 (Sedang Guiding), 3 (Tidak Aktif)
+        'status' => 'required|in:1,2,3',
     ]);
 
     $guide = Guide::findOrFail($id);
 
-    // Cek jika ada file foto yang diunggah
+
     if ($request->hasFile('foto')) {
-        // Hapus foto lama jika ada
+
         if ($guide->foto) {
             Storage::disk('public')->delete($guide->foto);
         }
-        // Simpan foto baru
+
         $fotoPath = $request->file('foto')->store('guides', 'public');
         $guide->foto = $fotoPath;
     }
 
-    // Update data lainnya
+
     $guide->update([
         'nama_guide' => $request->nama_guide,
         'salary' => $request->salary,
@@ -148,7 +147,7 @@ public function update(Request $request, $id)
         'alamat' => $request->alamat,
         'email' => $request->email,
         'bahasa' => $request->bahasa,
-        'status' => $request->status,  // Menyimpan status yang dipilih (1, 2, atau 3)
+        'status' => $request->status,
     ]);
 
     return redirect()->route('guide.index')->with('success', 'Guide berhasil diperbarui.');
@@ -162,7 +161,7 @@ public function update(Request $request, $id)
     {
         $guide = Guide::findOrFail($id);
 
-        // Hapus foto jika ada
+
         if ($guide->foto) {
             Storage::disk('public')->delete($guide->foto);
         }

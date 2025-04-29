@@ -41,7 +41,7 @@
                             <td>{{ $index + 1 }}</td>
                             <td>{{ $paket->nama_paket }}</td>
                             <td>{{ Str::limit($paket->deskripsi_paket, 50) }}</td>
-                            <td>Rp {{ number_format($paket->harga, 2, ',', '.') }}</td>
+                            <td>Rp {{ number_format($paket->harga, 0, ',', '.') }}</td>
                             <td>{{ $paket->durasi }}</td>
                             <td>{{ $paket->destinasi }}</td>
                             <td>{{ Str::limit($paket->include, 50) }}</td>

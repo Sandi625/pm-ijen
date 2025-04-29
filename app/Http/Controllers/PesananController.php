@@ -70,10 +70,13 @@ class PesananController extends Controller
             'negara' => 'required|string|max:100',
             'bahasa' => 'required|string|max:100',
             'riwayat_medis' => 'required|string',
-            'paspor' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'paspor' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120', // Maksimal 5MB
             'special_request' => 'nullable|string',
             'id_guide' => 'nullable|exists:guides,id',  // Menambahkan validasi id_guide
+        ], [
+            'tanggal_keberangkatan.after_or_equal' => 'The departure date must be the same as or after the booking date.',
         ]);
+
 
         // Simpan file paspor jika ada
         if ($request->hasFile('paspor')) {
@@ -169,7 +172,7 @@ public function edit($id)
             'negara' => 'required|string|max:100',
             'bahasa' => 'required|string|max:100',
             'riwayat_medis' => 'required|string',
-            'paspor' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'paspor' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120', // Maksimal 5MB
             'special_request' => 'nullable|string',
             'id_guide' => 'nullable|exists:guides,id',  // Validasi id_guide yang nullable
         ]);

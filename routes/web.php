@@ -87,6 +87,17 @@ Route::get('/reviews', function () {
 Route::get('/review', [ReviewController::class, 'index'])->name('review.review');
 
 Route::post('/review/store', [ReviewController::class, 'store'])->name('review.store');
+
+Route::get('/reviews/create', [ReviewController::class, 'create'])->name('reviews.create');
+
+Route::get('/reviews/{id}/edit', [ReviewController::class, 'edit'])->name('review.edit');
+Route::put('/reviews/{id}', [ReviewController::class, 'update'])->name('review.update');
+Route::delete('/reviews/{id}', [ReviewController::class, 'destroy'])->name('review.destroy');
+
+Route::get('/admin/reviews', [ReviewController::class, 'allReviews'])->name('review.all');
+
+
+
 //paket
 Route::get('/', [PaketController::class, 'showPakets'])->name('home');
 

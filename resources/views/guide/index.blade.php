@@ -25,6 +25,8 @@
                 <th>Alamat</th>
                 <th>Email</th>
                 <th>Bahasa</th>
+                <th>Foto</th>
+
                 <th class="text-center">Aksi</th>
             </tr>
         </thead>
@@ -33,7 +35,7 @@
                 <tr>
                     <td>{{ $index + 1 }}</td>
                     <td>{{ $guide->nama_guide }}</td>
-                    <td>Rp {{ number_format($guide->salary, 2, ',', '.') }}</td>
+                    <td>Rp {{ number_format($guide->salary, 0, ',', '.') }}</td>
                     <td>{{ $guide->kriteria_unggulan ?? '-' }}</td>
                     <td>{{ $guide->deskripsi_guide ?? '-' }}</td>
                     <td>{{ $guide->nomer_hp }}</td>
@@ -55,6 +57,14 @@
                     <td>{{ $guide->alamat ?? '-' }}</td>
                     <td>{{ $guide->email }}</td>
                     <td>{{ $guide->bahasa }}</td>
+                    <td>
+                        @if($guide->foto)
+                            <img src="{{ asset('storage/' . $guide->foto) }}" alt="Foto {{ $guide->nama_guide }}" width="60" height="60" class="rounded">
+                        @else
+                            <span class="text-muted">-</span>
+                        @endif
+                    </td>
+
                     <td class="text-center">
                         <div class="btn-group">
                             <a href="{{ route('guide.edit', $guide->id) }}" class="btn btn-primary btn-sm">

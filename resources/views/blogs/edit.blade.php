@@ -40,7 +40,10 @@
 
             <!-- Gambar Blog (Opsional) -->
             <div class="mb-4">
-                <label for="image" class="block text-lg font-medium text-gray-700">Gambar (Opsional)</label>
+                <label for="image" class="block text-lg font-medium text-gray-700">
+                    Gambar
+                    <span class="text-red-500">(Maksimal 2MB)</span>
+                </label>
                 <input type="file" id="image" name="image" class="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
                 @error('image')
                     <div class="text-red-500 text-sm mt-2">{{ $message }}</div>
@@ -52,6 +55,7 @@
                     </div>
                 @endif
             </div>
+
 
             <!-- Status (Checkbox) -->
             <div class="mb-4">

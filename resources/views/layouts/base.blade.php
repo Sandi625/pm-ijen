@@ -63,7 +63,7 @@
 
             <!-- Heading -->
             <div class="sidebar-heading">
-                Interface
+                SPK Profile Matching
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
@@ -87,7 +87,7 @@
             </li>
 
             <!-- Guide -->
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseGuide"
                     aria-expanded="false" aria-controls="collapseGuide">
                     <i class="fas fa-fw fa-cog"></i>
@@ -100,7 +100,7 @@
                         <a class="collapse-item" href="{{ url('/paket') }}">Paket Wisata</a>
                     </div>
                 </div>
-            </li>
+            </li> --}}
 
             <!-- Nav Item - Utilities Collapse Menu -->
             {{-- <li class="nav-item">
@@ -126,7 +126,7 @@
 
             <!-- Heading -->
             <div class="sidebar-heading">
-                Addons
+                Manajemen Web dan Data
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
@@ -153,11 +153,18 @@
 
             <!-- Nav Item - Charts -->
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('users.index') }}">
+                <a class="nav-link" href="{{ url('/guide') }}">
                     <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Manejemen User</span>
+                    <span>Guide</span>
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url('/paket') }}">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Paket Wisata</span>
+                </a>
+            </li>
+
 
 
             <!-- Nav Item - Tables -->
@@ -178,6 +185,17 @@
                 <a class="nav-link" href="{{ route('blogs.index') }}">
                     <i class="fas fa-fw fa-table"></i>
                     <span>Blog</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('review.all') }}">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Reviews</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('users.index') }}">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Manejemen User</span>
+                </a>
             </li>
 
             <!-- Divider -->

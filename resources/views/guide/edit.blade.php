@@ -19,7 +19,7 @@
 
             <div>
                 <label for="salary" class="block font-semibold">Gaji:</label>
-                <input type="number" id="salary" name="salary" value="{{ old('salary', $guide->salary) }}" required class="w-full border rounded p-2">
+                <input type="text" id="salary" name="salary" value="{{ old('salary', number_format($guide->salary, 0, ',', '.')) }}" required class="w-full border rounded p-2">
                 @error('salary') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
             </div>
 
@@ -54,7 +54,10 @@
             </div>
 
             <div>
-                <label for="foto" class="block font-semibold">Foto:</label>
+                <label for="foto" class="block font-semibold">
+                    Foto:
+                    <span class="text-red-500 text-sm ml-2">(Maksimal 2MB)</span>
+                </label>
                 <input type="file" id="foto" name="foto" accept="image/*" class="w-full border rounded p-2">
                 @error('foto') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
 
@@ -78,15 +81,37 @@
                 @enderror
             </div>
 
-
             <div class="flex justify-between">
                 <a href="{{ route('guide.index') }}" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Kembali</a>
                 <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Simpan Perubahan</button>
             </div>
         </form>
 
-
-
     </div>
 </div>
+
+<script>
+    // Format input as currency (Rupiah)
+    document.getElementById('salary').addEventListener('input', function (e) {
+        let value = e.target.value;
+
+        // Remove any non-numeric characters
+        value = value.replace(/[^0-9]/g, '');
+
+        // Add thousand separators
+        value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+        // Set value with 'Rp' prefix
+        e.target.value = 'Rp ' + value;
+    });
+
+    // Remove the 'Rp' symbol and other non-numeric characters before submitting
+    document.getElementById('salary').addEventListener('blur', function (e) {
+        let salaryInput = document.getElementById('salary');
+        let salaryValue = salaryInput.value.replace(/[^0-9]/g, ''); // Remove 'Rp' and non-numeric chars
+        salaryInput.value = salaryValue;
+    });
+</script>
+
 @endsection
+

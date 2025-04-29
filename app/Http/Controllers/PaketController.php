@@ -45,6 +45,8 @@ class PaketController extends Controller
 
     public function store(Request $request)
     {
+
+
         // Validasi input
         $request->validate([
             'nama_paket' => 'required|string|max:150',
@@ -92,6 +94,7 @@ class PaketController extends Controller
             'information_trip' => $request->information_trip,
             'foto' => $fotoPath,
         ]);
+
 
         // Redirect dengan pesan sukses
         return redirect()->route('paket.index')->with('success', 'Paket berhasil ditambahkan!');
