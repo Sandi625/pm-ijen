@@ -104,4 +104,5 @@ Route::get('/', [PaketController::class, 'showPakets'])->name('home');
 Route::resource('users', UserController::class);
 
 
+Route::get('/chart/pesanan-per-bulan', [DashboardController::class, 'chartPesananPerBulan'])->name('chart.pesanan.bulanan');
 

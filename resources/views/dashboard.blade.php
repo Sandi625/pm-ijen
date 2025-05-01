@@ -1,72 +1,293 @@
 @extends('layouts.base')
 
 @section('content')
-<div class="flex justify-center mt-10 px-4">
-    <div class="w-full max-w-6xl">
-        <h1 class="text-4xl font-bold text-gray-800 mb-8 text-center">Dashboard</h1>
+<div class="row">
 
-        <!-- Statistik Cards -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-            <!-- Card 1 -->
-            <div class="relative bg-white shadow-md rounded-2xl p-6 transition-transform hover:scale-[1.02]">
-                <h2 class="text-lg font-semibold text-gray-700">Total Penilaian</h2>
-                <p class="text-4xl font-bold text-gray-900 mt-2">{{ $totalPenilaian }}</p>
-                <div class="absolute bottom-4 right-4 text-blue-500 text-5xl">
-                    <i class="fa-solid fa-clipboard-list"></i>
+    <!-- Earnings (Monthly) Card Example -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <a href="{{ route('pesanan.index') }}" style="text-decoration: none;">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Total Pesanan (Bulan Ini)
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                {{ $pesanans->count() }}
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </a>
+    </div>
 
-            <!-- Card 2 -->
-            <div class="relative bg-white shadow-md rounded-2xl p-6 transition-transform hover:scale-[1.02]">
-                <h2 class="text-lg font-semibold text-gray-700">Kriteria Terdaftar</h2>
-                <p class="text-4xl font-bold text-gray-900 mt-2">{{ $totalKriteria }}</p>
-                <div class="absolute bottom-4 right-4 text-green-500 text-5xl">
-                    <i class="fa-solid fa-list-alt"></i>
+
+
+    <!-- Earnings (Monthly) Card Example -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <a href="{{ route('guide.index') }}" style="text-decoration: none;">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Total Guides
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                {{ $guides->count() }}
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-user fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </a>
+    </div>
 
-            <!-- Card 3 -->
-            <div class="relative bg-white shadow-md rounded-2xl p-6 transition-transform hover:scale-[1.02]">
-                <h2 class="text-lg font-semibold text-gray-700">Subkriteria Terdaftar</h2>
-                <p class="text-4xl font-bold text-gray-900 mt-2">{{ $totalSubkriteria }}</p>
-                <div class="absolute bottom-4 right-4 text-yellow-500 text-5xl">
-                    <i class="fa-solid fa-tags"></i>
+
+
+    <!-- Earnings (Monthly) Card Example -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <a href="{{ route('paket.index') }}" style="text-decoration: none;">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Total Paket
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                {{ $totalPaket }}
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </a>
+    </div>
 
-        <!-- Tabel Penilaian Terbaru -->
-        <div class="bg-white shadow-md rounded-2xl p-6">
-            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Penilaian Terbaru</h2>
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200 text-sm">
-                    <thead class="bg-gray-100">
+
+
+    <!-- Pending Requests Card Example -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <a href="{{ route('review.all') }}" style="text-decoration: none;">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                Total Review
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $totalReviews }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-comments fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+
+</div>
+<div class="row">
+
+    <!-- Area Chart -->
+    <div class="card-body">
+        <h2 class="h5 mb-4 font-weight-bold text-gray-800">Penilaian Terbaru</h2>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Nama Guide</th>
+                        <th>Tanggal Penilaian</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($recentPenilaians as $penilaian)
                         <tr>
-                            <th class="px-6 py-3 text-left font-semibold text-gray-600">Nama Guide</th>
-                            <th class="px-6 py-3 text-left font-semibold text-gray-600">Tanggal Penilaian</th>
-                            <th class="px-6 py-3 text-left font-semibold text-gray-600">Aksi</th>
+                            <td>{{ $penilaian->guide->nama_guide ?? '-' }}</td>
+                            <td>{{ $penilaian->created_at->format('d-m-Y') }}</td>
+                            <td>
+                                <a href="{{ route('penilaian.show', $penilaian) }}" class="text-primary">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        @forelse($recentPenilaians as $penilaian)
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-3 text-gray-800">{{ $penilaian->guide->nama_guide ?? '-' }}</td>
-                                <td class="px-6 py-3 text-gray-800">{{ $penilaian->created_at->format('d-m-Y') }}</td>
-                                <td class="px-6 py-3">
-                                    <a href="{{ route('penilaian.show', $penilaian) }}" class="text-blue-500 hover:text-blue-700">
-                                        <i class="fa-solid fa-eye"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="3" class="text-center px-6 py-4 text-gray-500">Belum ada data penilaian.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+                    @empty
+                        <tr>
+                            <td colspan="3" class="text-center text-muted">Belum ada data penilaian.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="col-xl-8 col-lg-7">
+        <div class="card shadow mb-4">
+            <!-- Card Header - Dropdown -->
+            <div
+                class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
+                <div class="dropdown no-arrow">
+                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                        aria-labelledby="dropdownMenuLink">
+                        <div class="dropdown-header">Dropdown Header:</div>
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <div class="chart-area">
+                    <canvas id="myAreaChart"></canvas>
+                </div>
             </div>
         </div>
     </div>
+
+
+  <!-- Pie Chart -->
+<div class="col-xl-4 col-lg-5">
+    <div class="card shadow mb-4">
+        <!-- Card Header - Dropdown -->
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="m-0 font-weight-bold text-primary">Review</h6>
+            <div class="dropdown no-arrow">
+                <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                    aria-labelledby="dropdownMenuLink">
+                    <div class="dropdown-header">Dropdown Header:</div>
+                    <a class="dropdown-item" href="#">Action</a>
+                    <a class="dropdown-item" href="#">Another action</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Something else here</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Body -->
+        <div class="card-body">
+            <!-- Display Recent Reviews -->
+            <div class="mt-3">
+                <h6>Recent Reviews:</h6>
+                <ul class="list-unstyled">
+                    @forelse($reviews as $review)
+                        <li class="mb-2">
+                            <p><strong>{{ $review->name }}</strong></p>
+                            <p>{{ Str::limit($review->isi_testimoni, 150) }}</p> <!-- Membatasi panjang testimoni -->
+                        </li>
+                    @empty
+                        <li>No reviews available.</li>
+                    @endforelse
+                </ul>
+            </div>
+
+            <div class="chart-pie pt-4 pb-2">
+                <canvas id="myPieChart"></canvas>
+            </div>
+
+            <!-- Display Total Reviews -->
+            {{-- <div class="mt-4 text-center small">
+                <span class="mr-2">
+                    <i class="fas fa-circle text-primary"></i> Total Reviews: {{ $totalReviews }}
+                </span>
+            </div> --}}
+        </div>
+    </div>
 </div>
+
+
+<style>.card-body {
+    max-height: 350px; /* Menyesuaikan tinggi maksimal */
+    overflow-y: auto;  /* Menambahkan scroll jika konten lebih panjang */
+}
+
+.chart-pie {
+    max-height: 3px; /* Membatasi tinggi grafik */
+}
+
+ul.list-unstyled {
+    max-height: 500px; /* Membatasi tinggi daftar review */
+    overflow-y: auto; /* Menambahkan scroll pada daftar review jika terlalu banyak */
+}
+</style>
+
+
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById("myAreaChart").getContext("2d");
+    let myChart;
+
+    fetch("{{ route('chart.pesanan.bulanan') }}")
+        .then(res => res.json())
+        .then(({ labels, data }) => {
+            myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: "Total Pesanan",
+                        lineTension: 0.3,
+                        backgroundColor: "rgba(78, 115, 223, 0.05)",
+                        borderColor: "rgba(78, 115, 223, 1)",
+                        pointRadius: 3,
+                        pointBackgroundColor: "rgba(78, 115, 223, 1)",
+                        pointBorderColor: "rgba(78, 115, 223, 1)",
+                        pointHoverRadius: 3,
+                        pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
+                        pointHoverBorderColor: "rgba(78, 115, 223, 1)",
+                        pointHitRadius: 10,
+                        pointBorderWidth: 2,
+                        data: data,
+                    }],
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    layout: {
+                        padding: { left: 10, right: 25, top: 25, bottom: 0 }
+                    },
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            title: { display: true, text: 'Bulan' }
+                        },
+                        y: {
+                            ticks: { beginAtZero: true },
+                            title: { display: true, text: 'Jumlah Pesanan' }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        });
+</script>
+
 @endsection
