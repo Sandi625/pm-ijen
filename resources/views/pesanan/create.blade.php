@@ -11,19 +11,19 @@
 
 
     <div id="paket-detail" class="mt-10 space-y-8">
-        <h2 class="text-3xl font-bold text-gray-800 border-b pb-2">Detail Paket</h2>
+        <h2 class="text-3xl font-bold text-gray-800 border-b pb-2">Package Details</h2>
 
         <!-- Card 1: Nama, Deskripsi, Foto -->
         <div class="bg-white shadow-lg rounded-xl p-6 flex flex-col md:flex-row gap-8">
             <!-- Informasi -->
             <div class="flex-1 space-y-4">
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-700">Nama Paket</h3>
+                    <h3 class="text-lg font-semibold text-gray-700">Package Name</h3>
                     <p id="paket-nama" class="text-gray-900 text-base">
                         {{ $paketDetail->nama_paket ?? 'Nama Paket Tidak Ditemukan' }}</p>
                 </div>
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-700">Deskripsi</h3>
+                    <h3 class="text-lg font-semibold text-gray-700">Description</h3>
                     <p id="paket-deskripsi" class="text-gray-600 text-sm leading-relaxed">
                         {{ $paketDetail->deskripsi_paket ?? 'Deskripsi Tidak Tersedia' }}</p>
                 </div>
@@ -31,7 +31,7 @@
 
             <!-- Foto -->
             <div class="w-full md:w-80">
-                <h3 class="text-lg font-semibold text-gray-700 mb-2">Foto</h3>
+                <h3 class="text-lg font-semibold text-gray-700 mb-2">Photo</h3>
                 <img id="paket-foto" src="{{ asset('storage/' . $paketDetail->foto) }}" alt="Foto Paket"
                     class="rounded-lg shadow w-full object-cover"
                     style="display: {{ $paketDetail->foto ? 'block' : 'none' }};">
@@ -43,15 +43,15 @@
             <!-- Kolom Kiri -->
             <div class="space-y-4">
                 <div>
-                    <h4 class="font-medium text-gray-700">Harga</h4>
+                    <h4 class="font-medium text-gray-700">Price</h4>
                     <p id="paket-harga" class="text-gray-800">{{ $paketDetail->harga ?? 'Harga Tidak Tersedia' }}</p>
                 </div>
                 <div>
-                    <h4 class="font-medium text-gray-700">Durasi</h4>
+                    <h4 class="font-medium text-gray-700">Duration</h4>
                     <p id="paket-durasi" class="text-gray-800">{{ $paketDetail->durasi ?? 'Durasi Tidak Tersedia' }}</p>
                 </div>
                 <div>
-                    <h4 class="font-medium text-gray-700">Destinasi</h4>
+                    <h4 class="font-medium text-gray-700">Destination</h4>
                     <p id="paket-destinasi" class="text-gray-800">
                         {{ $paketDetail->destinasi ?? 'Destinasi Tidak Tersedia' }}</p>
                 </div>
@@ -77,7 +77,7 @@
                                 class="inline-block px-6 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-md text-sm"
                                 download>Download Itinerary PDF</a>
                         @else
-                            <span class="text-gray-600">Tidak ada itinerary yang diunggah.</span>
+                            <span class="text-gray-600">No itinerary uploaded.</span>
                         @endif
                     </p>
                 </div>
@@ -93,7 +93,7 @@
 
     <div class="container mx-auto mt-8 px-4">
         <div class="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4">
-            <h1 class="text-3xl font-bold mb-4 text-gray-800">Tambah Pesanan</h1>
+            <h1 class="text-3xl font-bold mb-4 text-gray-800">Add Order</h1>
 
             @if ($errors->any())
                 <div class="mb-4 p-4 bg-red-100 text-red-700 rounded-md">
@@ -110,7 +110,7 @@
 
                 <!-- Nama -->
                 <div class="mb-4">
-                    <label class="block text-gray-700 font-bold mb-2" for="nama">Nama</label>
+                    <label class="block text-gray-700 font-bold mb-2" for="nama">Name</label>
                     <input type="text" name="nama" id="nama"
                         class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         value="{{ old('nama') }}" required>
@@ -132,7 +132,7 @@
 
                 <!-- Nomor Telepon -->
                 <div class="mb-4">
-                    <label class="block text-gray-700 font-bold mb-2" for="nomor_telp">Nomor Telepon</label>
+                    <label class="block text-gray-700 font-bold mb-2" for="nomor_telp">Phone Number</label>
                     <input type="text" name="nomor_telp" id="nomor_telp"
                         class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         value="{{ old('nomor_telp') }}" required>
@@ -143,11 +143,11 @@
 
                 <!-- Kriteria -->
                 <div class="mb-4">
-                    <label class="block text-gray-700 font-bold mb-2" for="id_kriteria">Kriteria</label>
+                    <label class="block text-gray-700 font-bold mb-2" for="id_kriteria">Guide Criteria that you want</label>
                     <select name="id_kriteria" id="id_kriteria"
                         class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         required>
-                        <option value="">Pilih Kriteria</option>
+                        <option value="">Select Criteria</option>
                         @foreach ($kriterias as $kriteria)
                             <option value="{{ $kriteria->id }}" {{ old('id_kriteria') == $kriteria->id ? 'selected' : '' }}>
                                 {{ $kriteria->nama }}
@@ -161,7 +161,7 @@
 
                 <!-- Paket -->
                 <div class="mb-4">
-                    <label class="block text-gray-700 font-bold mb-2" for="id_paket">Paket</label>
+                    <label class="block text-gray-700 font-bold mb-2" for="id_paket">Package</label>
                     <select name="id_paket" id="id_paket"
                         class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         required readonly>
@@ -179,7 +179,7 @@
 
                 <!-- Tanggal Pesan -->
                 <div class="mb-4">
-                    <label class="block text-gray-700 font-bold mb-2" for="tanggal_pesan">Tanggal Pesan</label>
+                    <label class="block text-gray-700 font-bold mb-2" for="tanggal_pesan">Order Date</label>
                     <input type="date" name="tanggal_pesan" id="tanggal_pesan"
                         class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         value="{{ old('tanggal_pesan') }}" required>
@@ -190,7 +190,7 @@
 
                 <!-- Tanggal Keberangkatan -->
                 <div class="mb-4">
-                    <label class="block text-gray-700 font-bold mb-2" for="tanggal_keberangkatan">Tanggal Keberangkatan</label>
+                    <label class="block text-gray-700 font-bold mb-2" for="tanggal_keberangkatan">Departure Date</label>
                     <input type="date" name="tanggal_keberangkatan" id="tanggal_keberangkatan"
                         class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         value="{{ old('tanggal_keberangkatan') }}" required>
@@ -201,7 +201,7 @@
 
                 <!-- Jumlah Peserta -->
                 <div class="mb-4">
-                    <label class="block text-gray-700 font-bold mb-2" for="jumlah_peserta">Jumlah Peserta</label>
+                    <label class="block text-gray-700 font-bold mb-2" for="jumlah_peserta">Number of participants</label>
                     <input type="number" name="jumlah_peserta" id="jumlah_peserta"
                         class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         value="{{ old('jumlah_peserta') }}" required>
@@ -212,7 +212,7 @@
 
                 <!-- Negara -->
                 <div class="mb-4">
-                    <label class="block text-gray-700 font-bold mb-2" for="negara">Negara</label>
+                    <label class="block text-gray-700 font-bold mb-2" for="negara">Country</label>
                     <input type="text" name="negara" id="negara"
                         class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         value="{{ old('negara') }}" required>
@@ -223,7 +223,7 @@
 
                 <!-- Bahasa -->
                 <div class="mb-4">
-                    <label class="block text-gray-700 font-bold mb-2" for="bahasa">Bahasa</label>
+                    <label class="block text-gray-700 font-bold mb-2" for="bahasa">The language you use</label>
                     <input type="text" name="bahasa" id="bahasa"
                         class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         value="{{ old('bahasa') }}" required>
@@ -234,10 +234,10 @@
 
                 <!-- Riwayat Medis -->
                 <div class="mb-4">
-                    <label class="block text-gray-700 font-bold mb-2" for="riwayat_medis">Riwayat Medis</label>
+                    <label class="block text-gray-700 font-bold mb-2" for="riwayat_medis">Medical History</label>
                     <textarea name="riwayat_medis" id="riwayat_medis" rows="4"
                         class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="Contoh: Alergi makanan laut, asma, dll..." required>{{ old('riwayat_medis') }}</textarea>
+                        placeholder="Example: Asthma, heart disease, hypertension or others" required>{{ old('riwayat_medis') }}</textarea>
                     @error('riwayat_medis')
                         <div class="text-red-600 text-sm mt-1">{{ $message }}</div>
                     @enderror
@@ -246,8 +246,8 @@
                 <!-- Paspor -->
                 <div class="mb-4">
                     <label class="block text-gray-700 font-bold mb-2" for="paspor">
-                        Upload Foto Paspor
-                        <span class="text-red-500">(Maksimal 5MB)</span>
+                        Upload Passport Photo
+                        <span class="text-red-500">(Maximum 5MB)</span>
                     </label>
                     <input type="file" name="paspor" id="paspor" accept="image/*"
                         class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -263,14 +263,14 @@
                     <label class="block text-gray-700 font-bold mb-2" for="special_request">Special Request (Optional)</label>
                     <textarea name="special_request" id="special_request" rows="4"
                         class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="Contoh: Vegetarian meal, kebutuhan khusus, dll...">{{ old('special_request') }}</textarea>
+                        placeholder="Example: Vegetarian meal, special needs, etc...">{{ old('special_request') }}</textarea>
                 </div>
 
                 <!-- Tombol Submit -->
                 <div class="flex justify-end">
                     <button type="submit"
                         class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200">
-                        Simpan Pesanan
+                        Save Order
                     </button>
                 </div>
             </form>

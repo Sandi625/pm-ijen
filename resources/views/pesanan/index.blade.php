@@ -1,7 +1,16 @@
 @extends('layouts.base')
 
 @section('title', 'Daftar Pesanan')
+<style>
+    .bg-success {
+    background-color: #28a745 !important; /* Warna hijau */
+}
 
+.bg-warning {
+    background-color: #ffc107 !important; /* Warna kuning */
+}
+
+</style>
 @section('content')
 <div class="container-fluid vh-100 d-flex flex-column">
     <div class="bg-white shadow-md rounded-lg p-4 flex-grow-1">
@@ -42,7 +51,7 @@
                             <td>{{ $pesanan->nama }}</td>
                             <td>{{ $pesanan->email }}</td>
                             <td>{{ $pesanan->nomor_telp }}</td>
-                            <td>
+                            <td class="{{ $pesanan->guide ? 'bg-success' : 'bg-warning' }}">
                                 {{ $pesanan->guide ? $pesanan->guide->nama_guide : '-' }} <!-- Nama Guide -->
                             </td>
                             <td>{{ $pesanan->negara ?? '-' }}</td>
@@ -59,8 +68,8 @@
                                 @if ($pesanan->paspor)
                                     <a href="{{ asset('storage/' . $pesanan->paspor) }}" target="_blank">
                                         <img src="{{ asset('storage/' . $pesanan->paspor) }}"
-                                            alt="Foto Paspor"
-                                            style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px; box-shadow: 0 0 4px rgba(0,0,0,0.2);">
+                                             alt="Foto Paspor"
+                                             style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px; box-shadow: 0 0 4px rgba(0,0,0,0.2);">
                                     </a>
                                 @else
                                     -
@@ -85,6 +94,7 @@
                 </tbody>
             </table>
         </div>
+
 
     </div>
 </div>

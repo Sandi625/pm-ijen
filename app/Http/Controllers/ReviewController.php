@@ -61,7 +61,7 @@ class ReviewController extends Controller
 
         $review->save();
 
-        return redirect()->route('review.all')->with('success', 'Review has been created please check again later.');
+        return redirect()->route('review.review')->with('success', 'Review has been created please check again later.');
     }
 
 
