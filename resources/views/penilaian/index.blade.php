@@ -81,4 +81,22 @@
         });
     }
 </script>
+
+<script>
+    function cekGuide(adaGuide) {
+        if (!adaGuide) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Tidak Ada Guide',
+                text: 'Mohon untuk menambahkan guide terlebih dahulu jika ingin melakukan penilaian.',
+                confirmButtonText: 'OK'
+            });
+        }
+    }
+
+    // Panggil fungsi hanya jika data guide kosong
+    cekGuide({{ $penilaians->isEmpty() ? 'false' : 'true' }});
+</script>
+
+
 @endsection

@@ -56,8 +56,8 @@
                 </select>
             </div>
 
-            <button type="submit" class="btn btn-success">Simpan</button>
             <a href="{{ route('review.all') }}" class="btn btn-secondary">Batal</a>
+            <button type="submit" class="btn btn-success">Simpan</button>
         </form>
     </div>
 </div>

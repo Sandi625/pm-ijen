@@ -67,11 +67,15 @@
                 </div>
 
                 <!-- Submit Button -->
-                <div class="text-center">
-                    <button type="submit"
-                        class="btn btn-success mt-8 px-8 py-3 rounded-md bg-green-500 text-white hover:bg-green-600 text-xl">Tambah
-                        Blog</button>
+                <div class="flex justify-between items-center mt-8">
+                    <a href="{{ route('blogs.index') }}" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Kembali</a>
+
+
+                    <button type="submit" class="bg-blue-500 text-white px-8 py-3 rounded-md hover:bg-blue-600 transition duration-200 text-xl">
+                        Tambah Blog
+                    </button>
                 </div>
+
             </form>
         </div>
     </div>

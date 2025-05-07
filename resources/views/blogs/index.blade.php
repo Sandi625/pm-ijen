@@ -15,7 +15,7 @@
 
     <div class="table-responsive">
         <table class="table table-bordered table-striped">
-            <thead class="thead-dark">
+            <thead class="table-light">
                 <tr>
                     <th>No</th>
                     <th>Judul</th>
@@ -47,7 +47,7 @@
                         </td>
                         <td>
                             <a href="{{ route('blogs.show', $blog->id) }}" class="btn btn-info btn-sm">Lihat</a>
-                            <a href="{{ route('blogs.edit', $blog->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                            <a href="{{ route('blogs.edit', $blog->id) }}" class="btn btn-primary btn-sm">Edit</a>
 
                             <form id="delete-form-{{ $blog->id }}" action="{{ route('blogs.destroy', $blog->id) }}" method="POST" class="d-inline">
                                 @csrf

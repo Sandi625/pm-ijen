@@ -165,12 +165,17 @@
 
 
                 <!-- Tombol Submit -->
-                <div class="flex justify-end">
+                <div class="flex justify-between items-center">
+                    <a href="{{ route('pesanan.index') }}" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">
+                        Kembali
+                    </a>
+
                     <button type="submit"
                         class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200">
                         Perbarui Pesanan
                     </button>
                 </div>
+
             </form>
         </div>
     </div>
