@@ -225,9 +225,10 @@
     overflow-y: auto;  /* Menambahkan scroll jika konten lebih panjang */
 }
 
-.chart-pie {
-    max-height: 3px; /* Membatasi tinggi grafik */
-}
+    .chart-pie {
+        max-height: 200px;
+    }
+
 
 ul.list-unstyled {
     max-height: 500px; /* Membatasi tinggi daftar review */

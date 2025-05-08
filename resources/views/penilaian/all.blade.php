@@ -4,7 +4,7 @@
 <div class="container mx-auto mt-8 px-4">
     <h1 class="text-2xl font-bold mb-4">Hasil Perhitungan Profile Matching</h1>
     <div class="mb-5 space-x-2">
-        <a href="{{ route('penilaian.pdf.all') }}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+        {{-- <a href="{{ route('penilaian.pdf.all') }}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
             Cetak Semua Penilaian
         </a>
         <a href="{{ route('penilaian.pdf.accepted') }}" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
@@ -12,7 +12,7 @@
         </a>
         <a href="{{ route('penilaian.pdf.rejected') }}" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
             Cetak Penilaian Ditolak
-        </a>
+        </a> --}}
         <a href="{{ route('penilaian.index') }}" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Kembali</a>
 
     </div>

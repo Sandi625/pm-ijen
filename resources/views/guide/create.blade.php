@@ -84,18 +84,18 @@
                 @enderror
             </div>
 
-          <!-- Foto -->
-<!-- Foto -->
-<div class="mb-4">
-    <label for="foto" class="block text-gray-700 text-sm font-bold mb-2 inline-block">
-        Foto
-        <span class="text-red-500">(Maksimal 2MB)</span> <!-- Menambahkan teks maksimal ukuran file di samping label dengan warna merah -->
-    </label>
-    <input type="file" id="foto" name="foto" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('foto') border-red-500 @enderror">
-    @error('foto')
-        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-    @enderror
-</div>
+
+            <!-- Foto -->
+            <div class="mb-4">
+                <label for="foto" class="block text-gray-700 text-sm font-bold mb-2 inline-block">
+                    Foto
+                    <span class="text-red-500">(Maksimal 2MB)</span> <!-- Menambahkan teks maksimal ukuran file di samping label dengan warna merah -->
+                </label>
+                <input type="file" id="foto" name="foto" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('foto') border-red-500 @enderror">
+                @error('foto')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
 
 
 

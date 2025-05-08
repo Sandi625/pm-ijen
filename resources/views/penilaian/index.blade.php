@@ -20,9 +20,9 @@
             <a href="{{ route('penilaian.all') }}" class="btn btn-primary">
                 <i class="fa-solid fa-list"></i> Lihat Keseluruhan Penilaian
             </a>
-            <a href="{{ route('candidates.report') }}" class="btn btn-info">
+            {{-- <a href="{{ route('candidates.report') }}" class="btn btn-info">
                 <i class="fa-solid fa-print"></i> Cetak penialai
-            </a>
+            </a> --}}
         </div>
 
         <div class="overflow-auto flex-grow-1">

@@ -133,13 +133,14 @@
                 <!-- Nomor Telepon -->
                 <div class="mb-4">
                     <label class="block text-gray-700 font-bold mb-2" for="nomor_telp">Phone Number</label>
-                    <input type="text" name="nomor_telp" id="nomor_telp"
+                    <input type="tel" name="nomor_telp" id="nomor_telp"
                         class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        value="{{ old('nomor_telp') }}" required>
+                        value="{{ old('nomor_telp') }}" required maxlength="20" title="Nomor HP harus terdiri dari 10 sampai 13 digit angka.">
                     @error('nomor_telp')
                         <div class="text-red-600 text-sm mt-1">{{ $message }}</div>
                     @enderror
                 </div>
+
 
                 <!-- Kriteria -->
                 <div class="mb-4">
@@ -202,13 +203,16 @@
                 <!-- Jumlah Peserta -->
                 <div class="mb-4">
                     <label class="block text-gray-700 font-bold mb-2" for="jumlah_peserta">Number of participants</label>
-                    <input type="number" name="jumlah_peserta" id="jumlah_peserta"
+                    <input type="text" name="jumlah_peserta" id="jumlah_peserta"
                         class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        value="{{ old('jumlah_peserta') }}" required>
+                        value="{{ old('jumlah_peserta') }}" required maxlength="20" pattern="[0-9]*" inputmode="numeric"
+                        title="Masukkan angka maksimal 20 digit">
                     @error('jumlah_peserta')
                         <div class="text-red-600 text-sm mt-1">{{ $message }}</div>
                     @enderror
                 </div>
+
+
 
                 <!-- Negara -->
                 <div class="mb-4">
