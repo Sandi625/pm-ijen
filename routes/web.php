@@ -112,6 +112,8 @@ Route::middleware('auth')->group(function () {
     Route::put('/reviews/{id}', [ReviewController::class, 'update'])->name('review.update');
     Route::delete('/reviews/{id}', [ReviewController::class, 'destroy'])->name('review.destroy');
     Route::get('/admin/reviews', [ReviewController::class, 'allReviews'])->name('review.all');
+    Route::get('/reviews/{id}', [ReviewController::class, 'show'])->name('review.show');
+
 });
 
 

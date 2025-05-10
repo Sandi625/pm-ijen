@@ -31,6 +31,16 @@ class PesananController extends Controller
         return view('pesanan.index', compact('pesanans'));
     }
 
+    public function show($id)
+{
+    // Mencari data pesanan berdasarkan ID, termasuk relasi kriteria, paket, dan guide
+    $pesanan = Pesanan::with(['kriteria', 'paket', 'guide'])->findOrFail($id);
+
+    // Mengirim data pesanan ke view show
+    return view('pesanan.show', compact('pesanan'));
+}
+
+
 
     public function create($id_paket = null)
     {

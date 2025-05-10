@@ -15,6 +15,7 @@
 <div class="container-fluid vh-100 d-flex flex-column">
     <div class="bg-white shadow-md rounded-lg p-4 flex-grow-1">
         <h1 class="text-3xl font-bold mb-4 text-gray-800">Daftar Pesanan</h1>
+<p class="text-red-600 mb-4">Klik pada detail pesanan untuk melihat Riwayat Medis dan Special Request lebih lanjut.</p>
 
         @if(session('success'))
             <div class="alert alert-success">
@@ -33,8 +34,8 @@
                         <th>Nama Guide</th> <!-- Tambahan -->
                         <th>Negara</th>
                         <th>Bahasa</th>
-                        <th>Riwayat Medis</th>
-                        <th>Special Request</th>
+                        {{-- <th>Riwayat Medis</th>
+                        <th>Special Request</th> --}}
                         <th>Nama Paket</th>
                         <th>Nama Kriteria</th>
                         <th>Tanggal Pesan</th>
@@ -56,8 +57,8 @@
                             </td>
                             <td>{{ $pesanan->negara ?? '-' }}</td>
                             <td>{{ $pesanan->bahasa ?? '-' }}</td>
-                            <td>{{ $pesanan->riwayat_medis ?? '-' }}</td>
-                            <td>{{ $pesanan->special_request ?? '-' }}</td>
+                            {{-- <td>{{ $pesanan->riwayat_medis ?? '-' }}</td>
+                            <td>{{ $pesanan->special_request ?? '-' }}</td> --}}
                             <td>{{ $pesanan->paket->nama_paket ?? '-' }}</td>
                             <td>{{ $pesanan->kriteria->nama ?? '-' }}</td>
 
@@ -76,19 +77,23 @@
                                 @endif
                             </td>
                             <td class="text-center">
-                                <div class="btn-group">
-                                    <a href="{{ route('pesanan.edit', $pesanan->id) }}" class="btn btn-primary btn-sm">
-                                        <i class="fa-solid fa-pen-to-square"></i> Edit
-                                    </a>
-                                    <button onclick="confirmDelete({{ $pesanan->id }})" class="btn btn-danger btn-sm">
-                                        <i class="fa-solid fa-trash"></i> Hapus
-                                    </button>
-                                </div>
-                                <form id="delete-form-{{ $pesanan->id }}" action="{{ route('pesanan.destroy', $pesanan->id) }}" method="POST" class="d-none">
-                                    @csrf
-                                    @method('DELETE')
-                                </form>
-                            </td>
+    <div class="btn-group">
+        <a href="{{ route('pesanan.show', $pesanan->id) }}" class="btn btn-info btn-sm">
+            <i class="fa-solid fa-eye"></i> Detail
+        </a>
+        <a href="{{ route('pesanan.edit', $pesanan->id) }}" class="btn btn-primary btn-sm">
+            <i class="fa-solid fa-pen-to-square"></i> Edit
+        </a>
+        <button onclick="confirmDelete({{ $pesanan->id }})" class="btn btn-danger btn-sm">
+            <i class="fa-solid fa-trash"></i> Hapus
+        </button>
+    </div>
+    <form id="delete-form-{{ $pesanan->id }}" action="{{ route('pesanan.destroy', $pesanan->id) }}" method="POST" class="d-none">
+        @csrf
+        @method('DELETE')
+    </form>
+</td>
+
                         </tr>
                     @endforeach
                 </tbody>

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nama_paket', 150);
             $table->text('deskripsi_paket')->nullable();
-            $table->decimal('harga', 10, 2);
+            $table->integer('harga'); // Menggunakan integer tanpa desimal
             $table->string('durasi'); // dalam hari atau jam sesuai kebutuhan
             $table->string('destinasi', 255);
             $table->text('include')->nullable();

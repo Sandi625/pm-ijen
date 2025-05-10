@@ -20,6 +20,16 @@ class PaketController extends Controller
         return view('paket.index', compact('pakets'));
     }
 
+    public function show($id)
+{
+    // Cari data paket berdasarkan ID
+    $paket = Paket::findOrFail($id);
+
+    // Kirim data paket ke view 'paket.show'
+    return view('paket.show', compact('paket'));
+}
+
+
 
     public function showPakets()
     {
@@ -110,62 +120,65 @@ class PaketController extends Controller
         return view('paket.edit', compact('paket'));
     }
 
-    public function update(Request $request, $id)
-    {
-        $paket = Paket::findOrFail($id);
+   public function update(Request $request, $id)
+{
+    $paket = Paket::findOrFail($id);
 
-        // Validasi data
-        $request->validate([
-            'nama_paket'      => 'required|string|max:150',
-            'deskripsi_paket' => 'nullable|string',
-            'harga'           => 'required|numeric|min:0',
-            'durasi'          => 'required|string|min:1',
-            'destinasi'       => 'required|string|max:255',
-            'include'         => 'nullable|string',
-            'exclude'         => 'nullable|string',
-            'itinerary'       => 'nullable|file|mimes:pdf|max:10240', // Ensure it's a PDF and no larger than 10MB
-            'information_trip' => 'nullable|string',
-            'foto'            => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-        ]);
+    // Validasi data
+    $request->validate([
+        'nama_paket'      => 'required|string|max:150',
+        'deskripsi_paket' => 'nullable|string',
+        'harga'           => 'required|numeric|max:1000000000', // Harga tidak boleh lebih dari 1 milyar
+        'durasi'          => 'required|string|min:1',
+        'destinasi'       => 'required|string|max:255',
+        'include'         => 'nullable|string',
+        'exclude'         => 'nullable|string',
+        'itinerary'       => 'nullable|file|mimes:pdf|max:10240', // Pastikan file PDF dan tidak lebih dari 10MB
+        'information_trip' => 'nullable|string',
+        'foto'            => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+    ], [
+        'harga.max' => 'Harga tidak boleh lebih dari 1 milyar.', // Pesan khusus jika harga melebihi 1 milyar
+    ]);
 
-        // Update data
-        $paket->nama_paket = $request->nama_paket;
-        $paket->deskripsi_paket = $request->deskripsi_paket;
-        $paket->harga = $request->harga;
-        $paket->durasi = $request->durasi;
-        $paket->destinasi = $request->destinasi;
-        $paket->include = $request->include;
-        $paket->exclude = $request->exclude;
-        $paket->information_trip = $request->information_trip;
+    // Update data
+    $paket->nama_paket = $request->nama_paket;
+    $paket->deskripsi_paket = $request->deskripsi_paket;
+    $paket->harga = $request->harga;
+    $paket->durasi = $request->durasi;
+    $paket->destinasi = $request->destinasi;
+    $paket->include = $request->include;
+    $paket->exclude = $request->exclude;
+    $paket->information_trip = $request->information_trip;
 
-        // Handle itinerary file upload (if a new file is uploaded)
-        if ($request->hasFile('itinerary')) {
-            // Delete old itinerary if exists
-            if ($paket->itinerary) {
-                Storage::delete('public/' . $paket->itinerary);
-            }
-
-            // Store the new itinerary file
-            $itineraryPath = $request->file('itinerary')->store('itinerary', 'public');
-            $paket->itinerary = $itineraryPath;
+    // Handle itinerary file upload (if a new file is uploaded)
+    if ($request->hasFile('itinerary')) {
+        // Delete old itinerary if exists
+        if ($paket->itinerary) {
+            Storage::delete('public/' . $paket->itinerary);
         }
 
-        // Handle foto upload (if a new file is uploaded)
-        if ($request->hasFile('foto')) {
-            // Delete old photo if exists
-            if ($paket->foto) {
-                Storage::delete('public/' . $paket->foto);
-            }
-
-            // Store the new photo
-            $fotoPath = $request->file('foto')->store('paket', 'public');
-            $paket->foto = $fotoPath;
-        }
-
-        $paket->save();
-
-        return redirect()->route('paket.index')->with('success', 'Paket berhasil diperbarui!');
+        // Store the new itinerary file
+        $itineraryPath = $request->file('itinerary')->store('itinerary', 'public');
+        $paket->itinerary = $itineraryPath;
     }
+
+    // Handle foto upload (if a new file is uploaded)
+    if ($request->hasFile('foto')) {
+        // Delete old photo if exists
+        if ($paket->foto) {
+            Storage::delete('public/' . $paket->foto);
+        }
+
+        // Store the new photo
+        $fotoPath = $request->file('foto')->store('paket', 'public');
+        $paket->foto = $fotoPath;
+    }
+
+    $paket->save();
+
+    return redirect()->route('paket.index')->with('success', 'Paket berhasil diperbarui!');
+}
+
 
 
 

@@ -25,6 +25,22 @@ class ReviewController extends Controller
 
         return view('review.review', ['reviews' => $reviews]);
     }
+    public function show($id)
+{
+    // Ambil data review berdasarkan ID
+    $review = DB::table('reviews')->where('id', $id)->first();
+
+    // Jika tidak ditemukan, lempar 404
+    if (!$review) {
+        abort(404, 'Review tidak ditemukan');
+    }
+
+    // Kirim data ke view review.show
+    return view('adminreview.show', compact('review'));
+}
+
+
+
 
     public function create()
 {

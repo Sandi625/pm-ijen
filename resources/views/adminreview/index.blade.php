@@ -45,6 +45,9 @@
                     </td>
                     <td class="text-center">
                         <div class="btn-group">
+                            <a href="{{ route('review.show', $review->id) }}" class="btn btn-info btn-sm">
+            <i class="fa-solid fa-eye"></i> Show
+        </a>
                             <a href="{{ route('review.edit', $review->id) }}" class="btn btn-primary btn-sm">
                                 <i class="fa-solid fa-pen-to-square"></i> Edit
                             </a>

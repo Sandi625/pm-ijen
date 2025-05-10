@@ -33,14 +33,15 @@
                 </div>
 
                 <!-- Harga -->
-                <div class="mb-4">
-                    <label class="block text-gray-700 font-bold mb-2" for="harga">Harga</label>
-                    <input type="text" name="harga" id="harga" value="{{ old('harga', $paket->harga) }}"
-                        class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    @error('harga')
-                        <p class="text-red-500 text-sm">{{ $message }}</p>
-                    @enderror
-                </div>
+             <div class="mb-4">
+    <label class="block text-gray-700 font-bold mb-2" for="harga">Harga</label>
+    <input type="text" name="harga" id="harga" value="{{ old('harga', $paket->harga) }}"
+        class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+    @error('harga')
+        <p class="text-red-500 text-sm">{{ $message }}</p>
+    @enderror
+</div>
+
 
                 <!-- Durasi -->
                 <div class="mb-4">

@@ -37,7 +37,7 @@
                     <td>{{ $guide->nama_guide }}</td>
                     <td>Rp {{ number_format($guide->salary, 0, ',', '.') }}</td>
                     <td>{{ $guide->kriteria_unggulan ?? '-' }}</td>
-                    <td>{{ $guide->deskripsi_guide ?? '-' }}</td>
+<td>{{ \Illuminate\Support\Str::limit($guide->deskripsi_guide, 100, '...') }}</td>
                     <td>{{ $guide->nomer_hp }}</td>
                     <td>
                         @switch($guide->status)
@@ -67,6 +67,9 @@
 
                     <td class="text-center">
                         <div class="btn-group">
+                            <a href="{{ route('guide.show', $guide->id) }}" class="btn btn-info btn-sm">
+            <i class="fa-solid fa-eye"></i> Show
+        </a>
                             <a href="{{ route('guide.edit', $guide->id) }}" class="btn btn-primary btn-sm">
                                 <i class="fa-solid fa-pen-to-square"></i> Edit
                             </a>

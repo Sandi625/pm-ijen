@@ -47,6 +47,26 @@ class GuideController extends Controller
         return view('guide.index', compact('guides'));
     }
 
+   public function show($id)
+{
+    $guide = Guide::with(['kriteria', 'penilaians.detailPenilaians.subkriteria.kriteria'])->findOrFail($id);
+
+    // Menambahkan data terkait atau perhitungan lain jika diperlukan
+    $penilaian = $guide->penilaians->first();
+
+    if ($penilaian) {
+        $hasil = $this->hitungProfileMatching($penilaian);
+        $kriteriaUnggul = $this->tentukanKriteriaUnggulanshow($hasil);
+    } else {
+        $kriteriaUnggul = 'Belum Dinilai';
+    }
+
+    $guide->kriteria_unggulan = $kriteriaUnggul;
+
+    return view('guide.show', compact('guide'));
+}
+
+
 
 
 

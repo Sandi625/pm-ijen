@@ -57,7 +57,10 @@
                             </td>
                             <td class="text-center">
                                 <div class="btn-group">
-                                    <a href="{{ route('paket.edit', $paket->id) }}" class="btn btn-primary btn-sm">
+                                                <a href="{{ route('paket.show', $paket->id) }}" class="btn btn-info btn-sm">
+                        <i class="fa-solid fa-eye"></i> Show
+                    </a>
+                                                <a href="{{ route('paket.edit', $paket->id) }}" class="btn btn-primary btn-sm">
                                         <i class="fa-solid fa-pen-to-square"></i> Edit
                                     </a>
                                     <button onclick="confirmDelete({{ $paket->id }})" class="btn btn-danger btn-sm">
