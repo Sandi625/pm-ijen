@@ -64,7 +64,13 @@ Route::post('/pesanan', [PesananController::class, 'store'])->name('pesanan.stor
 // web.php
 Route::get('/halamanguide', [HalguideController::class, 'index'])
     ->name('halamanguide.index')
-    ->middleware('auth');
+    ->middleware('auth');  // Menambahkan middleware auth
+
+Route::get('/halaman-guide/{id}', [HalguideController::class, 'showguide'])
+    ->name('halamanguide.show')
+    ->middleware('auth');  // Menambahkan middleware auth
+
+
 
 
 

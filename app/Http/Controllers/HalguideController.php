@@ -7,14 +7,19 @@ use Illuminate\Http\Request;
 
 class HalguideController extends Controller
 {
-    public function index()
+public function index()
 {
-    // Fetch all pesanan records from the database
-    $pesanans = Pesanan::all(); // You can modify this to include pagination or any other filters
-
-    // Return the view with the pesanan data
+    $pesanans = Pesanan::all();
     return view('halamanguide.index', compact('pesanans'));
 }
+
+public function showguide($id)
+    {
+        $pesanan = Pesanan::with(['guide', 'paket', 'kriteria'])->findOrFail($id);
+        return view('halamanguide.show', compact('pesanan'));
+    }
+
+
 
 
 }

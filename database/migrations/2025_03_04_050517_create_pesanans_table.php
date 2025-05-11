@@ -29,7 +29,8 @@ return new class extends Migration
             $table->string('bahasa', 100)->nullable();
             $table->text('riwayat_medis')->nullable();
             $table->string('paspor', 255)->nullable();
-            $table->text('special_request')->nullable();            // Tambahan special request
+            $table->text('special_request')->nullable();
+                     // Tambahan special request
 
             $table->timestamps();
 

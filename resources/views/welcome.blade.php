@@ -696,21 +696,21 @@
                 <div class="footer__data">
                     <h3 class="footer__subtitle">Contact</h3>
                     <ul>
-                        <li class="footer__item">
+                        {{-- <li class="footer__item">
                             <a href="https://wa.me/+6282331489128?text=Hello!%20I%20would%20like%20to%20get%20in%20touch." target="_blank">
                                 <i class="fab fa-whatsapp"></i> +6282331489128
                             </a>
-                        </li>
+                        </li> --}}
                         <li class="footer__item">
                             <a href="https://wa.me/+6282132662815?text=Hello!%20I%20would%20like%20to%20get%20in%20touch." target="_blank">
                                 <i class="fab fa-whatsapp"></i> +6282132662815
                             </a>
                         </li>
-                        <li class="footer__item">
+                        {{-- <li class="footer__item">
                             <a href="https://wa.me/+6281381117555?text=Hello!%20I%20would%20like%20to%20get%20in%20touch." target="_blank">
                                 <i class="fab fa-whatsapp"></i> +6281381117555
                             </a>
-                        </li>
+                        </li> --}}
 
                         <li class="footer__item">
                             <a href="#"><i class="fas fa-envelope"></i>Ijencratertour.indonesia@gmail.com</a>

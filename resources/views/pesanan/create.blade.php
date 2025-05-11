@@ -135,7 +135,8 @@
                     <label class="block text-gray-700 font-bold mb-2" for="nomor_telp">Phone Number</label>
                     <input type="tel" name="nomor_telp" id="nomor_telp"
                         class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        value="{{ old('nomor_telp') }}" required maxlength="20" title="Nomor HP harus terdiri dari 10 sampai 13 digit angka.">
+                        value="{{ old('nomor_telp') }}" required maxlength="20"
+                        title="Nomor HP harus terdiri dari 10 sampai 13 digit angka.">
                     @error('nomor_telp')
                         <div class="text-red-600 text-sm mt-1">{{ $message }}</div>
                     @enderror
@@ -150,7 +151,8 @@
                         required>
                         <option value="">Select Criteria</option>
                         @foreach ($kriterias as $kriteria)
-                            <option value="{{ $kriteria->id }}" {{ old('id_kriteria') == $kriteria->id ? 'selected' : '' }}>
+                            <option value="{{ $kriteria->id }}"
+                                {{ old('id_kriteria') == $kriteria->id ? 'selected' : '' }}>
                                 {{ $kriteria->nama }}
                             </option>
                         @endforeach
@@ -168,7 +170,8 @@
                         required readonly>
                         <option value="">Pilih Paket</option>
                         @foreach ($pakets as $paket)
-                            <option value="{{ $paket->id }}" {{ old('id_paket', $selectedPaketId) == $paket->id ? 'selected' : '' }}>
+                            <option value="{{ $paket->id }}"
+                                {{ old('id_paket', $selectedPaketId) == $paket->id ? 'selected' : '' }}>
                                 {{ $paket->nama_paket }}
                             </option>
                         @endforeach
@@ -205,8 +208,8 @@
                     <label class="block text-gray-700 font-bold mb-2" for="jumlah_peserta">Number of participants</label>
                     <input type="text" name="jumlah_peserta" id="jumlah_peserta"
                         class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        value="{{ old('jumlah_peserta') }}" required maxlength="20" pattern="[0-9]*" inputmode="numeric"
-                        title="Masukkan angka maksimal 20 digit">
+                        value="{{ old('jumlah_peserta') }}" required maxlength="20" pattern="[0-9]*"
+                        inputmode="numeric" title="Masukkan angka maksimal 20 digit">
                     @error('jumlah_peserta')
                         <div class="text-red-600 text-sm mt-1">{{ $message }}</div>
                     @enderror
@@ -250,21 +253,22 @@
                 <!-- Paspor -->
                 <div class="mb-4">
                     <label class="block text-gray-700 font-bold mb-2" for="paspor">
-                        Upload Passport Photo
+                        Upload Passport Photo (Optional)
                         <span class="text-red-500">(Maximum 5MB)</span>
                     </label>
                     <input type="file" name="paspor" id="paspor" accept="image/*"
-                        class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        required>
+                        class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                     @error('paspor')
                         <div class="text-red-600 text-sm mt-1">{{ $message }}</div>
                     @enderror
                 </div>
 
 
+
                 <!-- Special Request -->
                 <div class="mb-4">
-                    <label class="block text-gray-700 font-bold mb-2" for="special_request">Special Request (Optional)</label>
+                    <label class="block text-gray-700 font-bold mb-2" for="special_request">Special Request
+                        (Optional)</label>
                     <textarea name="special_request" id="special_request" rows="4"
                         class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="Example: Vegetarian meal, special needs, etc...">{{ old('special_request') }}</textarea>
@@ -303,17 +307,17 @@
     @endif
 
     @if ($errors->any())
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            Swal.fire({
-                title: 'Terjadi Kesalahan!',
-                html: `{!! implode('<br>', $errors->all()) !!}`,
-                icon: 'error',
-                confirmButtonText: 'OK'
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    title: 'Terjadi Kesalahan!',
+                    html: `{!! implode('<br>', $errors->all()) !!}`,
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
             });
-        });
-    </script>
-@endif
+        </script>
+    @endif
 
 
     <script>

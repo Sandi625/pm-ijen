@@ -2,63 +2,139 @@
 
 @section('title', 'Daftar Pesanan')
 
+@php
+    use Illuminate\Support\Str;
+@endphp
+
 @section('content')
-    <div class="container mx-auto mt-8 px-4">
-        <h1 class="text-3xl font-bold mb-4">Daftar Pesanan</h1>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f7fa;
+            margin: 0;
+            padding: 20px;
+        }
 
-        <table class="table-auto w-full border-collapse">
-            <thead>
-                <tr>
-                    <th class="px-4 py-2 border-b">Nama</th>
-                    {{-- <th class="px-4 py-2 border-b">Email</th>
-                    <th class="px-4 py-2 border-b">Nomor Telepon</th> --}}
-                    <th class="px-4 py-2 border-b">Kriteria</th>
-                    <th class="px-4 py-2 border-b">Paket</th>
-                    <th class="px-4 py-2 border-b">Tanggal Pesan</th>
-                    <th class="px-4 py-2 border-b">Tanggal Keberangkatan</th>
-                    <th class="px-4 py-2 border-b">Jumlah Peserta</th>
-                    <th class="px-4 py-2 border-b">Negara</th>
-                    <th class="px-4 py-2 border-b">Bahasa</th>
-                    <th class="px-4 py-2 border-b">Riwayat Medis</th>
-                    {{-- <th class="px-4 py-2 border-b">Paspor</th> --}}
-                    <th class="px-4 py-2 border-b">Special Request</th>
-                    {{-- <th class="px-4 py-2 border-b">Aksi</th> --}}
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($pesanans as $pesanan)
+        .custom-container {
+            max-width: 1200px;
+            margin: auto;
+            background-color: #ffffff;
+            padding: 20px 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .custom-heading {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 12px;
+            text-align: left;
+            vertical-align: top;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+            font-size: 14px;
+        }
+
+        th {
+            background-color: #f0f0f0;
+        }
+
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        .action-link {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .action-link:hover {
+            text-decoration: underline;
+        }
+        .btn {
+    display: inline-block;
+    padding: 10px 20px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.btn-blue {
+    background-color: #007bff;
+    color: white;
+    border: none;
+}
+
+.btn-blue:hover {
+    background-color: #0056b3;
+}
+
+    </style>
+
+    <div class="custom-container">
+        <h1 class="custom-heading">Daftar Pesanan</h1>
+
+        <!-- Menambahkan pesan dengan warna merah -->
+        <p style="color: red; text-align: center; font-size: 16px; margin-bottom: 20px;">
+            Klik detail untuk melihat spesial request dan riwayat medis pelanggan
+        </p>
+
+        <div class="overflow-x-auto">
+            <table>
+                <thead>
                     <tr>
-                        <td class="px-4 py-2 border-b">{{ $pesanan->nama }}</td>
-                        {{-- <td class="px-4 py-2 border-b">{{ $pesanan->email }}</td>
-                        <td class="px-4 py-2 border-b">{{ $pesanan->nomor_telp }}</td> --}}
-                        <td class="px-4 py-2 border-b">{{ $pesanan->kriteria->nama ?? 'N/A' }}</td>
-                        <td class="px-4 py-2 border-b">{{ $pesanan->paket->nama_paket ?? 'N/A' }}</td>
-                        <td class="px-4 py-2 border-b">{{ $pesanan->tanggal_pesan }}</td>
-                        <td class="px-4 py-2 border-b">{{ $pesanan->tanggal_keberangkatan }}</td>
-                        <td class="px-4 py-2 border-b">{{ $pesanan->jumlah_peserta }}</td>
-                        <td class="px-4 py-2 border-b">{{ $pesanan->negara }}</td>
-                        <td class="px-4 py-2 border-b">{{ $pesanan->bahasa }}</td>
-                        <td class="px-4 py-2 border-b">{{ $pesanan->riwayat_medis }}</td>
-                        {{-- <td class="px-4 py-2 border-b">
-                            @if ($pesanan->paspor)
-                                <img src="{{ asset('storage/' . $pesanan->paspor) }}" alt="Paspor" class="w-20 h-20">
-                            @else
-                                N/A
-                            @endif
-                        </td> --}}
-                        <td class="px-4 py-2 border-b">{{ $pesanan->special_request ?? 'N/A' }}</td>
-                        {{-- <td class="px-4 py-2 border-b">
-                            <a href="{{ route('pesanan.edit', $pesanan->id) }}" class="text-blue-500 hover:text-blue-700">Edit</a> |
-                            <form action="{{ route('pesanan.destroy', $pesanan->id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="text-red-500 hover:text-red-700">Hapus</button>
-                            </form>
-                        </td> --}}
+                        <th>Nama</th>
+                        <th>Kriteria</th>
+                        <th>Paket</th>
+                        <th>Tanggal Pesan</th>
+                        <th>Tanggal Keberangkatan</th>
+                        <th>Jumlah Peserta</th>
+                        <th>Negara</th>
+                        <th>Bahasa</th>
+                        <th>Riwayat Medis</th>
+                        <th>Special Request</th>
+                        <th>Aksi</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach ($pesanans as $pesanan)
+                        <tr>
+                            <td>{{ $pesanan->nama }}</td>
+                            <td>{{ $pesanan->kriteria->nama ?? 'N/A' }}</td>
+                            <td>{{ $pesanan->paket->nama_paket ?? 'N/A' }}</td>
+                            <td>{{ $pesanan->tanggal_pesan }}</td>
+                            <td>{{ $pesanan->tanggal_keberangkatan }}</td>
+                            <td>{{ $pesanan->jumlah_peserta }}</td>
+                            <td>{{ $pesanan->negara }}</td>
+                            <td>{{ $pesanan->bahasa }}</td>
+                            <td>{{ Str::limit($pesanan->riwayat_medis ?? '-', 40) }}</td>
+                            <td>{{ Str::limit($pesanan->special_request ?? '-', 40) }}</td>
+                            <td>
+                                <a href="{{ route('halamanguide.show', $pesanan->id) }}"
+                                    class="action-link btn btn-blue">Detail</a>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
-@endsection
 
+@endsection
