@@ -2,31 +2,47 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function showLoginForm(Request $request)
-    {
+  public function showLoginForm(Request $request)
+{
+    if (Auth::check()) {
+        $level = Auth::user()->level;
 
-        // Cek jika pengguna sudah login
-        if (Auth::check()) {
-            // Redirect ke dashboard jika sudah login
+        // Arahkan sesuai level
+        if ($level === 'admin') {
             return redirect()->route('dashboard');
-        }
+        } elseif ($level === 'guide') {
+            return redirect('/halamanguide');
+        } elseif ($level === 'pelanggan') {
+            return redirect('/customer/packages');
+        } else {
+            // Jika level tidak dikenali, logout dan kembali ke login
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
 
-        return view('login');
+            return redirect('/login')->withErrors(['email' => 'Level user tidak valid.']);
+        }
     }
 
-      public function login(Request $request)
+    return view('login');
+}
+
+
+     public function login(Request $request)
 {
     $credentials = $request->only('email', 'password');
 
     if (Auth::attempt($credentials)) {
-        // Regenerate session setelah login agar hindari session fixation
         $request->session()->regenerate();
 
         $level = Auth::user()->level;
@@ -46,10 +62,11 @@ class AuthController extends Controller
         }
     }
 
-    return back()->withErrors(['email' => 'Email dan password tidak cocok, coba lagi.']);
+    // ✅ Error handling login gagal
+    return back()->withInput()->withErrors([
+        'email' => 'Incorrect email or password',
+    ]);
 }
-
-
 
 
 
@@ -66,6 +83,52 @@ class AuthController extends Controller
 
     return redirect('/login');
 }
+
+public function showRegisterForm()
+{
+    return view('register');
+}
+
+
+public function register(Request $request)
+{
+    try {
+        $validated = $request->validate([
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|email|unique:users,email',
+            'password' => 'required|min:6|confirmed',
+            'level'    => 'nullable|in:pelanggan',  // hanya pelanggan, nullable
+        ]);
+
+        // Jika level tidak diisi, set default 'pelanggan'
+        $level = $validated['level'] ?? 'pelanggan';
+
+        $user = User::create([
+            'name'     => $validated['name'],
+            'email'    => $validated['email'],
+            'password' => Hash::make($validated['password']),
+            'level'    => $level,
+        ]);
+
+        Auth::login($user);
+
+        // Redirect sesuai level
+        if ($user->level === 'pelanggan') {
+            return redirect('/customer/packages');
+        } elseif ($user->level === 'guide') {
+            return redirect('/halamanguide');
+        }
+
+        return redirect('/');
+
+    } catch (\Exception $e) {
+        Log::error('Register error: '.$e->getMessage());
+        return back()->withInput()->withErrors(['register' => 'An error occurred while registering the account. Please try again.']);
+    }
+}
+
+
+
 
 
 }

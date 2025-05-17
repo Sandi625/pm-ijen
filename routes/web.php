@@ -26,6 +26,9 @@ Route::get('/', function () {
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register.form');
+Route::post('/register', [AuthController::class, 'register'])->name('register');
+
 
 // Halaman admin semua dibungkus 'auth' dan 'isAdmin'
 Route::middleware(['auth', 'isAdmin'])->group(function () {
@@ -114,13 +117,14 @@ Route::get('/blogs/{blog}', [BlogController::class, 'show'])->name('blogs.show')
 Route::get('/sblog', [BlogController::class, 'listBlogs'])->name('blog.list');
 Route::get('/review', [ReviewController::class, 'index'])->name('review.review');
 Route::post('/review/store', [ReviewController::class, 'store'])->name('review.store');
-Route::prefix('customer')->group(function () {
-    Route::get('/packages', [HalPelangganController::class, 'showPackages'])->name('customer.packages');
-});
 //Pelanggan
 // 2. Route create & store TANPA middleware auth
 Route::get('/pesanan/create/{id_paket?}', [PesananController::class, 'create'])->name('pesanan.create');
 Route::post('/pesanan', [PesananController::class, 'store'])->name('pesanan.store');
+
+Route::prefix('customer')->middleware(['auth'])->group(function () {
+    Route::get('/packages', [HalPelangganController::class, 'showPackages'])->name('customer.packages');
+});
 
 
 
