@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
-   <style>
+    <style>
         /* Basic styling */
         .section-title {
             text-align: center;
@@ -32,7 +32,8 @@
             transition: transform 0.3s ease-in-out;
 
             /* Ukuran untuk 3 per baris */
-            width: calc(33.33% - 1rem); /* 3 per baris */
+            width: calc(33.33% - 1rem);
+            /* 3 per baris */
             max-width: 300px;
         }
 
@@ -85,23 +86,27 @@
         }
 
         .testimonials__include {
-            color: var(--include-color); /* Warna hijau */
+            color: var(--include-color);
+            /* Warna hijau */
         }
 
         .testimonials__exclude {
-            color: var(--exclude-color); /* Warna merah */
+            color: var(--exclude-color);
+            /* Warna merah */
         }
 
         /* Responsive */
         @media screen and (max-width: 992px) {
             .testimonials__card {
-                width: calc(33.33% - 1rem); /* 3 per baris (untuk ukuran layar PC) */
+                width: calc(33.33% - 1rem);
+                /* 3 per baris (untuk ukuran layar PC) */
             }
         }
 
         @media screen and (max-width: 600px) {
             .testimonials__card {
-                width: 100%; /* 1 per baris */
+                width: 100%;
+                /* 1 per baris */
             }
 
             .testimonials__image {
@@ -109,34 +114,36 @@
             }
         }
     </style>
-<section id="tour-pakets">
-    <h2 class="section-title">Tour Pakets</h2>
-    <div class="bd-container testimonials__container">
-        @foreach ($pakets as $paket)
-            <div class="testimonials__card">
-                <div class="testimonials__image">
-                    @if($paket->foto)
-                        <a href="{{ route('pesanan.create', ['id_paket' => $paket->id]) }}">
-                            <img src="{{ asset('storage/' . $paket->foto) }}" alt="Foto Paket" class="w-full h-40 object-cover rounded-lg hover:opacity-90 transition-opacity duration-300">
+    <section id="tour-pakets">
+        <h2 class="section-title">Tour Pakets</h2>
+        <div class="bd-container testimonials__container">
+            @foreach ($pakets as $paket)
+                <div class="testimonials__card">
+                    <div class="testimonials__image">
+                        @if ($paket->foto)
+                            <a href="{{ route('pesanan.create', ['id_paket' => $paket->id]) }}">
+                                <img src="{{ asset('storage/' . $paket->foto) }}" alt="Foto Paket"
+                                    class="w-full h-40 object-cover rounded-lg hover:opacity-90 transition-opacity duration-300">
+                            </a>
+                        @else
+                            <p>Foto tidak tersedia</p>
+                        @endif
+                    </div>
+                    <div class="testimonials__info">
+                        <h3 class="testimonials__name">{{ $paket->nama_paket }}</h3>
+                        <p class="testimonials__description">{{ Str::limit($paket->deskripsi_paket, 100) }}</p>
+                        <p class="testimonials__duration">Durasi: {{ $paket->durasi }}</p>
+
+                        <!-- Tombol Detail -->
+                        <a href="{{ route('pesanan.create', ['id_paket' => $paket->id]) }}"
+                            class="inline-block mt-4 px-6 py-2.5 bg-gradient-to-r from-green-500 to-green-700 text-blue-500 font-semibold text-sm rounded-full shadow-lg hover:from-green-600 hover:to-green-800 transition-all duration-300 ease-in-out">
+                            💼 Klik For More
                         </a>
-                    @else
-                        <p>Foto tidak tersedia</p>
-                    @endif
-                </div>
-                <div class="testimonials__info">
-                    <h3 class="testimonials__name">{{ $paket->nama_paket }}</h3>
-                    <p class="testimonials__description">{{ Str::limit($paket->deskripsi_paket, 100) }}</p>
-                    <p class="testimonials__duration">Durasi: {{ $paket->durasi }}</p>
 
-                    <!-- Tombol Detail -->
-                    <a href="{{ route('pesanan.create', ['id_paket' => $paket->id]) }}"
-                        class="inline-block mt-4 px-6 py-2.5 bg-gradient-to-r from-green-500 to-green-700 text-white font-semibold text-sm rounded-full shadow-lg hover:from-green-600 hover:to-green-800 transition-all duration-300 ease-in-out">
-                        💼 Klik For More
-                    </a>
 
+                    </div>
                 </div>
-            </div>
-        @endforeach
-    </div>
-</section>
+            @endforeach
+        </div>
+    </section>
 @endsection

@@ -126,7 +126,7 @@
 
             <!-- Heading -->
             <div class="sidebar-heading">
-               Trip Packages
+                Trip Packages
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
@@ -157,11 +157,23 @@
 
 
             <!-- Nav Item - Tables -->
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('customer.packages') }}">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Packages</span></a>
-            </li>
+         <li class="nav-item">
+    <a class="nav-link" href="{{ route('customer.packages') }}">
+        <i class="fas fa-fw fa-table"></i>
+        <span>Packages</span>
+    </a>
+</li>
+
+<li class="nav-item">
+    <form id="logout-form" method="POST" action="{{ route('logout') }}" style="display: none;">
+        @csrf
+    </form>
+    <a href="#" class="nav-link" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+    </a>
+</li>
+
 
 
 
@@ -389,8 +401,7 @@
                                 </a>
 
                                 <!-- Hidden Logout Form -->
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                    class="d-none">
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                     @csrf
                                 </form>
 
