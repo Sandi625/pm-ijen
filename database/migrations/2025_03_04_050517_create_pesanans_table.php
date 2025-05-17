@@ -23,6 +23,7 @@ return new class extends Migration
             $table->date('tanggal_pesan');
             $table->date('tanggal_keberangkatan');
             $table->integer('jumlah_peserta');
+            $table->string('order_id', 100)->nullable();
 
             // Kolom tambahan
             $table->string('negara', 100)->nullable();
@@ -30,7 +31,7 @@ return new class extends Migration
             $table->text('riwayat_medis')->nullable();
             $table->string('paspor', 255)->nullable();
             $table->text('special_request')->nullable();
-                     // Tambahan special request
+            $table->boolean('status')->default(1)->nullable(); // Kolom status nullable         // Tambahan special request
 
             $table->timestamps();
 

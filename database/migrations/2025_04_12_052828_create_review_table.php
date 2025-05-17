@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('guide_id'); // Tambahkan kolom guide_id
             $table->string('name', 100);
             $table->string('email', 100);
             $table->integer('rating')->check('rating >= 1 AND rating <= 5');
@@ -22,6 +23,9 @@ return new class extends Migration
             $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();
             $table->timestamps();
+
+            $table->foreign('guide_id')->references('id')->on('guides')->onDelete('cascade');
+
         });
     }
 

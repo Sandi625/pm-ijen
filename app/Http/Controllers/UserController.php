@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule; // ✅ Import Rule di sini
+
 
 class UserController extends Controller
 {
@@ -16,10 +18,12 @@ class UserController extends Controller
     }
 
     // Tampilkan form tambah user
-    public function create()
-    {
-        return view('users.create');
-    }
+   public function create()
+{
+    $levels = ['admin', 'guide', 'pelanggan'];
+    return view('users.create', compact('levels'));
+}
+
 
     // Simpan user baru
     public function store(Request $request)
@@ -28,7 +32,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',  // Validasi password dan konfirmasi password
-            'level' => 'required|in:admin,user', // Validasi level
+        'level' => ['required', Rule::in(['admin', 'guide', 'pelanggan'])],
         ]);
 
         // Hash password
@@ -44,28 +48,29 @@ class UserController extends Controller
 
     // Tampilkan form edit user
     public function edit($id)
-    {
-        $user = User::findOrFail($id);
-        return view('users.edit', compact('user'));
-    }
+{
+    $user = User::findOrFail($id);
+    $levels = ['admin', 'guide', 'pelanggan'];
+    return view('users.edit', compact('user', 'levels'));
+}
+
 
     // Update user
-    public function update(Request $request, $id)
+     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
 
         $validated = $request->validate([
-            'name'  => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $id,
+            'name'     => 'required|string|max:255',
+            'email'    => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($id)],
             'password' => 'nullable|string|min:6|confirmed',
-            'level'    => 'required|in:admin,user', // Validasi untuk level
-
+            'level'    => ['required', Rule::in(['admin', 'guide', 'pelanggan'])], // ✅ Fix validasi level
         ]);
 
         if ($request->filled('password')) {
             $validated['password'] = Hash::make($validated['password']);
         } else {
-            unset($validated['password']); // Jangan ubah password kalau kosong
+            unset($validated['password']);
         }
 
         $user->update($validated);

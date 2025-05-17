@@ -299,7 +299,7 @@
                     allowOutsideClick: false,
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.href = '{{ route('customer.packages') }}';
+                        window.location.href = '{{ route('home') }}';
                     }
                 });
             });

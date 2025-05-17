@@ -11,6 +11,16 @@
                 @csrf
                 @method('PUT')
 
+                <!-- Order ID -->
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-bold mb-2" for="order_id">Order ID</label>
+                    <input type="text" name="order_id" id="order_id" value="{{ old('order_id', $pesanan->order_id) }}"
+                        class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        required>
+                    <p class="text-sm text-gray-500 mt-1">Contoh format: ORDER20240516XXXX</p>
+                </div>
+
+
                 <!-- Nama -->
                 <div class="mb-4">
                     <label class="block text-gray-700 font-bold mb-2" for="nama">Nama</label>
@@ -134,22 +144,39 @@
                         class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         rows="4">{{ old('special_request', $pesanan->special_request) }}</textarea>
                 </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700 font-bold mb-2" for="id_guide">Guide</label>
-                    <select name="id_guide" id="id_guide"
-                        class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        @foreach ($guides as $guide)
-                            <option value="{{ $guide->id }}" {{ $pesanan->id_guide == $guide->id ? 'selected' : '' }}>
-                                {{ $guide->nama_guide }}
-                                @if ($guide->kriteria_unggulan)
-                                    - {{ is_array($guide->kriteria_unggulan) ? implode(', ', $guide->kriteria_unggulan) : $guide->kriteria_unggulan }}
-                                @else
-                                    - Tidak Diketahui
-                                @endif
+                <div class="mb-3">
+                    <div class="mb-4">
+                        <label for="status" class="block text-gray-700 font-bold mb-2">Status</label>
+                        <select name="status" id="status"
+                            class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="1" {{ old('status', $pesanan->status) == 1 ? 'selected' : '' }}>Aktif
                             </option>
-                        @endforeach
-                    </select>
+                            <option value="0" {{ old('status', $pesanan->status) == 0 ? 'selected' : '' }}>Tidak
+                                Aktif</option>
+                        </select>
+                    </div>
+
+
                 </div>
+
+               <div class="mb-4">
+    <label class="block text-gray-700 font-bold mb-2" for="id_guide">Guide</label>
+    <select name="id_guide" id="id_guide"
+        class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <option value="">-- Pilih Guide --</option>
+        @foreach ($guides as $guide)
+            <option value="{{ $guide->id }}" {{ $pesanan->id_guide == $guide->id ? 'selected' : '' }}>
+                {{ $guide->nama_guide }}
+                @if ($guide->kriteria_unggulan)
+                    - {{ is_array($guide->kriteria_unggulan) ? implode(', ', $guide->kriteria_unggulan) : $guide->kriteria_unggulan }}
+                @else
+                    - Tidak Diketahui
+                @endif
+            </option>
+        @endforeach
+    </select>
+</div>
+
 
 
 
@@ -166,7 +193,8 @@
 
                 <!-- Tombol Submit -->
                 <div class="flex justify-between items-center">
-                    <a href="{{ route('pesanan.index') }}" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">
+                    <a href="{{ route('pesanan.index') }}"
+                        class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">
                         Kembali
                     </a>
 

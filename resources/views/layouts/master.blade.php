@@ -45,7 +45,7 @@
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">Admin Ijen Crater Tour </div>
+                <div class="sidebar-brand-text mx-3">User </div>
             </a>
 
             <!-- Divider -->
@@ -63,11 +63,11 @@
 
             <!-- Heading -->
             <div class="sidebar-heading">
-                SPK Profile Matching
+                {{-- SPK Profile Matching --}}
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
@@ -84,7 +84,7 @@
 
                     </div>
                 </div>
-            </li>
+            </li> --}}
 
             <!-- Guide -->
             {{-- <li class="nav-item">
@@ -126,7 +126,7 @@
 
             <!-- Heading -->
             <div class="sidebar-heading">
-                Manajemen Web dan Data
+               Trip Packages
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
@@ -152,51 +152,18 @@
             </li> --}}
 
             <!-- Nav Item - Charts -->
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url('/guide') }}">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Guide</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url('/paket') }}">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Paket Wisata</span>
-                </a>
-            </li>
+
 
 
 
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('pesanan.index') }}">
+                <a class="nav-link" href="{{ route('customer.packages') }}">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>Pesanan</span></a>
+                    <span>Packages</span></a>
             </li>
 
-              <!-- Nav Item - Tables -->
-              <li class="nav-item">
-                <a class="nav-link" href="{{ route('galeris.index') }}">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Gallery</span></a>
-            </li>
 
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('blogs.index') }}">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Blog</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('review.all') }}">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Reviews</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('users.index') }}">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Manejemen User</span>
-                </a>
-            </li>
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -394,7 +361,7 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Admin</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">User</span>
                                 <img class="img-profile rounded-circle"
                                     src="{{ asset('/assets/sb-admin/img/undraw_profile.svg') }}">
                             </a>

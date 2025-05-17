@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -20,7 +19,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'level', // Tambahkan 'level' di sini
+        'level', // sudah benar ditambahkan
     ];
 
     /**
@@ -34,15 +33,28 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
+     * The attributes that should be cast.
      *
-     * @return array<string, string>
+     * @var array<string, string>
      */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
+
+    public function isAdmin()
+{
+    return $this->level === 'admin';
+}
+
+public function isGuide()
+{
+    return $this->level === 'guide';
+}
+
+public function isPelanggan()
+{
+    return $this->level === 'pelanggan';
+}
+
 }

@@ -16,6 +16,7 @@
         <thead class="table-light">
             <tr>
                 <th>NO</th>
+                <th>Nama Guide</th>
                 <th>Nama</th>
                 <th>Email</th>
                 <th>Rating</th>
@@ -29,6 +30,7 @@
             @foreach ($reviews as $index => $review)
                 <tr>
                     <td>{{ $index + 1 }}</td>
+                    <td>{{ $review->nama_guide ?? 'Unknown Guide' }}</td> <!-- Tambah Nama Guide -->
                     <td>{{ $review->name }}</td>
                     <td>{{ $review->email }}</td>
                     <td>{{ $review->rating }} / 5</td>
@@ -46,8 +48,8 @@
                     <td class="text-center">
                         <div class="btn-group">
                             <a href="{{ route('review.show', $review->id) }}" class="btn btn-info btn-sm">
-            <i class="fa-solid fa-eye"></i> Show
-        </a>
+                                <i class="fa-solid fa-eye"></i> Show
+                            </a>
                             <a href="{{ route('review.edit', $review->id) }}" class="btn btn-primary btn-sm">
                                 <i class="fa-solid fa-pen-to-square"></i> Edit
                             </a>
@@ -65,6 +67,7 @@
         </tbody>
     </table>
 </div>
+
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>

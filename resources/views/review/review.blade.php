@@ -15,110 +15,123 @@
 
 </head>
 
- <style>
+<style>
+    /*========== TESTIMONIALS ==========*/
+    .testimonials {
+        padding: 3rem 0;
+        /* Konsistensi jarak */
+        background-color: #f4f4f4;
+        /* Warna latar belakang utama */
+    }
 
-/*========== TESTIMONIALS ==========*/
-.testimonials {
-  padding: 3rem 0; /* Konsistensi jarak */
-  background-color: #f4f4f4; /* Warna latar belakang utama */
-}
+    .section-title {
+        text-align: center;
+        font-size: 2.5rem;
+        /* Ukuran font */
+        color: #07412a;
+        /* Warna judul */
+        margin-bottom: 2rem;
+    }
 
-.section-title {
-  text-align: center;
-  font-size: 2.5rem; /* Ukuran font */
-  color: #07412a; /* Warna judul */
-  margin-bottom: 2rem;
-}
+    .testimonials__container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
 
-.testimonials__container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
-}
+    .testimonials__card {
+        background: #07412a;
+        border-radius: 0.5rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        /* Efek bayangan lembut */
+        padding: 1rem;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        /* Efek transisi */
+    }
 
-.testimonials__card {
-  background: #07412a;
-  border-radius: 0.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Efek bayangan lembut */
-  padding: 1rem;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Efek transisi */
-}
+    /* Animasi hover untuk kartu testimonial */
+    .testimonials__card:hover {
+        transform: translateY(-10px);
+        /* Mengangkat kartu saat hover */
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        /* Bayangan lebih besar */
+    }
 
-/* Animasi hover untuk kartu testimonial */
-.testimonials__card:hover {
-  transform: translateY(-10px); /* Mengangkat kartu saat hover */
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Bayangan lebih besar */
-}
+    .testimonials__header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
 
-.testimonials__header {
-  display: flex;
-  align-items: center;
-  margin-bottom: 1rem;
-}
+    .testimonials__image {
+        margin-right: 1rem;
+    }
 
-.testimonials__image {
-  margin-right: 1rem;
-}
+    .testimonials__image img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
 
-.testimonials__image img {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  object-fit: cover;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
+    .testimonials__name {
+        font-weight: 600;
+        /* Font semi-bold */
+        font-size: 1.2rem;
+        /* Ukuran font */
+        margin-bottom: 0.5rem;
+        color: #ffffff;
+    }
 
-.testimonials__name {
-  font-weight: 600; /* Font semi-bold */
-  font-size: 1.2rem; /* Ukuran font */
-  margin-bottom: 0.5rem;
-  color: #ffffff;
-}
+    .testimonials__rating {
+        color: #f39c12;
+        /* Warna bintang */
+    }
 
-.testimonials__rating {
-  color: #f39c12; /* Warna bintang */
-}
+    .star {
+        font-size: 1.2rem;
+        margin-right: 0.2rem;
+    }
 
-.star {
-  font-size: 1.2rem;
-  margin-right: 0.2rem;
-}
+    .testimonials__description {
+        font-size: 1rem;
+        /* Ukuran font */
+        color: #ffffff;
+        /* Warna teks */
+        text-align: center;
+        /* Memusatkan teks secara horizontal */
+        display: flex;
+        align-items: center;
+        /* Memusatkan secara vertikal */
+        justify-content: center;
+        /* Memusatkan secara horizontal */
+        height: 100%;
+        /* Menjamin deskripsi mengisi ruang yang ada */
+    }
 
-.testimonials__description {
-  font-size: 1rem; /* Ukuran font */
-  color: #ffffff; /* Warna teks */
-  text-align: center; /* Memusatkan teks secara horizontal */
-  display: flex;
-  align-items: center; /* Memusatkan secara vertikal */
-  justify-content: center; /* Memusatkan secara horizontal */
-  height: 100%; /* Menjamin deskripsi mengisi ruang yang ada */
-}
+    @media (max-width: 768px) {
+        .testimonials__card {
+            width: 100%;
+        }
+    }
 
-@media (max-width: 768px) {
-  .testimonials__card {
-    width: 100%;
-  }
-}
+    @media (max-width: 480px) {
+        .section-title {
+            font-size: 2rem;
+            /* Ukuran font untuk tampilan lebih kecil */
+        }
 
-@media (max-width: 480px) {
-  .section-title {
-    font-size: 2rem; /* Ukuran font untuk tampilan lebih kecil */
-  }
-
-  .testimonials__card {
-    width: 100%;
-  }
-}
-
-
-
-
+        .testimonials__card {
+            width: 100%;
+        }
+    }
 </style>
 
 <body>
@@ -170,6 +183,15 @@
                     <input type="email" id="email" name="email" placeholder="Enter your email" required>
                 </div>
                 <div class="form-group">
+                    <label for="guide_id">Select Guide</label>
+                    <select id="guide_id" name="guide_id" required>
+                        <option value="" disabled selected>Select a Guide</option>
+                        @foreach ($guides as $guide)
+                            <option value="{{ $guide->id }}">{{ $guide->nama_guide }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group">
                     <label for="rating">Rating</label>
                     <select id="rating" name="rating" required>
                         <option value="" disabled selected>Select your rating</option>
@@ -195,33 +217,31 @@
 
 
 
-    @if(session('success'))
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        Swal.fire({
-            icon: 'success',
-            title: 'Succeed!',
-            text: '{{ session('success') }}',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK'
-        });
-    </script>
-@endif
+    @if (session('success'))
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Succeed!',
+                text: '{{ session('success') }}',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK'
+            });
+        </script>
+    @endif
 
-@if($errors->any())
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        Swal.fire({
-            icon: 'error',
-            title: 'Gagal!',
-            text: '{{ $errors->first() }}',
-            confirmButtonColor: '#d33',
-            confirmButtonText: 'OK'
-        });
-    </script>
-@endif
-
-
+    @if ($errors->any())
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal!',
+                text: '{{ $errors->first() }}',
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'OK'
+            });
+        </script>
+    @endif
 
 
 
@@ -229,37 +249,38 @@
 
 
 
-<section class="testimonials section">
-    <h2 class="section-title">Testimoni</h2>
-    <div class="bd-container testimonials__container">
-      @if(isset($reviews) && $reviews->count())
-        @foreach ($reviews as $review)
-          <div class="testimonials__card">
-            <div class="testimonials__header">
-              <div class="testimonials__image">
-                <img
-                  src="{{ $review->photo && $review->photo !== 'images/default-avatar.jpg' ? asset('storage/' . $review->photo) : asset('images/default-avatar.jpg') }}"
-                  alt="{{ $review->name }}">
-              </div>
-              <div>
-                <div class="testimonials__name">{{ $review->name }}</div>
-                <div class="testimonials__rating">
-                  @for ($i = 1; $i <= 5; $i++)
-                    <span class="star">{{ $i <= $review->rating ? '★' : '☆' }}</span>
-                  @endfor
-                </div>
-              </div>
-            </div>
-            <p class="testimonials__description">
-              "{{ $review->isi_testimoni }}"
-            </p>
-          </div>
-        @endforeach
-      @else
-        <p class="text-center">Belum ada testimoni tersedia.</p>
-      @endif
-    </div>
-  </section>
+
+
+    <section class="testimonials section">
+        <h2 class="section-title">Testimoni</h2>
+        <div class="bd-container testimonials__container">
+            @if (isset($reviews) && $reviews->count())
+                @foreach ($reviews as $review)
+                    <div class="testimonials__card">
+                        <div class="testimonials__header">
+                            <div class="testimonials__image">
+                                <img src="{{ $review->photo && $review->photo !== 'images/default-avatar.jpg' ? asset('storage/' . $review->photo) : asset('images/default-avatar.jpg') }}"
+                                    alt="{{ $review->name }}">
+                            </div>
+                            <div>
+                                <div class="testimonials__name">{{ $review->name }}</div>
+                                <div class="testimonials__rating">
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        <span class="star">{{ $i <= $review->rating ? '★' : '☆' }}</span>
+                                    @endfor
+                                </div>
+                            </div>
+                        </div>
+                        <p class="testimonials__description">
+                            "{{ $review->isi_testimoni }}"
+                        </p>
+                    </div>
+                @endforeach
+            @else
+                <p class="text-center">Belum ada testimoni tersedia.</p>
+            @endif
+        </div>
+    </section>
 
 
 
@@ -341,17 +362,20 @@
                     <h3 class="footer__subtitle">Company</h3>
                     <ul>
                         <li class="footer__item">
-                            <a href="https://wa.me/+6282331489128?text=Hello!%20I%20would%20like%20to%20get%20in%20touch." target="_blank">
+                            <a href="https://wa.me/+6282331489128?text=Hello!%20I%20would%20like%20to%20get%20in%20touch."
+                                target="_blank">
                                 <i class="fab fa-whatsapp"></i> +6282331489128
                             </a>
                         </li>
                         <li class="footer__item">
-                            <a href="https://wa.me/+6282132662815?text=Hello!%20I%20would%20like%20to%20get%20in%20touch." target="_blank">
+                            <a href="https://wa.me/+6282132662815?text=Hello!%20I%20would%20like%20to%20get%20in%20touch."
+                                target="_blank">
                                 <i class="fab fa-whatsapp"></i> +6282132662815
                             </a>
                         </li>
                         <li class="footer__item">
-                            <a href="https://wa.me/+6281381117555?text=Hello!%20I%20would%20like%20to%20get%20in%20touch." target="_blank">
+                            <a href="https://wa.me/+6281381117555?text=Hello!%20I%20would%20like%20to%20get%20in%20touch."
+                                target="_blank">
                                 <i class="fab fa-whatsapp"></i> +6281381117555
                             </a>
                         </li>

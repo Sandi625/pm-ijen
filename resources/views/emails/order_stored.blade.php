@@ -3,6 +3,7 @@
 
 Berikut adalah detail pesanan:<br><br>
 
+**Order ID:** {{ $pesanan->order_id }}<br>
 **Nama:** {{ $pesanan->nama }}<br>
 **Email:** {{ $pesanan->email }}<br>
 **Nomor Telepon:** {{ $pesanan->nomor_telp }}<br>

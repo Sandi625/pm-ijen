@@ -13,22 +13,29 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+       // Admin
+    User::factory()->create([
+        'name' => 'Admin',
+        'email' => 'admin@gmail.com',
+        'password' => bcrypt('admin'),
+        'level' => 'admin',
+    ]);
 
-        User::factory()->create([
-            'name' => 'Admin',
-            'email' => 'admin@gmail.com',
-            'password' => bcrypt('admin'),
-            'level' => 'admin', // Menambahkan level admin
-        ]);
+    // Pelanggan (User biasa)
+    User::factory()->create([
+        'name' => 'John Doe',
+        'email' => 'user@example.com',
+        'password' => bcrypt('user123'),
+        'level' => 'pelanggan',
+    ]);
 
-        // User biasa
-        User::factory()->create([
-            'name' => 'John Doe',
-            'email' => 'user@example.com',
-            'password' => bcrypt('user123'),
-            'level' => 'user', // Menambahkan level user
-        ]);
+    // Guide
+    User::factory()->create([
+        'name' => 'Guide One',
+        'email' => 'guide@example.com',
+        'password' => bcrypt('guide123'),
+        'level' => 'guide',
+    ]);
 
 
         // Menjalankan semua seeder yang telah Anda buat

@@ -9,9 +9,11 @@ class HalguideController extends Controller
 {
 public function index()
 {
-    $pesanans = Pesanan::all();
+    $pesanans = Pesanan::with('guide')->where('status', 1)->get();
     return view('halamanguide.index', compact('pesanans'));
 }
+
+
 
 public function showguide($id)
     {

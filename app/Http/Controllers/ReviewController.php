@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Guide;
 use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -19,33 +20,49 @@ class ReviewController extends Controller
      */
     public function index()
     {
+        $reviews = DB::table('reviews')
+            ->join('guides', 'reviews.guide_id', '=', 'guides.id')
+            ->where('reviews.status', 1)
+            ->select('reviews.*', 'guides.nama_guide')
+            ->get();
 
-        $reviews = DB::table('reviews')->where('status', 1)->get();
+        $guides = DB::table('guides')->get(); // fetch all guides
 
-
-        return view('review.review', ['reviews' => $reviews]);
+        return view('review.review', [
+            'reviews' => $reviews,
+            'guides' => $guides
+        ]);
     }
+
+
     public function show($id)
-{
-    // Ambil data review berdasarkan ID
-    $review = DB::table('reviews')->where('id', $id)->first();
+    {
+        // Ambil data review beserta guide
+        $review = DB::table('reviews')
+            ->leftJoin('guides', 'reviews.guide_id', '=', 'guides.id')
+            ->select('reviews.*', 'guides.nama_guide')
+            ->where('reviews.id', $id)
+            ->first();
 
-    // Jika tidak ditemukan, lempar 404
-    if (!$review) {
-        abort(404, 'Review tidak ditemukan');
+        // Jika tidak ditemukan, lempar 404
+        if (!$review) {
+            abort(404, 'Review tidak ditemukan');
+        }
+
+        // Kirim data ke view review.show
+        return view('adminreview.show', compact('review'));
     }
 
-    // Kirim data ke view review.show
-    return view('adminreview.show', compact('review'));
-}
 
 
 
 
     public function create()
-{
-    return view('adminreview.create');
-}
+    {
+        $guides = Guide::orderBy('nama_guide')->get();
+
+        return view('adminreview.create', compact('guides'));
+    }
 
 
 
@@ -62,7 +79,8 @@ class ReviewController extends Controller
             'email' => 'required|string|max:100',
             'rating' => 'required|integer|between:1,5',
             'isi_testimoni' => 'required|string',
-            'photo' => 'nullable|image|max:2048', // Maksimal 2MB untuk gambar
+            'guide_id' => 'required|exists:guides,id', // Make sure guide_id exists
+            'photo' => 'nullable|image|max:2048',
             'status' => 'nullable|boolean',
         ]);
 
@@ -71,9 +89,8 @@ class ReviewController extends Controller
         if ($request->hasFile('photo')) {
             $review->photo = $request->file('photo')->store('photos', 'public');
         } else {
-            $review->photo = 'images/default-avatar.jpg'; // avatar default (letakkan di public/images)
+            $review->photo = 'images/default-avatar.jpg';
         }
-
 
         $review->save();
 
@@ -81,11 +98,16 @@ class ReviewController extends Controller
     }
 
 
+
     public function edit($id)
     {
-        $review = Review::findOrFail($id);
-        return view('adminreview.edit', compact('review'));
+        $review = Review::with('guide')->findOrFail($id);
+        $guides = Guide::all(); // Ambil semua guide untuk select
+
+        return view('adminreview.edit', compact('review', 'guides'));
     }
+
+
 
     /**
      * Update the specified review in storage.
@@ -99,6 +121,7 @@ class ReviewController extends Controller
         $review = Review::findOrFail($id);
 
         $validated = $request->validate([
+            'guide_id' => 'required|exists:guides,id',
             'name' => 'required|string|max:100',
             'email' => 'required|string|max:100',
             'rating' => 'required|integer|between:1,5',
@@ -107,11 +130,18 @@ class ReviewController extends Controller
             'status' => 'nullable|boolean',
         ]);
 
-        $review->fill($validated);
+        // Isi data validated
+        $review->guide_id = $validated['guide_id'];
+        $review->name = $validated['name'];
+        $review->email = $validated['email'];
+        $review->rating = $validated['rating'];
+        $review->isi_testimoni = $validated['isi_testimoni'];
+        $review->status = $validated['status'] ?? 0; // default ke 0 kalau null
 
+        // Cek dan ganti foto jika ada upload baru
         if ($request->hasFile('photo')) {
             if ($review->photo && Storage::disk('public')->exists($review->photo)) {
-                Storage::disk('public')->delete($review->photo); // delete old photo
+                Storage::disk('public')->delete($review->photo); // Hapus foto lama
             }
             $review->photo = $request->file('photo')->store('photos', 'public');
         }
@@ -120,6 +150,7 @@ class ReviewController extends Controller
 
         return redirect()->route('review.all')->with('success', 'Review has been updated.');
     }
+
 
     /**
      * Remove the specified review from storage.
@@ -142,12 +173,12 @@ class ReviewController extends Controller
 
 
     public function allReviews()
-{
-    $reviews = DB::table('reviews')->get(); // tanpa filter status
-    return view('adminreview.index', compact('reviews'));
-}
+    {
+        $reviews = DB::table('reviews')
+            ->join('guides', 'reviews.guide_id', '=', 'guides.id')
+            ->select('reviews.*', 'guides.nama_guide')
+            ->get();
 
-
-
-
+        return view('adminreview.index', compact('reviews'));
+    }
 }

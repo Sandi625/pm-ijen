@@ -21,6 +21,19 @@
                 <input type="email" name="email" class="form-control" value="{{ old('email') }}" required>
             </div>
 
+             {{-- Dropdown Guide --}}
+        <div class="mb-3">
+            <label for="guide_id" class="form-label">Guide</label>
+            <select name="guide_id" class="form-control" required>
+                <option value="">Pilih Guide</option>
+                @foreach ($guides as $guide)
+                    <option value="{{ $guide->id }}" {{ old('guide_id') == $guide->id ? 'selected' : '' }}>
+                        {{ $guide->nama_guide }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
             <div class="mb-3">
                 <label for="rating" class="form-label">Rating</label>
                 <select name="rating" class="form-control" required>

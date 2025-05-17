@@ -6,8 +6,10 @@ use App\Models\Guide;
 use App\Models\Paket;
 use App\Models\Pesanan;
 use App\Models\Kriteria;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Mail\OrderStoredMail;
+use App\Traits\KriteriaTrait;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -16,20 +18,32 @@ use App\Services\ProfileMatchingService;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\OrderStoredNotification;
 use App\Traits\ProfileMatchingTrait; // Pastikan sudah pakai trait ini di controller!
-use App\Traits\KriteriaTrait;
+
 
 
 
 class PesananController extends Controller
 {
-    public function index()
-    {
-        // Memuat data pesanan dengan relasi kriteria, paket, dan guide
-        $pesanans = Pesanan::with(['kriteria', 'paket', 'guide'])->get();
+   public function index(Request $request)
+{
+    // Mulai query builder
+    $query = Pesanan::with(['kriteria', 'paket', 'guide']);
 
-        // Mengirim data pesanan ke view
-        return view('pesanan.index', compact('pesanans'));
+    // Cek apakah ada parameter pencarian (q)
+    if ($request->filled('q')) {
+        $search = $request->q;
+        $query->where(function ($q) use ($search) {
+            $q->where('order_id', 'like', '%' . $search . '%')
+              ->orWhere('nama', 'like', '%' . $search . '%');
+        });
     }
+
+    // Ambil data
+    $pesanans = $query->orderBy('created_at', 'desc')->get();
+
+    // Kirim ke view
+    return view('pesanan.index', compact('pesanans'));
+}
 
     public function show($id)
 {
@@ -82,6 +96,7 @@ class PesananController extends Controller
             'riwayat_medis' => 'required|string',
             'paspor' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120', // Maksimal 5MB
             'special_request' => 'nullable|string',
+            'status' => 'nullable|boolean',  // Menambahkan validasi untuk status (nullable dan boolean)
             'id_guide' => 'nullable|exists:guides,id',  // Menambahkan validasi id_guide
         ], [
             'tanggal_keberangkatan.after_or_equal' => 'The departure date must be the same as or after the booking date.',
@@ -97,6 +112,9 @@ class PesananController extends Controller
 
         // Tambahkan 'id_guide' ke dalam data yang divalidasi
         $validated['id_guide'] = $request->id_guide;  // Pastikan id_guide ada di request
+
+        $validated['order_id'] = 'ORDER' . now()->format('Ymd') . strtoupper(Str::random(4));
+
 
         // Simpan pesanan ke database
         $pesanan = Pesanan::create($validated);  // Pastikan model pesanan dapat menangani atribut yang diberikan
@@ -184,6 +202,7 @@ public function edit($id)
             'riwayat_medis' => 'required|string',
             'paspor' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120', // Maksimal 5MB
             'special_request' => 'nullable|string',
+            'status' => 'nullable|boolean',
             'id_guide' => 'nullable|exists:guides,id',  // Validasi id_guide yang nullable
         ]);
 
@@ -219,6 +238,7 @@ public function edit($id)
             'riwayat_medis' => $request->riwayat_medis,
             'paspor' => $pasporPath,  // Mempertahankan file paspor yang lama atau menggantinya jika baru
             'special_request' => $request->special_request,
+            'status' => $request->has('status') ? $request->status : 0,
             'id_guide' => $request->id_guide,  // Update id_guide jika ada
         ]);
 

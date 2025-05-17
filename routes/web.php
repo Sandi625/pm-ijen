@@ -15,6 +15,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PenilaianController;
 use App\Http\Controllers\SubKriteriaController;
 use App\Http\Controllers\ShowBlogController;
+use App\Http\Controllers\HalPelangganController;
+
 
 
 Route::get('/', function () {
@@ -33,13 +35,12 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/penilaian/all', [PenilaianController::class, 'all'])->name('penilaian.all');
     Route::resource('penilaian', PenilaianController::class);
-
 });
 Route::get('/pdf/candidates', [PenilaianController::class, 'generateCandidatesReport'])->name('candidates.report');
 route::get('/pdf/penilaian/all', [PenilaianController::class, 'generatePenilaianPdf'])->name('penilaian.pdf.all');
-route::get('/pdf/penilaian/accepted', [PenilaianController::class, 'generatePenilaianPdf'])     ->name('penilaian.pdf.accepted') ->defaults('status', 'accepted');
+route::get('/pdf/penilaian/accepted', [PenilaianController::class, 'generatePenilaianPdf'])->name('penilaian.pdf.accepted')->defaults('status', 'accepted');
 
-route::get('/pdf/penilaian/rejected', [PenilaianController::class, 'generatePenilaianPdf'])     ->name('penilaian.pdf.rejected')->defaults('status', 'rejected');
+route::get('/pdf/penilaian/rejected', [PenilaianController::class, 'generatePenilaianPdf'])->name('penilaian.pdf.rejected')->defaults('status', 'rejected');
 
 
 
@@ -74,7 +75,7 @@ Route::get('/halaman-guide/{id}', [HalguideController::class, 'showguide'])
 
 
 
-    Route::resource('galeris', GaleriController::class)->middleware('auth');
+Route::resource('galeris', GaleriController::class)->middleware('auth');
 
 // Route::get('/galeri', [GaleriController::class, 'showGaleri'])->name('galeri.page');
 
@@ -119,7 +120,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/reviews/{id}', [ReviewController::class, 'destroy'])->name('review.destroy');
     Route::get('/admin/reviews', [ReviewController::class, 'allReviews'])->name('review.all');
     Route::get('/reviews/{id}', [ReviewController::class, 'show'])->name('review.show');
-
 });
 
 
@@ -135,3 +135,26 @@ Route::get('/chart/pesanan-per-bulan', [DashboardController::class, 'chartPesana
     ->name('chart.pesanan.bulanan')
     ->middleware('auth');
 
+
+
+
+Route::prefix('customer')->group(function () {
+    Route::get('/packages', [HalPelangganController::class, 'showPackages'])->name('customer.packages');
+});
+
+
+
+// // Admin
+// Route::prefix('dashboard')->middleware(['auth', 'ceklevel:admin'])->group(function () {
+//     Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
+// });
+
+// // Guide
+// Route::prefix('halamanguide')->middleware(['auth', 'ceklevel:guide'])->group(function () {
+//     Route::get('/', [GuideController::class, 'index'])->name('guide.dashboard');
+// });
+
+// // Pelanggan
+// Route::prefix('customer')->middleware(['auth', 'ceklevel:pelanggan'])->group(function () {
+//     Route::get('/packages', [HalPelangganController::class, 'showPackages'])->name('customer.packages');
+// });

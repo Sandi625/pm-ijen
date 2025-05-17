@@ -10,8 +10,8 @@ class Pesanan extends Model
 
     protected $fillable = [
         'nama', 'email', 'nomor_telp', 'id_kriteria', 'id_paket', 'id_guide',
-        'tanggal_pesan', 'tanggal_keberangkatan', 'jumlah_peserta',
-        'negara', 'bahasa', 'riwayat_medis', 'paspor', 'special_request'
+        'tanggal_pesan', 'tanggal_keberangkatan', 'jumlah_peserta','order_id',
+        'negara', 'bahasa', 'riwayat_medis', 'paspor', 'special_request','status',
     ];
 
     // Relasi ke Kriteria

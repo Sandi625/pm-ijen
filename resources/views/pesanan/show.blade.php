@@ -16,6 +16,11 @@
                 </thead>
                 <tbody>
                     <tr>
+                        <td>Order ID</td>
+                        <td>{{ $pesanan->order_id }}</td>
+                    </tr>
+
+                    <tr>
                         <td>Nama</td>
                         <td>{{ $pesanan->nama }}</td>
                     </tr>
@@ -72,7 +77,8 @@
                         <td>
                             @if ($pesanan->paspor)
                                 <a href="{{ asset('storage/' . $pesanan->paspor) }}" target="_blank">
-                                    <img src="{{ asset('storage/' . $pesanan->paspor) }}" alt="Paspor" style="max-width: 100px; max-height: 100px;">
+                                    <img src="{{ asset('storage/' . $pesanan->paspor) }}" alt="Paspor"
+                                        style="max-width: 100px; max-height: 100px;">
                                 </a>
                             @else
                                 -

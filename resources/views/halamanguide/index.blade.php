@@ -8,91 +8,124 @@
 
 @section('content')
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Inter', Arial, sans-serif;
             background-color: #f5f7fa;
             margin: 0;
             padding: 20px;
+            color: #333;
         }
 
         .custom-container {
             max-width: 1200px;
             margin: auto;
-            background-color: #ffffff;
-            padding: 20px 30px;
+            background-color: #fff;
+            padding: 30px 40px;
             border-radius: 12px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
         }
 
         .custom-heading {
             text-align: center;
             margin-bottom: 30px;
-            font-size: 24px;
-            font-weight: bold;
+            font-size: 28px;
+            font-weight: 600;
+            color: #222;
         }
 
-        table {
+        p.notice {
+            color: #d32f2f;
+            text-align: center;
+            font-size: 16px;
+            margin-bottom: 25px;
+            font-weight: 500;
+        }
+
+        .overflow-x-auto {
+            overflow-x: auto;
+        }
+
+             table {
             width: 100%;
-            border-collapse: collapse;
-            table-layout: fixed;
-        }
-
-        th,
-        td {
-            border: 1px solid #ccc;
-            padding: 12px;
-            text-align: left;
-            vertical-align: top;
-            word-wrap: break-word;
-            white-space: pre-wrap;
+            border-collapse: separate;
+            border-spacing: 0 8px;
+            table-layout: auto;
             font-size: 14px;
         }
 
-        th {
-            background-color: #f0f0f0;
+        thead th {
+            padding: 14px 12px;
+            font-weight: 600;
+            color: #1a73e8;
+            text-align: left;
+            white-space: nowrap;
+            border-bottom: 2px solid #c1d0fc;
         }
 
-        tr:hover {
-            background-color: #f9f9f9;
+        tbody td {
+            padding: 12px;
+            color: #555;
+            vertical-align: middle;
+            white-space: normal;
+            word-wrap: break-word;
+            text-align: left;
+        }
+
+        td:nth-child(7), td:nth-child(5), td:nth-child(6) {
+            text-align: center;
+        }
+
+        .badge-guide {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #fff;
+            background-color: #4caf50;
+        }
+
+        .badge-guide.empty {
+            background-color: #d32f2f;
+            padding: 4px 10px;
         }
 
         .action-link {
-            color: #007bff;
+            color: white;
+            font-weight: 600;
+            padding: 8px 14px;
+            border-radius: 6px;
             text-decoration: none;
-            font-weight: bold;
+            background-color: #1a73e8;
+            transition: background-color 0.3s ease;
+            display: inline-block;
+            font-size: 14px;
+            text-align: center;
         }
+
 
         .action-link:hover {
-            text-decoration: underline;
+            background-color: #155ab6;
         }
-        .btn {
-    display: inline-block;
-    padding: 10px 20px;
-    text-align: center;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 5px;
-    text-decoration: none;
-    cursor: pointer;
-}
 
-.btn-blue {
-    background-color: #007bff;
-    color: white;
-    border: none;
-}
-
-.btn-blue:hover {
-    background-color: #0056b3;
-}
-
+        /* Responsive */
+        @media (max-width: 768px) {
+            .custom-container {
+                padding: 20px 15px;
+            }
+            thead th, tbody td {
+                font-size: 12px;
+                padding: 10px 8px;
+            }
+        }
     </style>
 
     <div class="custom-container">
         <h1 class="custom-heading">Daftar Pesanan</h1>
 
-        <!-- Menambahkan pesan dengan warna merah -->
-        <p style="color: red; text-align: center; font-size: 16px; margin-bottom: 20px;">
+        <p class="notice">
             Klik detail untuk melihat spesial request dan riwayat medis pelanggan
         </p>
 
@@ -101,6 +134,7 @@
                 <thead>
                     <tr>
                         <th>Nama</th>
+                        <th>Guide</th>
                         <th>Kriteria</th>
                         <th>Paket</th>
                         <th>Tanggal Pesan</th>
@@ -117,18 +151,24 @@
                     @foreach ($pesanans as $pesanan)
                         <tr>
                             <td>{{ $pesanan->nama }}</td>
+                            <td>
+                                @if($pesanan->guide && $pesanan->guide->nama_guide)
+                                    <span class="badge-guide">{{ $pesanan->guide->nama_guide }}</span>
+                                @else
+                                    <span class="badge-guide empty">-</span>
+                                @endif
+                            </td>
                             <td>{{ $pesanan->kriteria->nama ?? 'N/A' }}</td>
                             <td>{{ $pesanan->paket->nama_paket ?? 'N/A' }}</td>
-                            <td>{{ $pesanan->tanggal_pesan }}</td>
-                            <td>{{ $pesanan->tanggal_keberangkatan }}</td>
+                            <td>{{ \Carbon\Carbon::parse($pesanan->tanggal_pesan)->format('d M Y') }}</td>
+                            <td>{{ \Carbon\Carbon::parse($pesanan->tanggal_keberangkatan)->format('d M Y') }}</td>
                             <td>{{ $pesanan->jumlah_peserta }}</td>
                             <td>{{ $pesanan->negara }}</td>
                             <td>{{ $pesanan->bahasa }}</td>
                             <td>{{ Str::limit($pesanan->riwayat_medis ?? '-', 40) }}</td>
                             <td>{{ Str::limit($pesanan->special_request ?? '-', 40) }}</td>
                             <td>
-                                <a href="{{ route('halamanguide.show', $pesanan->id) }}"
-                                    class="action-link btn btn-blue">Detail</a>
+                                <a href="{{ route('halamanguide.show', $pesanan->id) }}" class="action-link">Detail</a>
                             </td>
                         </tr>
                     @endforeach

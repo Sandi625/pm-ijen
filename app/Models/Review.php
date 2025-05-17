@@ -15,6 +15,7 @@ class Review extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'guide_id', // tambahkan ini
         'name',
         'email',
         'rating',
@@ -53,4 +54,9 @@ class Review extends Model
     protected $appends = [
         // Add any attributes you want to append to model arrays.
     ];
+
+     public function guide()
+    {
+        return $this->belongsTo(Guide::class, 'guide_id');
+    }
 }

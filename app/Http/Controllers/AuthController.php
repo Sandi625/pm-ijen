@@ -19,55 +19,34 @@ class AuthController extends Controller
         return view('login');
     }
 
-    public function login(Request $request)
-{
-    $credentials = $request->only('email', 'password');
+        public function login(Request $request)
+        {
+            $credentials = $request->only('email', 'password');
 
-    if (Auth::attempt($credentials)) {
-        // Cek apakah level user adalah admin atau user biasa
-        if (Auth::user()->level === 'admin') {
-            return redirect()->intended('/dashboard'); // Redirect ke dashboard untuk admin
-        } else {
-            return redirect()->intended('/halamanguide'); // Redirect ke halguide untuk user biasa
+            if (Auth::attempt($credentials)) {
+                $level = Auth::user()->level;
+
+                if ($level === 'admin') {
+                    return redirect()->intended('/dashboard'); // Redirect ke dashboard admin
+                } elseif ($level === 'guide') {
+                    return redirect()->intended('/halamanguide'); // Redirect ke halaman guide
+                } elseif ($level === 'pelanggan') {
+                    return redirect()->intended('/customer/packages'); // Redirect ke halaman pelanggan
+                } else {
+                    Auth::logout();
+                    return back()->withErrors([
+                        'email' => 'Level user tidak valid.',
+                    ]);
+                }
+            }
+
+            return back()->withErrors([
+                'email' => 'Email dan password tidak cocok, coba lagi.',
+            ]);
         }
-    }
-
-    return back()->withErrors([
-        'email' => 'username and password not match, try again',
-    ]);
-}
 
 
-    // public function login(Request $request)
-    // {
-    //     $credentials = $request->only('email', 'password');
 
-    //     if (Auth::attempt($credentials)) {
-    //         $request->session()->regenerate();
-
-    //         // Cek apakah level user adalah admin atau user biasa
-    //         if (Auth::user()->level === 'admin') {
-    //             return redirect()->intended('/dashboard'); // Redirect ke dashboard untuk admin
-    //         } else {
-    //             return redirect()->intended('/halguide'); // Redirect ke halguide untuk user biasa
-    //         }
-    //     }
-
-    //     return back()->withErrors([
-    //         'email' => 'The provided credentials do not match our records.',
-    //     ]);
-    // }
-
-
-    // public function logout(Request $request)
-    // {
-    //     Auth::logout();
-
-    //     $request->session()->invalidate();
-    //     $request->session()->regenerateToken();
-
-    //     return redirect('/login');
-    // }
 
     public function logout()
     {

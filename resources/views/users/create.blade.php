@@ -41,13 +41,17 @@
 
 
             <!-- Menambahkan kolom level -->
-            <div class="mb-3">
-                <label for="level" class="form-label">Level</label>
-                <select id="level" name="level" class="form-control" required>
-                    <option value="admin" {{ old('level') == 'admin' ? 'selected' : '' }}>Admin</option>
-                    <option value="user" {{ old('level') == 'user' ? 'selected' : '' }}>User</option>
-                </select>
-            </div>
+         <div class="mb-3">
+    <label for="level" class="form-label">Level</label>
+    <select id="level" name="level" class="form-control" required>
+        @foreach ($levels as $level)
+            <option value="{{ $level }}" {{ old('level') == $level ? 'selected' : '' }}>
+                {{ ucfirst($level) }}
+            </option>
+        @endforeach
+    </select>
+</div>
+
 
             <div class="d-flex justify-content-between">
                 <a href="{{ route('users.index') }}" class="btn btn-secondary">Batal</a>
