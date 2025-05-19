@@ -9,6 +9,8 @@
     <link href="{{asset('assets/fa-solid-900.woff2')}}" rel="stylesheet">
     <link href="{{asset('assets/fa-solid-900.ttf')}}" rel="stylesheet">
 
+    {!!htmlScriptTagJsApi()!!}
+
 </head>
 <body class="bg-gray-100 flex flex-col min-h-screen">
     <nav class="bg-white shadow-lg">

@@ -97,6 +97,7 @@ public function register(Request $request)
             'name'     => 'required|string|max:255',
             'email'    => 'required|email|unique:users,email',
             'password' => 'required|min:6|confirmed',
+            'g-recaptcha-response'=>'recaptcha',
             'level'    => 'nullable|in:pelanggan',  // hanya pelanggan, nullable
         ]);
 
@@ -123,7 +124,7 @@ public function register(Request $request)
 
     } catch (\Exception $e) {
         Log::error('Register error: '.$e->getMessage());
-        return back()->withInput()->withErrors(['register' => 'An error occurred while registering the account. Please try again.']);
+        return back()->withInput()->withErrors(['register' => 'An error occurred while registering the account or verifying the captcha. Please try again.']);
     }
 }
 

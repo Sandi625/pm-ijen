@@ -58,13 +58,21 @@
                 </div>
 
                 <div class="mb-4">
-                    <label for="password_confirmation" class="block text-gray-700 text-sm font-bold mb-2">Retype Password
-                    </label>
+                    <label for="password_confirmation" class="block text-gray-700 text-sm font-bold mb-2">Retype
+                        Password</label>
                     <input id="password_confirmation" type="password" name="password_confirmation" required
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                 </div>
 
-
+                {{-- reCAPTCHA Section --}}
+                <div class="mb-4">
+                    {!! htmlFormSnippet() !!}
+                    @if ($errors->has('g-recaptcha-response'))
+                        <p class="text-red-500 text-xs italic mt-2">
+                            {{ $errors->first('g-recaptcha-response') }}
+                        </p>
+                    @endif
+                </div>
 
 
                 <div class="flex items-center justify-between">
@@ -74,23 +82,10 @@
                     </button>
                     <a href="{{ route('login') }}"
                         class="inline-block align-baseline font-bold text-sm text-green-500 hover:text-green-800">
-Already have an account?
+                        Already have an account?
                     </a>
                 </div>
             </form>
         </div>
     </div>
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul class="mb-0">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-    {{-- @error('register')
-    <div class="alert alert-danger">{{ $message }}</div>
-@enderror --}}
 @endsection
