@@ -31,14 +31,14 @@ class PaketController extends Controller
 
 
 
-    public function showPakets()
-    {
-        // Ambil semua data paket dari database
-        $pakets = Paket::all();
+    // public function showPakets()
+    // {
+    //     // Ambil semua data paket dari database
+    //     $pakets = Paket::all();
 
-        // Return directly to 'welcome' view with 'pakets' data
-        return view('welcome', compact('pakets'));
-    }
+    //     // Return directly to 'welcome' view with 'pakets' data
+    //     return view('welcome', compact('pakets'));
+    // }
 
 
 

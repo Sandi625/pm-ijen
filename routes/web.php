@@ -19,6 +19,7 @@ use App\Http\Controllers\HalPelangganController;
 use App\Http\Controllers\GuideKriteriaController;
 use App\Http\Controllers\NotifGuideController;
 
+use App\Http\Controllers\LandingPageController;
 
 
 
@@ -145,7 +146,7 @@ Route::resource('pesanan', PesananController::class)
 ->middleware('auth');
 
 // paket di halaman welcome
-Route::get('/', [PaketController::class, 'showPakets'])->name('home');
+// Route::get('/', [PaketController::class, 'showPakets'])->name('home');
 
 
 // Route::get('/reviews', function () {
@@ -198,6 +199,9 @@ Route::get('/notif-guide', [NotifGuideController::class, 'guidesWithPesanan'])->
 // Route::post('/guide/{id}/send-notif', [NotifGuideController::class, 'sendNotifToGuide'])->name('guide.send-notif');
 Route::get('/guide/{id}/send-notif', [NotifGuideController::class, 'sendNotifToGuide'])->name('guide.sendNotif');
 
+// Route::get('/landing-reviews', [ReviewController::class, 'getActiveReviews'])->name('landing.reviews');
 
-
+// Route::get('/', [ReviewController::class, 'getActiveReviews'])->name('home');
 // Route::resource('guide_kriteria', GuideKriteriaController::class);
+
+Route::get('/', [LandingPageController::class, 'index'])->name('home');

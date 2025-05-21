@@ -189,4 +189,17 @@ public function index()
 
         return view('adminreview.index', compact('reviews'));
     }
+
+
+public function getActiveReviews()
+{
+    $reviews = Review::with('guide') // pastikan relasi 'guide' ada di model Review
+        ->where('status', 1)
+        ->latest()
+        ->get();
+
+    return view('welcome', compact('reviews'));
+}
+
+
 }

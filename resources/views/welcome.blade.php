@@ -420,6 +420,42 @@
                 @endforeach
             </div>
         </section>
+        <!--==================== Review ====================-->
+
+
+
+<section class="review-marquee">
+    <div class="review-track">
+        {{-- Loop pertama --}}
+        @foreach($reviews as $review)
+            <div class="review-card">
+                <img src="{{ $review->photo && $review->photo !== 'images/default-avatar.jpg' ? asset('storage/' . $review->photo) : asset('images/default-avatar.jpg') }}" alt="Photo of {{ $review->name }}">
+                <h5>{{ $review->name }}</h5>
+                {{-- <h6 class="text-muted">Guide: {{ $review->guide->nama_guide ?? '-' }}</h6> --}}
+                <p>{{ $review->isi_testimoni }}</p>
+                <div>Rating: ⭐ {{ $review->rating }}/5</div>
+            </div>
+        @endforeach
+
+        {{-- Loop kedua (duplikat konten agar transisi mulus) --}}
+        @foreach($reviews as $review)
+            <div class="review-card">
+                <img src="{{ $review->photo && $review->photo !== 'images/default-avatar.jpg' ? asset('storage/' . $review->photo) : asset('images/default-avatar.jpg') }}" alt="Photo of {{ $review->name }}">
+                <h5>{{ $review->name }}</h5>
+                {{-- <h6 class="text-muted">Guide: {{ $review->guide->nama_guide ?? '-' }}</h6> --}}
+                <p>{{ $review->isi_testimoni }}</p>
+                <div>Rating: ⭐ {{ $review->rating }}/5</div>
+            </div>
+        @endforeach
+    </div>
+</section>
+
+
+
+
+
+
+
 
         <!-- SweetAlert2 CDN -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
