@@ -11,6 +11,18 @@
             + Tambah Review
         </a>
     </div>
+    <form action="{{ route('review.all') }}" method="GET" class="mb-4">
+    <div class="input-group" style="max-width: 400px;">
+        <input type="text" name="search" value="{{ request('search') }}" class="form-control"
+            placeholder="Search by guide name or rating...">
+        <div class="input-group-append">
+            <button class="btn btn-primary" type="submit">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </div>
+</form>
+
 
     <table class="table table-bordered w-100">
         <thead class="table-light">

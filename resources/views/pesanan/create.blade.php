@@ -108,27 +108,28 @@
             <form action="{{ route('pesanan.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
-                <!-- Nama -->
-                <div class="mb-4">
-                    <label class="block text-gray-700 font-bold mb-2" for="nama">Name</label>
-                    <input type="text" name="nama" id="nama"
-                        class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        value="{{ old('nama') }}" required>
-                    @error('nama')
-                        <div class="text-red-600 text-sm mt-1">{{ $message }}</div>
-                    @enderror
-                </div>
+               <!-- Nama -->
+<div class="mb-4">
+    <label class="block text-gray-700 font-bold mb-2" for="nama">Name</label>
+    <input type="text" name="nama" id="nama"
+        class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        value="{{ old('nama', Auth::user()->name ?? '') }}" required>
+    @error('nama')
+        <div class="text-red-600 text-sm mt-1">{{ $message }}</div>
+    @enderror
+</div>
 
-                <!-- Email -->
-                <div class="mb-4">
-                    <label class="block text-gray-700 font-bold mb-2" for="email">Email</label>
-                    <input type="email" name="email" id="email"
-                        class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        value="{{ old('email') }}" required>
-                    @error('email')
-                        <div class="text-red-600 text-sm mt-1">{{ $message }}</div>
-                    @enderror
-                </div>
+<!-- Email -->
+<div class="mb-4">
+    <label class="block text-gray-700 font-bold mb-2" for="email">Email</label>
+    <input type="email" name="email" id="email"
+        class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        value="{{ old('email', Auth::user()->email ?? '') }}" required>
+    @error('email')
+        <div class="text-red-600 text-sm mt-1">{{ $message }}</div>
+    @enderror
+</div>
+
 
                 <!-- Nomor Telepon -->
                 <div class="mb-4">

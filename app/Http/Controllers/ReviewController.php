@@ -180,15 +180,25 @@ public function index()
     }
 
 
-    public function allReviews()
-    {
-        $reviews = DB::table('reviews')
-            ->join('guides', 'reviews.guide_id', '=', 'guides.id')
-            ->select('reviews.*', 'guides.nama_guide')
-            ->get();
+  public function allReviews(Request $request)
+{
+    $query = DB::table('reviews')
+        ->join('guides', 'reviews.guide_id', '=', 'guides.id')
+        ->select('reviews.*', 'guides.nama_guide');
 
-        return view('adminreview.index', compact('reviews'));
+    if ($request->has('search')) {
+        $search = $request->input('search');
+        $query->where(function ($q) use ($search) {
+            $q->where('guides.nama_guide', 'like', '%' . $search . '%')
+              ->orWhere('reviews.rating', 'like', '%' . $search . '%');
+        });
     }
+
+    $reviews = $query->get();
+
+    return view('adminreview.index', compact('reviews'));
+}
+
 
 
 public function getActiveReviews()

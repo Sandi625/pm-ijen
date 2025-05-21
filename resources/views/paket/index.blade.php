@@ -23,13 +23,13 @@
                         <tr>
                             <th>NO</th>
                             <th>Nama Paket</th>
-                            <th>Deskripsi</th>
+                            {{-- <th>Deskripsi</th> --}}
                             <th>Harga</th>
                             <th>Durasi</th>
                             <th>Destinasi</th>
-                            <th>Include</th>
-                            <th>Exclude</th>
-                            <th>Informasi Trip</th> <!-- Added -->
+                            {{-- <th>Include</th>
+                            <th>Exclude</th> --}}
+                            {{-- <th>Informasi Trip</th> <!-- Added --> --}}
                             <th>Itinerary</th> <!-- Added -->
                             <th>Foto</th>
                             <th class="text-center">Aksi</th>
@@ -40,13 +40,13 @@
                             <tr>
                                 <td>{{ $index + 1 }}</td>
                                 <td>{{ $paket->nama_paket }}</td>
-                                <td>{{ Str::limit($paket->deskripsi_paket, 50) }}</td>
+                                {{-- <td>{{ Str::limit($paket->deskripsi_paket, 50) }}</td> --}}
                                 <td>Rp {{ number_format($paket->harga, 0, ',', '.') }}</td>
                                 <td>{{ $paket->durasi }}</td>
                                 <td>{{ $paket->destinasi }}</td>
-                                <td>{{ Str::limit($paket->include, 50) }}</td>
-                                <td>{{ Str::limit($paket->exclude, 50) }}</td>
-                                <td>{{ Str::limit($paket->information_trip, 50) }}</td> <!-- Display Information Trip -->
+                                {{-- <td>{{ Str::limit($paket->include, 50) }}</td>
+                                <td>{{ Str::limit($paket->exclude, 50) }}</td> --}}
+                                {{-- <td>{{ Str::limit($paket->information_trip, 50) }}</td> <!-- Display Information Trip --> --}}
                                 <td>{{ Str::limit($paket->itinerary, 50) }}</td> <!-- Display Itinerary -->
                                 <td>
                                     @if ($paket->foto)

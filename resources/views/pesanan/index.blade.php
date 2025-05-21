@@ -53,16 +53,16 @@
                             <th>Nomor Telepon</th>
                             <th>Nama Guide</th> <!-- Tambahan -->
                             <th>Negara</th>
-                            <th>Bahasa</th>
+                            {{-- <th>Bahasa</th> --}}
                             {{-- <th>Riwayat Medis</th>
                         <th>Special Request</th> --}}
                             <th>Nama Paket</th>
                             <th>Nama Kriteria</th>
-                            <th>Tanggal Pesan</th>
+                            {{-- <th>Tanggal Pesan</th> --}}
                             <th>Tanggal Keberangkatan</th>
                             <th>Jumlah Peserta</th>
                             <th>Paspor</th>
-                            <th>Status</th> <!-- Kolom Status -->
+                            {{-- <th>Status</th> <!-- Kolom Status --> --}}
                             <th class="text-center">Aksi</th>
                         </tr>
                     </thead>
@@ -80,13 +80,13 @@
                                     {{ $pesanan->guide ? $pesanan->guide->nama_guide : '-' }} <!-- Nama Guide -->
                                 </td>
                                 <td>{{ $pesanan->negara ?? '-' }}</td>
-                                <td>{{ $pesanan->bahasa ?? '-' }}</td>
+                                {{-- <td>{{ $pesanan->bahasa ?? '-' }}</td> --}}
                                 {{-- <td>{{ $pesanan->riwayat_medis ?? '-' }}</td>
                             <td>{{ $pesanan->special_request ?? '-' }}</td> --}}
                                 <td>{{ $pesanan->paket->nama_paket ?? '-' }}</td>
                                 <td>{{ $pesanan->kriteria->nama ?? '-' }}</td>
 
-                                <td>{{ $pesanan->tanggal_pesan }}</td>
+                                {{-- <td>{{ $pesanan->tanggal_pesan }}</td> --}}
                                 <td>{{ $pesanan->tanggal_keberangkatan }}</td>
                                 <td>{{ $pesanan->jumlah_peserta }}</td>
                                 <td>
@@ -99,13 +99,13 @@
                                         -
                                     @endif
                                 </td>
-                                <td>
+                                {{-- <td>
                                     @if ($pesanan->status)
                                         <span class="badge bg-success">Aktif</span>
                                     @else
                                         <span class="badge bg-secondary">Tidak Aktif</span>
                                     @endif
-                                </td> <!-- Tampilkan Status -->
+                                </td> <!-- Tampilkan Status --> --}}
                                 <td class="text-center">
                                     <div class="btn-group">
                                         <a href="{{ route('pesanan.show', $pesanan->id) }}" class="btn btn-info btn-sm">
@@ -135,6 +135,25 @@
 
         </div>
     </div>
+
+@if(session('conflict'))
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    Swal.fire({
+        icon: 'warning',
+        title: 'Konflik Jadwal Guide',
+        text: `{!! session("conflict") !!}`,
+        confirmButtonText: 'OK'
+    });
+</script>
+
+
+
+
+
+
+@endif
+
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>

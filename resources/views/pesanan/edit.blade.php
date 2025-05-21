@@ -144,7 +144,7 @@
                         class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         rows="4">{{ old('special_request', $pesanan->special_request) }}</textarea>
                 </div>
-                <div class="mb-3">
+                {{-- <div class="mb-3">
                     <div class="mb-4">
                         <label for="status" class="block text-gray-700 font-bold mb-2">Status</label>
                         <select name="status" id="status"
@@ -157,7 +157,7 @@
                     </div>
 
 
-                </div>
+                </div> --}}
 
                <div class="mb-4">
     <label class="block text-gray-700 font-bold mb-2" for="id_guide">Guide</label>

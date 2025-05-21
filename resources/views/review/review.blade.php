@@ -1,5 +1,7 @@
 @extends('layouts.pelanggan')
-
+@php
+    use Illuminate\Support\Facades\Auth;
+@endphp
 @section('content')
     <section id="add-review" class="review-section">
         <div class="container">
@@ -8,11 +10,14 @@
                 @csrf
                 <div class="form-group">
                     <label for="name">Your Name</label>
-                    <input type="text" id="name" name="name" placeholder="Enter your name" required>
+                    <input type="text" id="name" name="name" placeholder="Enter your name"
+                        value="{{ old('name', Auth::user()->name ?? '') }}" required>
                 </div>
+
                 <div class="form-group">
                     <label for="email">Your Email</label>
-                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                    <input type="email" id="email" name="email" placeholder="Enter your email"
+                        value="{{ old('email', Auth::user()->email ?? '') }}" required>
                 </div>
                 <div class="form-group guide-select-wrapper">
                     <label for="guide_id">Your Guide is</label>

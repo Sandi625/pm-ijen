@@ -112,7 +112,7 @@ class PesananController extends Controller
     // **Tambahkan user_id di sini**
     $validated['user_id'] = Auth::id();  // <- ini yang harus dipakai
 
-    $validated['order_id'] = 'ORDER' . now()->format('Ymd') . strtoupper(Str::random(4));
+$validated['order_id'] = 'ORD' . now()->format('ymd') . strtoupper(Str::random(4));
 
     $pesanan = Pesanan::create($validated);
 
@@ -199,6 +199,7 @@ public function edit($id)
         }
     }
 
+
     return view('pesanan.edit', [
         'pesanan' => $pesanan,
         'kriterias' => $kriterias,
@@ -238,6 +239,17 @@ public function edit($id)
 
         // Cari pesanan yang ingin diupdate
         $pesanan = Pesanan::findOrFail($id);
+        // Cek apakah guide sudah memiliki pesanan lain di tanggal keberangkatan yang sama (selain pesanan ini)
+    if ($request->id_guide) {
+        $pesananSama = Pesanan::where('id_guide', $request->id_guide)
+            ->where('tanggal_keberangkatan', $request->tanggal_keberangkatan)
+            ->where('id', '!=', $id)
+            ->exists();
+
+        if ($pesananSama) {
+            return redirect()->route('pesanan.index')->with('conflict', 'Guide ini sudah memiliki tamu pada tanggal keberangkatan "' . $request->tanggal_keberangkatan . '".');
+        }
+    }
 
         // Jika ada file paspor yang diupload, simpan file dan perbarui path-nya
         if ($request->hasFile('paspor')) {
@@ -273,7 +285,7 @@ public function edit($id)
         ]);
 
         // Redirect dengan pesan sukses
-        return redirect()->route('pesanan.index')->with('success', 'Pesanan berhasil diperbarui.');
+    return redirect()->route('pesanan.index')->with('success', 'Pesanan berhasil diperbarui.');
     }
 
 
