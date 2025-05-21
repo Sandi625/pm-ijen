@@ -36,7 +36,7 @@
                     <td>{{ $index + 1 }}</td>
                     <td>{{ $guide->nama_guide }}</td>
                     <td>Rp {{ number_format($guide->salary, 0, ',', '.') }}</td>
-                    <td>{{ $guide->kriteria_unggulan ?? '-' }}</td>
+<td>{{ $guide->nama_guide }} - {{ $guide->kriteria_unggulan_nama ?? 'Tidak Diketahui' }}</td>
 <td>{{ \Illuminate\Support\Str::limit($guide->deskripsi_guide, 100, '...') }}</td>
                     <td>{{ $guide->nomer_hp }}</td>
                     <td>

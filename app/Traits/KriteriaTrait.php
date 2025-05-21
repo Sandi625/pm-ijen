@@ -4,19 +4,26 @@ namespace App\Traits;
 
 trait KriteriaTrait
 {
-    public function tentukanKriteriaUnggulanshow($hasil)
-    {
-        $max = null;
-        $kriteriaUnggul = 'Belum Dinilai';
+   public function tentukanKriteriaUnggulanshow($hasil)
+{
+    $max = null;
+    $kriteriaUnggulId = null;
+    $kriteriaUnggulNama = 'Belum Dinilai';
 
-        foreach ($hasil['detail'] as $detail) {
-            $nilai = $detail['nilai_total'] ?? null;
-            if ($nilai !== null && ($max === null || $nilai > $max)) {
-                $max = $nilai;
-                $kriteriaUnggul = $detail['nama'];
-            }
+    foreach ($hasil['detail'] as $kriteriaId => $detail) {
+        $nilai = $detail['nilai_total'] ?? null;
+        if ($nilai !== null && ($max === null || $nilai > $max)) {
+            $max = $nilai;
+            $kriteriaUnggulId = $kriteriaId;
+            $kriteriaUnggulNama = $detail['nama']; // ← dari hitungProfileMatching
         }
-
-        return $kriteriaUnggul;
     }
+
+    return [
+        'id' => $kriteriaUnggulId,
+        'nama' => $kriteriaUnggulNama,
+    ];
+}
+
+
 }

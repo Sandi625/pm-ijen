@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Guide;
+use Illuminate\Http\Request;
 use App\Traits\KriteriaTrait;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use App\Traits\ProfileMatchingTrait; // <--- tambahkan ini
 use App\Services\ProfileMatchingService; // kalau butuh inject service
-
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class GuideController extends Controller
 {
@@ -27,44 +30,52 @@ class GuideController extends Controller
         $guides = Guide::with(['kriteria', 'penilaians.detailPenilaians.subkriteria.kriteria'])->get();
 
         foreach ($guides as $guide) {
+            // Ambil penilaian terbaru berdasarkan created_at
+            $penilaian = $guide->penilaians
+                ->sortByDesc(fn($p) => $p->created_at)
+                ->first();
 
-            $penilaian = $guide->penilaians->first();
-
-            if ($penilaian) {
-
+            if ($penilaian && $penilaian->detailPenilaians->count() > 0) {
                 $hasil = $this->hitungProfileMatching($penilaian);
-
-
                 $kriteriaUnggul = $this->tentukanKriteriaUnggulanshow($hasil);
+
+                $guide->kriteria_unggulan_id = $kriteriaUnggul['id'];
+                $guide->kriteria_unggulan_nama = $kriteriaUnggul['nama'];
             } else {
-                $kriteriaUnggul = 'Belum Dinilai';
+                $guide->kriteria_unggulan_id = null;
+                $guide->kriteria_unggulan_nama = 'Belum Dinilai';
             }
-
-
-            $guide->kriteria_unggulan = $kriteriaUnggul;
         }
 
         return view('guide.index', compact('guides'));
     }
 
-   public function show($id)
-{
-    $guide = Guide::with(['kriteria', 'penilaians.detailPenilaians.subkriteria.kriteria'])->findOrFail($id);
 
-    // Menambahkan data terkait atau perhitungan lain jika diperlukan
-    $penilaian = $guide->penilaians->first();
+    public function show($id)
+    {
+        $guide = Guide::with(['kriteria', 'penilaians.detailPenilaians.subkriteria.kriteria'])->findOrFail($id);
 
-    if ($penilaian) {
-        $hasil = $this->hitungProfileMatching($penilaian);
-        $kriteriaUnggul = $this->tentukanKriteriaUnggulanshow($hasil);
-    } else {
-        $kriteriaUnggul = 'Belum Dinilai';
+        // Ambil penilaian terbaru berdasarkan created_at (atau sesuaikan jika mau yang paling lengkap)
+        $penilaian = $guide->penilaians
+            ->sortByDesc(fn($p) => $p->created_at)
+            ->first();
+
+        if ($penilaian && $penilaian->detailPenilaians->count() > 0) {
+            $hasil = $this->hitungProfileMatching($penilaian);
+            $kriteriaUnggul = $this->tentukanKriteriaUnggulanshow($hasil);
+        } else {
+            $kriteriaUnggul = [
+                'id' => null,
+                'nama' => 'Belum Dinilai'
+            ];
+        }
+
+        // Simpan ke properti guide agar bisa dipakai di view
+        $guide->kriteria_unggulan_id = $kriteriaUnggul['id'];
+        $guide->kriteria_unggulan_nama = $kriteriaUnggul['nama'];
+
+        return view('guide.show', compact('guide'));
     }
-
-    $guide->kriteria_unggulan = $kriteriaUnggul;
-
-    return view('guide.show', compact('guide'));
-}
 
 
 
@@ -79,34 +90,59 @@ class GuideController extends Controller
         return view('guide.create');
     }
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'nama_guide' => 'required|string|max:100',
-            'salary' => 'required|numeric|min:0',
-            'deskripsi_guide' => 'required|string',
-            'nomer_hp' => 'required|string|max:15',
-            'alamat' => 'required|string',
-            'email' => 'required|email|unique:guides,email',
-            'bahasa' => 'required|string',
-            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'status' => 'required|in:1,2,3',
-        ]);
+   public function store(Request $request)
+{
+    // Bersihkan salary dari 'Rp', titik, dan spasi
+    $salaryRaw = $request->input('salary');
+    $salaryClean = preg_replace('/[^\d]/', '', $salaryRaw);
 
-        Guide::create([
-            'nama_guide' => $request->nama_guide,
-            'salary' => $request->salary,
-            'deskripsi_guide' => $request->deskripsi_guide,
-            'nomer_hp' => $request->nomer_hp,
-            'alamat' => $request->alamat,
-            'email' => $request->email,
-            'bahasa' => $request->bahasa,
-            'foto' => $request->file('foto') ? $request->file('foto')->store('guides', 'public') : null,
-            'status' => $request->status,
-        ]);
+    $request->merge(['salary' => $salaryClean]);
 
-        return redirect()->route('guide.index')->with('success', 'Guide berhasil ditambahkan!');
+    // Validasi input
+    $request->validate([
+        'nama_guide' => 'required|string|max:100',
+        'salary' => 'required|numeric|min:0',
+        'deskripsi_guide' => 'required|string',
+        'nomer_hp' => 'required|string|max:15',
+        'alamat' => 'required|string',
+        'email' => 'required|email|unique:guides,email|unique:users,email',
+        'bahasa' => 'required|string',
+        'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'status' => 'required|in:1,2,3',
+    ]);
+
+    // Buat user baru untuk login guide
+    $user = User::create([
+        'name' => $request->nama_guide,
+        'email' => $request->email,
+        'password' => Hash::make('password123'), // Bisa diganti sesuai inputan
+        'level' => 'guide',
+    ]);
+
+    // Simpan foto jika ada
+    $fotoPath = null;
+    if ($request->hasFile('foto')) {
+        $fotoPath = $request->file('foto')->store('guides', 'public');
     }
+
+    // Simpan data guide
+    Guide::create([
+        'nama_guide' => $request->nama_guide,
+        'salary' => $salaryClean,
+        'deskripsi_guide' => $request->deskripsi_guide,
+        'nomer_hp' => $request->nomer_hp,
+        'alamat' => $request->alamat,
+        'email' => $request->email,
+        'bahasa' => $request->bahasa,
+        'foto' => $fotoPath,
+        'status' => $request->status,
+        'user_id' => $user->id, // <-- hubungan guide ke user
+    ]);
+
+    return redirect()->route('guide.index')->with('success', 'Guide berhasil ditambahkan!');
+}
+
+
 
 
 
@@ -118,60 +154,60 @@ class GuideController extends Controller
 
 
     public function edit($id)
-{
-    $guide = Guide::findOrFail($id);
-    return view('guide.edit', compact('guide'));
-}
-
-
-
-
-
-
-
-
-
-public function update(Request $request, $id)
-{
-    $request->validate([
-        'nama_guide' => 'required|string|max:255',
-        'salary' => 'required|numeric|min:0',
-        'deskripsi_guide' => 'nullable|string',
-        'nomer_hp' => 'required|string|max:15',
-        'alamat' => 'required|string',
-        'email' => 'required|email|unique:guides,email,' . $id . ',id',
-        'bahasa' => 'nullable|string',
-        'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-        'status' => 'required|in:1,2,3',
-    ]);
-
-    $guide = Guide::findOrFail($id);
-
-
-    if ($request->hasFile('foto')) {
-
-        if ($guide->foto) {
-            Storage::disk('public')->delete($guide->foto);
-        }
-
-        $fotoPath = $request->file('foto')->store('guides', 'public');
-        $guide->foto = $fotoPath;
+    {
+        $guide = Guide::findOrFail($id);
+        return view('guide.edit', compact('guide'));
     }
 
 
-    $guide->update([
-        'nama_guide' => $request->nama_guide,
-        'salary' => $request->salary,
-        'deskripsi_guide' => $request->deskripsi_guide,
-        'nomer_hp' => $request->nomer_hp,
-        'alamat' => $request->alamat,
-        'email' => $request->email,
-        'bahasa' => $request->bahasa,
-        'status' => $request->status,
-    ]);
 
-    return redirect()->route('guide.index')->with('success', 'Guide berhasil diperbarui.');
-}
+
+
+
+
+
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'nama_guide' => 'required|string|max:255',
+            'salary' => 'required|numeric|min:0',
+            'deskripsi_guide' => 'nullable|string',
+            'nomer_hp' => 'required|string|max:15',
+            'alamat' => 'required|string',
+            'email' => 'required|email|unique:guides,email,' . $id . ',id',
+            'bahasa' => 'nullable|string',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'status' => 'required|in:1,2,3',
+        ]);
+
+        $guide = Guide::findOrFail($id);
+
+
+        if ($request->hasFile('foto')) {
+
+            if ($guide->foto) {
+                Storage::disk('public')->delete($guide->foto);
+            }
+
+            $fotoPath = $request->file('foto')->store('guides', 'public');
+            $guide->foto = $fotoPath;
+        }
+
+
+        $guide->update([
+            'nama_guide' => $request->nama_guide,
+            'salary' => $request->salary,
+            'deskripsi_guide' => $request->deskripsi_guide,
+            'nomer_hp' => $request->nomer_hp,
+            'alamat' => $request->alamat,
+            'email' => $request->email,
+            'bahasa' => $request->bahasa,
+            'status' => $request->status,
+        ]);
+
+        return redirect()->route('guide.index')->with('success', 'Guide berhasil diperbarui.');
+    }
 
 
 
@@ -190,14 +226,4 @@ public function update(Request $request, $id)
 
         return redirect()->route('guide.index')->with('success', 'Guide berhasil dihapus.');
     }
-
-
-
-
-
-
-
-
-
-
 }

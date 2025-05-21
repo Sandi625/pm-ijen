@@ -16,6 +16,10 @@ use App\Http\Controllers\PenilaianController;
 use App\Http\Controllers\SubKriteriaController;
 use App\Http\Controllers\ShowBlogController;
 use App\Http\Controllers\HalPelangganController;
+use App\Http\Controllers\GuideKriteriaController;
+use App\Http\Controllers\NotifGuideController;
+
+
 
 
 
@@ -115,8 +119,7 @@ Route::resource('blogs', BlogController::class)
 // Route 'show' tidak menggunakan middleware auth
 Route::get('/blogs/{blog}', [BlogController::class, 'show'])->name('blogs.show');
 Route::get('/sblog', [BlogController::class, 'listBlogs'])->name('blog.list');
-Route::get('/review', [ReviewController::class, 'index'])->name('review.review');
-Route::post('/review/store', [ReviewController::class, 'store'])->name('review.store');
+
 //Pelanggan
 // 2. Route create & store TANPA middleware auth
 Route::get('/pesanan/create/{id_paket?}', [PesananController::class, 'create'])->name('pesanan.create');
@@ -126,6 +129,12 @@ Route::prefix('customer')->middleware(['auth'])->group(function () {
     Route::get('/packages', [HalPelangganController::class, 'showPackages'])->name('customer.packages');
 });
 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/review', [ReviewController::class, 'index'])->name('review.review');
+    Route::post('/review/store', [ReviewController::class, 'store'])->name('review.store');
+});
+
+
 
 
 // Pesanan
@@ -134,6 +143,8 @@ Route::resource('pesanan', PesananController::class)
 ->except(['create', 'store'])
 ->middleware('auth');
 
+// paket di halaman welcome
+Route::get('/', [PaketController::class, 'showPakets'])->name('home');
 
 
 // Route::get('/reviews', function () {
@@ -148,8 +159,6 @@ Route::resource('pesanan', PesananController::class)
 
 
 
-//paket
-Route::get('/', [PaketController::class, 'showPakets'])->name('home');
 
 
 
@@ -174,3 +183,20 @@ Route::get('/', [PaketController::class, 'showPakets'])->name('home');
 // Route::prefix('customer')->middleware(['auth', 'ceklevel:pelanggan'])->group(function () {
 //     Route::get('/packages', [HalPelangganController::class, 'showPackages'])->name('customer.packages');
 // });
+
+
+
+// routes/web.php
+Route::get('/get-guides-by-kriteria/{kriteriaId}', [PesananController::class, 'getGuidesByKriteria']);
+
+
+Route::get('/notif-guide', [NotifGuideController::class, 'guidesWithPesanan'])->name('notif.guide');
+
+// Route::get('/guide/{id}/send-notif', [NotifGuideController::class, 'sendNotifToGuide'])->name('guide.sendNotif');
+// Route::post('/guide/{id}/send-notif', [GuideController::class, 'sendNotif'])->name('guide.sendNotif');
+// Route::post('/guide/{id}/send-notif', [NotifGuideController::class, 'sendNotifToGuide'])->name('guide.send-notif');
+Route::get('/guide/{id}/send-notif', [NotifGuideController::class, 'sendNotifToGuide'])->name('guide.sendNotif');
+
+
+
+// Route::resource('guide_kriteria', GuideKriteriaController::class);

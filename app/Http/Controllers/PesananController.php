@@ -21,7 +21,6 @@ use App\Traits\ProfileMatchingTrait; // Pastikan sudah pakai trait ini di contro
 
 
 
-
 class PesananController extends Controller
 {
    public function index(Request $request)
@@ -155,13 +154,17 @@ public function __construct(ProfileMatchingService $profileMatchingService)
 
 public function edit($id)
 {
-    $pesanan = Pesanan::with(['kriteria', 'guide.penilaians.detailPenilaians.subkriteria.kriteria'])->findOrFail($id);
+    $pesanan = Pesanan::with(['kriteria', 'guide.penilaians.detailPenilaians.subkriteria.kriteria'])
+        ->findOrFail($id);
 
     $kriterias = Kriteria::all();
     $pakets = Paket::all();
+
     $guides = Guide::with(['kriteria', 'penilaians.detailPenilaians.subkriteria.kriteria'])
-    ->where('status', 'aktif')
-    ->get();
+        ->where('status', 'aktif')
+        ->get();
+
+    $filteredGuides = collect();
 
     foreach ($guides as $guide) {
         $penilaian = $guide->penilaians->first();
@@ -169,15 +172,46 @@ public function edit($id)
         if ($penilaian) {
             $hasil = $this->hitungProfileMatching($penilaian);
             $kriteriaUnggul = $this->tentukanKriteriaUnggulanshow($hasil);
-        } else {
-            $kriteriaUnggul = 'Belum Dinilai';
-        }
 
-        $guide->kriteria_unggulan = $kriteriaUnggul;
+            $guide->kriteria_unggulan_id = $kriteriaUnggul['id'];
+            $guide->kriteria_unggulan_nama = $kriteriaUnggul['nama'];
+
+            if (
+                $kriteriaUnggul['id'] == $pesanan->id_kriteria ||
+                $guide->id == $pesanan->id_guide
+            ) {
+                $filteredGuides->push($guide);
+            }
+        } else {
+            $guide->kriteria_unggulan_id = null;
+            $guide->kriteria_unggulan_nama = 'Belum Dinilai';
+
+            if ($guide->id == $pesanan->id_guide) {
+                $filteredGuides->push($guide);
+            }
+        }
     }
 
-    return view('pesanan.edit', compact('pesanan', 'kriterias', 'pakets', 'guides'));
+    if (!$filteredGuides->contains('id', $pesanan->id_guide)) {
+        $currentGuide = Guide::with(['penilaians.detailPenilaians.subkriteria.kriteria'])
+            ->find($pesanan->id_guide);
+
+        if ($currentGuide) {
+            $currentGuide->kriteria_unggulan_id = null;
+            $currentGuide->kriteria_unggulan_nama = 'Dipilih tapi non-aktif';
+            $filteredGuides->push($currentGuide); // ← Tambahkan baris ini
+        }
+    }
+
+    return view('pesanan.edit', [
+        'pesanan' => $pesanan,
+        'kriterias' => $kriterias,
+        'pakets' => $pakets,
+        'guides' => $filteredGuides,
+    ]);
 }
+
+
 
 
 

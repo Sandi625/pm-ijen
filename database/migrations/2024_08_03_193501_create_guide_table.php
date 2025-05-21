@@ -23,10 +23,14 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('foto')->nullable();
             $table->string('bahasa', 100);
+            $table->unsignedBigInteger('user_id')->nullable();
+
             $table->timestamps();
 
             // Foreign key constraint
             $table->foreign('kriteria_id')->references('id')->on('kriterias')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+
         });
     }
 

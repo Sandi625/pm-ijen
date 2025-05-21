@@ -9,7 +9,9 @@
         "barryvdh/laravel-dompdf": "^2.2",
         "biscolab/laravel-recaptcha": "^6.1",
         "laravel/framework": "^11.9",
-        "laravel/tinker": "^2.9"
+        "laravel/sanctum": "^4.0",
+        "laravel/tinker": "^2.9",
+        "realrashid/sweet-alert": "^7.3"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.13",

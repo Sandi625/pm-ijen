@@ -31,5 +31,13 @@ class Pesanan extends Model
     {
         return $this->belongsTo(Guide::class, 'id_guide');
     }
+
+    // Model Pesanan.php
+
+
+
+
+
+
 }
 

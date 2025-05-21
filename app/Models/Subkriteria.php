@@ -26,4 +26,6 @@ class Subkriteria extends Model
     {
         return $this->hasMany(DetailPenilaian::class);
     }
+
+
 }

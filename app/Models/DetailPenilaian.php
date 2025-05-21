@@ -26,4 +26,6 @@ class DetailPenilaian extends Model
     {
         return $this->belongsTo(Subkriteria::class);
     }
+
+
 }

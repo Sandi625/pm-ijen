@@ -164,16 +164,13 @@
     <select name="id_guide" id="id_guide"
         class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
         <option value="">-- Pilih Guide --</option>
-        @foreach ($guides as $guide)
-            <option value="{{ $guide->id }}" {{ $pesanan->id_guide == $guide->id ? 'selected' : '' }}>
-                {{ $guide->nama_guide }}
-                @if ($guide->kriteria_unggulan)
-                    - {{ is_array($guide->kriteria_unggulan) ? implode(', ', $guide->kriteria_unggulan) : $guide->kriteria_unggulan }}
-                @else
-                    - Tidak Diketahui
-                @endif
-            </option>
-        @endforeach
+       @foreach ($guides as $guide)
+    <option value="{{ $guide->id }}" {{ $pesanan->id_guide == $guide->id ? 'selected' : '' }}>
+        {{ $guide->nama_guide }}
+        - {{ $guide->kriteria_unggulan_nama ?? 'Tidak Diketahui' }}
+    </option>
+@endforeach
+
     </select>
 </div>
 

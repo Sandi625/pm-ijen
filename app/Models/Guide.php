@@ -14,7 +14,7 @@ class Guide extends Model
 
     protected $fillable = [
         'nama_guide', 'salary', 'kriteria_id', 'deskripsi_guide',
-        'nomer_hp', 'status', 'alamat', 'email', 'foto', 'bahasa'
+        'nomer_hp', 'status', 'alamat', 'email', 'foto', 'bahasa', 'user_id', // <- HARUS ADA
     ];
 
     public function penilaians()
@@ -22,11 +22,19 @@ class Guide extends Model
         return $this->hasMany(Penilaian::class, 'guide_id');
     }
 
+    public function user()
+{
+    return $this->belongsTo(User::class);
+}
+
+
     // Relasi ke Kriteria
     // public function kriteria()
     // {
     //     return $this->belongsTo(Kriteria::class);
     // }
+
+
 
 
 
@@ -39,20 +47,13 @@ class Guide extends Model
 
 
 
-
-
-
-
-    // Relasi ke Pesanan
-    // public function pesanan()
-    // {
-    //     return $this->hasMany(Pesanan::class);
-    // }
-
-    public function pesanan()
+  // app/Models/Guide.php
+public function pesanans()
 {
     return $this->hasMany(Pesanan::class, 'id_guide');
 }
+
+
 
 
 
@@ -60,6 +61,14 @@ public function kriteriaUnggulan()
 {
     return $this->belongsTo(Kriteria::class, 'kriteria_id')->where('is_unggulan', true);  // assuming 'is_unggulan' is a column
 }
+
+//   public function kriteria()
+//     {
+//         return $this->belongsToMany(Kriteria::class,'guide_id', 'kriteria_id');
+//     }
+
+
+
 
 
 }

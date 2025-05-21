@@ -24,9 +24,10 @@
                     <td>Rp {{ number_format($guide->salary, 0, ',', '.') }}</td>
                 </tr>
                 <tr>
-                    <td>Kriteria Unggulan</td>
-                    <td>{{ $guide->kriteria_unggulan ?? '-' }}</td>
-                </tr>
+    <td>Kriteria Unggulan</td>
+    <td>{{ $guide->kriteria_unggulan_nama ?? '-' }}</td>
+</tr>
+
                 <tr>
                     <td>Deskripsi</td>
                     <td>{{ $guide->deskripsi_guide ?? '-' }}</td>

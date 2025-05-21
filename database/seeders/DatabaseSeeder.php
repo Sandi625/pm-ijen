@@ -44,6 +44,7 @@ class DatabaseSeeder extends Seeder
             SubkriteriaSeeder::class,
             PaketSeeder::class,
             GuideSeeder::class,
+            // PesananSeeder::class,
             // PenilaiansSeeder::class,
             // DetailPenilaiansSeeder::class,
         ]);

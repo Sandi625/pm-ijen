@@ -32,7 +32,7 @@ class GuideSeeder extends Seeder
             'salary' => 6000000,
             'deskripsi_guide' => 'Guide dengan spesialisasi Blue Fire Tour.',
             'nomer_hp' => '082345678901',
-            'status' => 'sedang_guiding', // status sedang guiding
+            'status' => 'aktif', // status sedang guiding
             'alamat' => 'Jl. Raya Seminyak No. 2',
             'email' => 'janesmith@example.com',
             'foto' => 'jane_smith.jpg',
@@ -44,7 +44,7 @@ class GuideSeeder extends Seeder
             'salary' => 5500000,
             'deskripsi_guide' => 'Guide yang telah pensiun dari dunia guiding.',
             'nomer_hp' => '083456789012',
-            'status' => 'tidak_aktif', // status tidak aktif
+            'status' => 'aktif', // status tidak aktif
             'alamat' => 'Jl. Raya Denpasar No. 3',
             'email' => 'michaeljohnson@example.com',
             'foto' => 'michael_johnson.jpg',

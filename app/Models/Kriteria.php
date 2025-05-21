@@ -25,4 +25,8 @@ class Kriteria extends Model
     {
         return $this->hasMany(Subkriteria::class);
     }
+     public function guides()
+    {
+        return $this->belongsToMany(Guide::class, 'guide_kriteria', 'kriteria_id', 'guide_id');
+    }
 }

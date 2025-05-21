@@ -198,6 +198,15 @@
                 </a>
             </li>
 
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('notif.guide') }}">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Kirim Notif Guide</span>
+                </a>
+            </li>
+
+
+
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 
