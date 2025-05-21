@@ -58,7 +58,6 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
 
     // Galeri
     Route::resource('galeris', GaleriController::class);
-    Route::get('/galeri', [GaleriController::class, 'showGaleri'])->name('galeri');
     Route::get('/galeri/video', [GaleriController::class, 'showVideo'])->name('galeri.video');
 
     // Chart pesanan
@@ -119,6 +118,8 @@ Route::resource('blogs', BlogController::class)
 // Route 'show' tidak menggunakan middleware auth
 Route::get('/blogs/{blog}', [BlogController::class, 'show'])->name('blogs.show');
 Route::get('/sblog', [BlogController::class, 'listBlogs'])->name('blog.list');
+    Route::get('/galeri', [GaleriController::class, 'showGaleri'])->name('galeri');
+
 
 //Pelanggan
 // 2. Route create & store TANPA middleware auth

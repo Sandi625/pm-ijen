@@ -19,6 +19,8 @@ return new class extends Migration
             $table->unsignedBigInteger('id_kriteria');
             $table->unsignedBigInteger('id_paket');
             $table->unsignedBigInteger('id_guide')->nullable(); // <<< id_guide nullable
+            $table->foreignId('user_id')->constrained('users');
+
 
             $table->date('tanggal_pesan');
             $table->date('tanggal_keberangkatan');

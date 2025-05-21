@@ -1,77 +1,79 @@
 <script>
-   // Menu toggle functionality
-const navToggle = document.getElementById('nav-toggle');
-const navMenu = document.getElementById('nav-menu');
-const navClose = document.getElementById('nav-close');
+document.addEventListener('DOMContentLoaded', function () {
+    // Menu toggle functionality
+    const navToggle = document.getElementById('nav-toggle');
+    const navMenu = document.getElementById('nav-menu');
+    const navClose = document.getElementById('nav-close');
 
-if (navToggle) {
-    navToggle.addEventListener('click', () => {
-        navMenu.classList.add('show-menu');
+    if (navToggle && navMenu) {
+        navToggle.addEventListener('click', () => {
+            navMenu.classList.add('show-menu');
+        });
+    }
+
+    if (navClose && navMenu) {
+        navClose.addEventListener('click', () => {
+            navMenu.classList.remove('show-menu');
+        });
+    }
+
+    // Hide menu on link click (optional)
+    const navLinks = document.querySelectorAll('.nav__link');
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            if(navMenu) navMenu.classList.remove('show-menu');
+        });
     });
-}
 
-if (navClose) {
-    navClose.addEventListener('click', () => {
-        navMenu.classList.remove('show-menu');
-    });
-}
+    // Toggle between images and videos
+    function showImages() {
+        const imageItems = document.querySelectorAll('.image-item');
+        const videoItems = document.querySelectorAll('.video-item');
 
-// Hide menu on link click (optional)
-const navLink = document.querySelectorAll('.nav__link');
-navLink.forEach(link => {
-    link.addEventListener('click', () => {
-        navMenu.classList.remove('show-menu');
-    });
-});
+        imageItems.forEach(item => item.style.display = 'block');
+        videoItems.forEach(item => item.style.display = 'none');
+    }
 
-// Toggle between images and videos
-function showImages() {
-    const imageItems = document.querySelectorAll('.image-item');
-    const videoItems = document.querySelectorAll('.video-item');
+    function showVideos() {
+        const imageItems = document.querySelectorAll('.image-item');
+        const videoItems = document.querySelectorAll('.video-item');
 
-    imageItems.forEach(item => item.style.display = 'block');
-    videoItems.forEach(item => item.style.display = 'none');
-}
+        imageItems.forEach(item => item.style.display = 'none');
+        videoItems.forEach(item => item.style.display = 'block');
+    }
 
-function showVideos() {
-    const imageItems = document.querySelectorAll('.image-item');
-    const videoItems = document.querySelectorAll('.video-item');
+    // Default to showing images on page load
+    showImages();
 
-    imageItems.forEach(item => item.style.display = 'none');
-    videoItems.forEach(item => item.style.display = 'block');
-}
+    // Modal Image View
+    const modal = document.getElementById("myModal");
+    const modalImg = document.getElementById("img01");
+    const captionText = document.getElementById("caption");
+    const images = document.querySelectorAll('.myImg');
 
-// Default to showing images on page load
-showImages();
+    if(modal && modalImg && captionText && images.length > 0){
+        images.forEach(function(img) {
+            img.addEventListener('click', function() {
+                modal.style.display = "block";
+                modalImg.src = this.src;
+                captionText.innerHTML = this.alt || '';
+            });
+        });
 
-// Modal Image View
-var modal = document.getElementById("myModal");
-var modalImg = document.getElementById("img01");
-var captionText = document.getElementById("caption");
+        // Close modal button
+        const span = document.querySelector(".close");
+        if(span) {
+            span.addEventListener('click', () => {
+                modal.style.display = "none";
+            });
+        }
 
-var images = document.querySelectorAll('.myImg');
-images.forEach(function(img) {
-    img.onclick = function() {
-        modal.style.display = "block";
-        modalImg.src = this.src;
-        captionText.innerHTML = this.alt;
+        // Close modal when clicking outside
+        window.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        });
     }
 });
-
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
-
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-    modal.style.display = "none";
-}
-
-// When the user clicks anywhere outside the modal, close it
-window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
-}
-
-
 </script>

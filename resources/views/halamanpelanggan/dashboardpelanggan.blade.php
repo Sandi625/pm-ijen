@@ -1,7 +1,190 @@
-@extends('layouts.master')
+@extends('layouts.pelanggan')
+
+
+
 
 @section('content')
     <style>
+
+:root {
+    --header-height: 4rem;
+    --white-color: #fff;
+    --body-color: #f4f4f9;
+    --text-color-light: #666;
+    --text-color: #333;
+    --title-color: #e67e22;
+    --font-semi-bold: 600;
+}
+
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: var(--body-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+/* Header banner (atas navbar) */
+header {
+    background: #082a2b;
+    color: var(--white-color);
+    padding: 10px 0;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+/* Container halaman */
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px 0;
+}
+
+/* Navbar utama */
+.nav {
+    height: var(--header-height);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 30px;
+    background-color: var(--body-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+/* Logo dan tombol toggle */
+.nav__logo,
+.nav__toggle {
+    color: var(--text-color);
+    cursor: pointer;
+    font-weight: var(--font-semi-bold);
+}
+
+.nav__logo {
+    font-size: 1.5rem;
+}
+
+.nav__toggle {
+    display: none;
+    font-size: 1.8rem;
+}
+
+/* Menu */
+.nav__menu {
+    display: flex;
+    align-items: center;
+}
+
+.nav__list {
+    display: flex;
+    gap: 3rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav__item {
+    list-style: none;
+}
+
+.nav__link {
+    color: var(--text-color-light);
+    font-weight: var(--font-semi-bold);
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: color 0.3s;
+    padding: 10px 15px;
+    position: relative;
+}
+
+/* Hover & Fokus */
+.nav__link:hover,
+.nav__link:focus {
+    color: var(--title-color);
+}
+
+/* Active Link */
+.active-link {
+    color: var(--title-color);
+}
+
+.active-link::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background-color: var(--title-color);
+    bottom: -5px;
+    left: 0;
+}
+
+/* Tombol close di mobile */
+.nav__close {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    font-size: 1.5rem;
+    color: var(--title-color);
+    cursor: pointer;
+    display: none;
+}
+
+/* Responsive: Mobile */
+@media screen and (max-width: 767px) {
+    .nav__menu {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 70%;
+        height: 100%;
+        background-color: var(--body-color);
+        box-shadow: -1px 0 4px rgba(14, 55, 63, 0.15);
+        padding: 2rem;
+        transition: 0.4s;
+        display: flex;
+        flex-direction: column;
+        gap: 2.5rem;
+        z-index: 99;
+    }
+
+    .nav__toggle {
+        display: block;
+    }
+
+    .nav__close {
+        display: block;
+    }
+
+    .show-menu {
+        right: 0;
+    }
+
+    .nav__list {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+}
+
+/* Scroll Effect */
+.scroll-header {
+    background-color: var(--body-color);
+    box-shadow: 0 0 4px rgba(14, 55, 63, 0.15);
+}
+
+.scroll-header .nav__logo,
+.scroll-header .nav__toggle {
+    color: var(--title-color);
+}
+
+
+
+
         /* Basic styling */
         .section-title {
             text-align: center;

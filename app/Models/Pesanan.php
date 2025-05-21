@@ -11,7 +11,7 @@ class Pesanan extends Model
     protected $fillable = [
         'nama', 'email', 'nomor_telp', 'id_kriteria', 'id_paket', 'id_guide',
         'tanggal_pesan', 'tanggal_keberangkatan', 'jumlah_peserta','order_id',
-        'negara', 'bahasa', 'riwayat_medis', 'paspor', 'special_request','status',
+        'negara', 'bahasa', 'riwayat_medis', 'paspor', 'special_request','status', 'user_id', // <--- jangan lupa tambahkan ini
     ];
 
     // Relasi ke Kriteria
@@ -33,6 +33,12 @@ class Pesanan extends Model
     }
 
     // Model Pesanan.php
+
+    public function user()
+{
+    return $this->belongsTo(User::class, 'user_id');
+}
+
 
 
 

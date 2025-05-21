@@ -157,22 +157,32 @@
 
 
             <!-- Nav Item - Tables -->
-         <li class="nav-item">
-    <a class="nav-link" href="{{ route('customer.packages') }}">
-        <i class="fas fa-fw fa-table"></i>
-        <span>Packages</span>
-    </a>
-</li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('customer.packages') }}">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Packages</span>
+                </a>
+            </li>
 
-<li class="nav-item">
-    <form id="logout-form" method="POST" action="{{ route('logout') }}" style="display: none;">
-        @csrf
-    </form>
-    <a href="#" class="nav-link" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-        <i class="fas fa-sign-out-alt"></i>
-        <span>Logout</span>
-    </a>
-</li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('review.review') }}">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Review</span>
+                </a>
+            </li>
+
+
+
+            <li class="nav-item">
+                <form id="logout-form" method="POST" action="{{ route('logout') }}" style="display: none;">
+                    @csrf
+                </form>
+                <a href="#" class="nav-link"
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </li>
 
 
 

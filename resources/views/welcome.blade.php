@@ -51,8 +51,13 @@
                         <a href="{{ route('galeri') }}" class="nav__link">Gallery</a>
                     </li>
                     <li class="nav__item">
-                        <a href="{{ route('review.review') }}" class="nav__link">Review</a>
+                        @auth
+                            <a href="{{ route('review.review') }}" class="nav__link">Review</a>
+                        @else
+                            <a href="#" class="nav__link" onclick="showLoginAlert()">Review</a>
+                        @endauth
                     </li>
+
                     <li class="nav__item">
                         <a href="{{ route('blog.list') }}" class="nav__link">Blogs</a>
                     </li>
@@ -93,10 +98,12 @@
                 </div>
 
                 <div class="home__social">
-                    <a href="https://www.facebook.com/profile.php?id=100090053510077" target="_blank" class="home__social-link">
+                    <a href="https://www.facebook.com/profile.php?id=100090053510077" target="_blank"
+                        class="home__social-link">
                         <i class="ri-facebook-box-fill"></i>
                     </a>
-                    <a href="https://www.instagram.com/ijencratertour.indonesia/" target="_blank" class="home__social-link">
+                    <a href="https://www.instagram.com/ijencratertour.indonesia/" target="_blank"
+                        class="home__social-link">
                         <i class="ri-instagram-fill"></i>
                     </a>
                     {{-- <a href="https://twitter.com/" target="_blank" class="home__social-link">
@@ -220,10 +227,13 @@
 
                             <div class="swiper-slide">
                                 <div class="shop-card" style="width: 18rem;">
-                                    <img src="assets/img/jkl laguna.jpg" class="shop-card__img card-img-top" alt="Product image">
+                                    <img src="assets/img/jkl laguna.jpg" class="shop-card__img card-img-top"
+                                        alt="Product image">
                                     <div class="shop-card__content card-body">
                                         <h5 class="shop-card__title card-title">Mountain Jacket</h5>
-                                        <p class="shop-card__description">Stay warm and protected with our mountain jacket. Featuring a weather-resistant design, it’s ideal for rugged outdoor adventures.</p>
+                                        <p class="shop-card__description">Stay warm and protected with our mountain
+                                            jacket. Featuring a weather-resistant design, it’s ideal for rugged outdoor
+                                            adventures.</p>
                                         {{-- <a href="#" class="shop-card__button btn btn-primary">Learn More</a> --}}
                                     </div>
                                 </div>
@@ -231,10 +241,13 @@
 
                             <div class="swiper-slide">
                                 <div class="shop-card" style="width: 18rem;">
-                                    <img src="assets/img/kupluk.jpeg" class="shop-card__img card-img-top" alt="Product image">
+                                    <img src="assets/img/kupluk.jpeg" class="shop-card__img card-img-top"
+                                        alt="Product image">
                                     <div class="shop-card__content card-body">
                                         <h5 class="shop-card__title card-title">Stylish Beanie</h5>
-                                        <p class="shop-card__description">Keep warm and look stylish with our premium beanie. Made from soft, high-quality fabric, this beanie is perfect for any season.</p>
+                                        <p class="shop-card__description">Keep warm and look stylish with our premium
+                                            beanie. Made from soft, high-quality fabric, this beanie is perfect for any
+                                            season.</p>
                                         {{-- <a href="#" class="shop-card__button btn btn-primary">Learn More</a> --}}
                                     </div>
                                 </div>
@@ -242,10 +255,13 @@
                             <!-- Swiper Slide 2 -->
                             <div class="swiper-slide">
                                 <div class="shop-card" style="width: 18rem;">
-                                    <img src="assets/img/lutek.png" class="shop-card__img card-img-top" alt="Product image">
+                                    <img src="assets/img/lutek.png" class="shop-card__img card-img-top"
+                                        alt="Product image">
                                     <div class="shop-card__content card-body">
                                         <h5 class="shop-card__title card-title">Hiking Stick</h5>
-                                        <p class="shop-card__description">Enhance your hiking experience with our durable hiking stick. Designed for comfort and support, it’s perfect for any trail.</p>
+                                        <p class="shop-card__description">Enhance your hiking experience with our
+                                            durable hiking stick. Designed for comfort and support, it’s perfect for any
+                                            trail.</p>
                                         {{-- <a href="#" class="shop-card__button btn btn-primary">Learn More</a> --}}
                                     </div>
                                 </div>
@@ -255,10 +271,13 @@
                             <!-- Swiper Slide 4 -->
                             <div class="swiper-slide">
                                 <div class="shop-card" style="width: 18rem;">
-                                    <img src="assets/img/download.jpeg" class="shop-card__img card-img-top" alt="Product image">
+                                    <img src="assets/img/download.jpeg" class="shop-card__img card-img-top"
+                                        alt="Product image">
                                     <div class="shop-card__content card-body">
                                         <h5 class="shop-card__title card-title">Gas Mask</h5>
-                                        <p class="shop-card__description">Stay safe in challenging environments with our high-quality gas mask. Designed for protection and comfort, it’s essential for any serious adventurer.</p>
+                                        <p class="shop-card__description">Stay safe in challenging environments with
+                                            our high-quality gas mask. Designed for protection and comfort, it’s
+                                            essential for any serious adventurer.</p>
                                         {{-- <a href="#" class="shop-card__button btn btn-primary">Learn More</a> --}}
                                     </div>
                                 </div>
@@ -357,83 +376,85 @@
             </div>
         </section>
 
-      <!--==================== TOUR PAKETS ====================-->
-    <section id="tour-pakets">
-    <h2 class="section-title">Tour Pakets</h2>
-    <div class="bd-container testimonials__container">
-        @foreach ($pakets as $paket)
-            <div class="testimonials__card">
-                <div class="testimonials__image">
-                    @if($paket->foto)
-                        @auth
-                            <a href="{{ route('login', ['id_paket' => $paket->id]) }}">
-                                <img src="{{ asset('storage/' . $paket->foto) }}" alt="Foto Paket" class="w-full h-40 object-cover rounded-lg hover:opacity-90 transition-opacity duration-300">
-                            </a>
-                        @else
-                            <a href="#" onclick="showLoginAlert()">
-                                <img src="{{ asset('storage/' . $paket->foto) }}" alt="Foto Paket" class="w-full h-40 object-cover rounded-lg hover:opacity-90 transition-opacity duration-300">
-                            </a>
-                        @endauth
-                    @else
-                        <p>Foto tidak tersedia</p>
-                    @endif
-                </div>
-                <div class="testimonials__info">
-                    <h3 class="testimonials__name">{{ $paket->nama_paket }}</h3>
-                    <p class="testimonials__description">{{ Str::limit($paket->deskripsi_paket, 100) }}</p>
-                    <p class="testimonials__duration">Durasi: {{ $paket->durasi }}</p>
+        <!--==================== TOUR PAKETS ====================-->
+        <section id="tour-pakets">
+            <h2 class="section-title">Tour Pakets</h2>
+            <div class="bd-container testimonials__container">
+                @foreach ($pakets as $paket)
+                    <div class="testimonials__card">
+                        <div class="testimonials__image">
+                            @if ($paket->foto)
+                                @auth
+                                    <a href="{{ route('login', ['id_paket' => $paket->id]) }}">
+                                        <img src="{{ asset('storage/' . $paket->foto) }}" alt="Foto Paket"
+                                            class="w-full h-40 object-cover rounded-lg hover:opacity-90 transition-opacity duration-300">
+                                    </a>
+                                @else
+                                    <a href="#" onclick="showLoginAlert()">
+                                        <img src="{{ asset('storage/' . $paket->foto) }}" alt="Foto Paket"
+                                            class="w-full h-40 object-cover rounded-lg hover:opacity-90 transition-opacity duration-300">
+                                    </a>
+                                @endauth
+                            @else
+                                <p>Foto tidak tersedia</p>
+                            @endif
+                        </div>
+                        <div class="testimonials__info">
+                            <h3 class="testimonials__name">{{ $paket->nama_paket }}</h3>
+                            <p class="testimonials__description">{{ Str::limit($paket->deskripsi_paket, 100) }}</p>
+                            <p class="testimonials__duration">Durasi: {{ $paket->durasi }}</p>
 
-                    @auth
-                        <a href="{{ route('login', ['id_paket' => $paket->id]) }}"
-                            class="inline-block mt-4 px-6 py-2.5 bg-gradient-to-r from-green-500 to-green-700 text-white font-semibold text-sm rounded-full shadow-lg hover:from-green-600 hover:to-green-800 transition-all duration-300 ease-in-out">
-                            💼 Klik For More
-                        </a>
-                    @else
-                        <a href="#" onclick="showLoginAlert()"
-                            class="inline-block mt-4 px-6 py-2.5 bg-gradient-to-r from-green-500 to-green-700 text-white font-semibold text-sm rounded-full shadow-lg hover:from-green-600 hover:to-green-800 transition-all duration-300 ease-in-out">
-                            💼 Klik For More
-                        </a>
-                    @endauth
-                </div>
+                            @auth
+                                <a href="{{ route('login', ['id_paket' => $paket->id]) }}"
+                                    class="inline-block mt-4 px-6 py-2.5 bg-gradient-to-r from-green-500 to-green-700 text-white font-semibold text-sm rounded-full shadow-lg hover:from-green-600 hover:to-green-800 transition-all duration-300 ease-in-out">
+                                    💼 Klik For More
+                                </a>
+                            @else
+                                <a href="#" onclick="showLoginAlert()"
+                                    class="inline-block mt-4 px-6 py-2.5 bg-gradient-to-r from-green-500 to-green-700 text-white font-semibold text-sm rounded-full shadow-lg hover:from-green-600 hover:to-green-800 transition-all duration-300 ease-in-out">
+                                    💼 Klik For More
+                                </a>
+                            @endauth
+                        </div>
+                    </div>
+                @endforeach
             </div>
-        @endforeach
-    </div>
-</section>
+        </section>
 
-<!-- SweetAlert2 CDN -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <!-- SweetAlert2 CDN -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<script>
-    function showLoginAlert() {
-        Swal.fire({
-            title: 'Login Required',
-            text: 'You must login to make a booking.',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Login Now',
-            cancelButtonText: 'Cancel'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = "{{ route('login') }}";
+        <script>
+            function showLoginAlert() {
+                Swal.fire({
+                    title: 'Login Required',
+                    text: 'You must login to make a acces more.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Login Now',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "{{ route('login') }}";
+                    }
+                });
             }
-        });
-    }
-</script>
+        </script>
 
 
 
 
 
 
-    <!-- In your welcome.blade.php -->
+        <!-- In your welcome.blade.php -->
 
 
 
 
 
-    {{-- <section class="blogs" id="blogs">
+        {{-- <section class="blogs" id="blogs">
         <h1 class="heading">Our Daily Blogs</h1>
 
         <div class="swiper blogs-slider">
@@ -441,7 +462,7 @@
                 @foreach ($blogs as $blog)
                     <div class="swiper-slide slide">
                         <!-- Displaying the image -->
-                        @if($blog->image)
+                        @if ($blog->image)
                             <img src="{{ asset('storage/' . $blog->image) }}" alt="{{ $blog->title }}">
                         @else
                             <img src="{{ asset('images/default.jpg') }}" alt="Default Image">
@@ -464,7 +485,7 @@
 
 
 
-    {{-- @if(session('success'))
+        {{-- @if (session('success'))
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         if (!sessionStorage.getItem('alertShown')) {
@@ -487,114 +508,119 @@
 
 
 
-    <style>
-        /* Basic styling */
-        .section-title {
-            text-align: center;
-            font-size: 2rem;
-            margin-bottom: 2rem;
-            color: var(--primary-text-color);
-        }
-
-        /* Container flex dengan wrap */
-        .bd-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1.5rem;
-            padding: 1rem;
-        }
-
-        /* Card styling */
-        .testimonials__card {
-            background-color: var(--card-bg-color);
-            border-radius: 10px;
-            box-shadow: 0 4px 8px var(--hover-effect-color);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            text-align: center;
-            padding: 1rem;
-            transition: transform 0.3s ease-in-out;
-
-            /* Ukuran untuk 3 per baris */
-            width: calc(33.33% - 1rem); /* 3 per baris */
-            max-width: 300px;
-        }
-
-        .testimonials__card:hover {
-            transform: translateY(-10px);
-            background-color: var(--card-hover-bg-color);
-        }
-
-        .testimonials__image {
-            margin-bottom: 1rem;
-            height: 200px;
-        }
-
-        .testimonials__image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 8px;
-        }
-
-        .testimonials__info {
-            padding: 0.5rem;
-        }
-
-        .testimonials__name {
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-            color: var(--primary-text-color);
-        }
-
-        .testimonials__description {
-            font-size: 1rem;
-            color: var(--secondary-text-color);
-            margin-bottom: 0.5rem;
-        }
-
-        .testimonials__price,
-        .testimonials__duration,
-        .testimonials__destinasi,
-        .testimonials__include,
-        .testimonials__exclude {
-            font-size: 0.9rem;
-            margin: 0.2rem 0;
-            color: var(--primary-text-color);
-        }
-
-        .testimonials__price {
-            font-weight: bold;
-        }
-
-        .testimonials__include {
-            color: var(--include-color); /* Warna hijau */
-        }
-
-        .testimonials__exclude {
-            color: var(--exclude-color); /* Warna merah */
-        }
-
-        /* Responsive */
-        @media screen and (max-width: 992px) {
-            .testimonials__card {
-                width: calc(33.33% - 1rem); /* 3 per baris (untuk ukuran layar PC) */
+        <style>
+            /* Basic styling */
+            .section-title {
+                text-align: center;
+                font-size: 2rem;
+                margin-bottom: 2rem;
+                color: var(--primary-text-color);
             }
-        }
 
-        @media screen and (max-width: 600px) {
+            /* Container flex dengan wrap */
+            .bd-container {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1.5rem;
+                padding: 1rem;
+            }
+
+            /* Card styling */
             .testimonials__card {
-                width: 100%; /* 1 per baris */
+                background-color: var(--card-bg-color);
+                border-radius: 10px;
+                box-shadow: 0 4px 8px var(--hover-effect-color);
+                overflow: hidden;
+                display: flex;
+                flex-direction: column;
+                text-align: center;
+                padding: 1rem;
+                transition: transform 0.3s ease-in-out;
+
+                /* Ukuran untuk 3 per baris */
+                width: calc(33.33% - 1rem);
+                /* 3 per baris */
+                max-width: 300px;
+            }
+
+            .testimonials__card:hover {
+                transform: translateY(-10px);
+                background-color: var(--card-hover-bg-color);
             }
 
             .testimonials__image {
-                height: 180px;
+                margin-bottom: 1rem;
+                height: 200px;
             }
-        }
-    </style>
+
+            .testimonials__image img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 8px;
+            }
+
+            .testimonials__info {
+                padding: 0.5rem;
+            }
+
+            .testimonials__name {
+                font-size: 1.5rem;
+                font-weight: bold;
+                margin-bottom: 0.5rem;
+                color: var(--primary-text-color);
+            }
+
+            .testimonials__description {
+                font-size: 1rem;
+                color: var(--secondary-text-color);
+                margin-bottom: 0.5rem;
+            }
+
+            .testimonials__price,
+            .testimonials__duration,
+            .testimonials__destinasi,
+            .testimonials__include,
+            .testimonials__exclude {
+                font-size: 0.9rem;
+                margin: 0.2rem 0;
+                color: var(--primary-text-color);
+            }
+
+            .testimonials__price {
+                font-weight: bold;
+            }
+
+            .testimonials__include {
+                color: var(--include-color);
+                /* Warna hijau */
+            }
+
+            .testimonials__exclude {
+                color: var(--exclude-color);
+                /* Warna merah */
+            }
+
+            /* Responsive */
+            @media screen and (max-width: 992px) {
+                .testimonials__card {
+                    width: calc(33.33% - 1rem);
+                    /* 3 per baris (untuk ukuran layar PC) */
+                }
+            }
+
+            @media screen and (max-width: 600px) {
+                .testimonials__card {
+                    width: 100%;
+                    /* 1 per baris */
+                }
+
+                .testimonials__image {
+                    height: 180px;
+                }
+            }
+        </style>
 
 
 
@@ -609,7 +635,7 @@
 
 
         <!--==================== EMAIL ====================-->
-{{-- <section class="section">
+        {{-- <section class="section">
     <div class="card email-card">
         <form method="post" action="https://formspree.io/f/xknlyagv">
             <h1 class="heading">Contact us via Email</h1>
@@ -675,7 +701,8 @@
                 <div class="maps__content">
                     <iframe
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d709.5816697941696!2d114.2573701416686!3d-8.205609772008037!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd14f6d1d6614bb%3A0xf9c55b4687931297!2sPT.%20IJEN%20CRATER%20TOUR%20INDONESIA!5e0!3m2!1sen!2sid!4v1724565411781!5m2!1sen!2sid"
-                        width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                        width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
                     </iframe>
                 </div>
             </div>
@@ -736,7 +763,8 @@
                             </a>
                         </li> --}}
                         <li class="footer__item">
-                            <a href="https://wa.me/+6282132662815?text=Hello!%20I%20would%20like%20to%20get%20in%20touch." target="_blank">
+                            <a href="https://wa.me/+6282132662815?text=Hello!%20I%20would%20like%20to%20get%20in%20touch."
+                                target="_blank">
                                 <i class="fab fa-whatsapp"></i> +6282132662815
                             </a>
                         </li>

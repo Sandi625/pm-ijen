@@ -18,6 +18,8 @@ use App\Services\ProfileMatchingService;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\OrderStoredNotification;
 use App\Traits\ProfileMatchingTrait; // Pastikan sudah pakai trait ini di controller!
+use Illuminate\Support\Facades\Auth;
+
 
 
 
@@ -78,58 +80,52 @@ class PesananController extends Controller
 
 
 
-    public function store(Request $request)
-    {
-        // Validasi input data
-        $validated = $request->validate([
-            'nama' => 'required|string|max:100',
-            'email' => 'required|email|max:100',
-            'nomor_telp' => 'required|string|max:20',
-            'id_kriteria' => 'required|exists:kriterias,id',
-            'id_paket' => 'required|exists:pakets,id',
-            'tanggal_pesan' => 'required|date',
-            'tanggal_keberangkatan' => 'required|date|after_or_equal:tanggal_pesan',
-            'jumlah_peserta' => 'required|integer|min:1',
-            'negara' => 'required|string|max:100',
-            'bahasa' => 'required|string|max:100',
-            'riwayat_medis' => 'required|string',
-            'paspor' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120', // Maksimal 5MB
-            'special_request' => 'nullable|string',
-            'status' => 'nullable|boolean',  // Menambahkan validasi untuk status (nullable dan boolean)
-            'id_guide' => 'nullable|exists:guides,id',  // Menambahkan validasi id_guide
-        ], [
-            'tanggal_keberangkatan.after_or_equal' => 'The departure date must be the same as or after the booking date.',
-        ]);
+   public function store(Request $request)
+{
+    $validated = $request->validate([
+        'nama' => 'required|string|max:100',
+        'email' => 'required|email|max:100',
+        'nomor_telp' => 'required|string|max:20',
+        'id_kriteria' => 'required|exists:kriterias,id',
+        'id_paket' => 'required|exists:pakets,id',
+        'tanggal_pesan' => 'required|date',
+        'tanggal_keberangkatan' => 'required|date|after_or_equal:tanggal_pesan',
+        'jumlah_peserta' => 'required|integer|min:1',
+        'negara' => 'required|string|max:100',
+        'bahasa' => 'required|string|max:100',
+        'riwayat_medis' => 'required|string',
+        'paspor' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
+        'special_request' => 'nullable|string',
+        'status' => 'nullable|boolean',
+        'id_guide' => 'nullable|exists:guides,id',
+    ], [
+        'tanggal_keberangkatan.after_or_equal' => 'The departure date must be the same as or after the booking date.',
+    ]);
 
-
-        // Simpan file paspor jika ada
-        if ($request->hasFile('paspor')) {
-            // Menyimpan file paspor dan mendapatkan path
-            $pasporPath = $request->file('paspor')->store('paspor', 'public');
-            $validated['paspor'] = $pasporPath;  // Menambahkan path paspor ke data yang tervalidasi
-        }
-
-        // Tambahkan 'id_guide' ke dalam data yang divalidasi
-        $validated['id_guide'] = $request->id_guide;  // Pastikan id_guide ada di request
-
-        $validated['order_id'] = 'ORDER' . now()->format('Ymd') . strtoupper(Str::random(4));
-
-
-        // Simpan pesanan ke database
-        $pesanan = Pesanan::create($validated);  // Pastikan model pesanan dapat menangani atribut yang diberikan
-
-        // Kirim notifikasi ke email
-        try {
-            Mail::to('sandipermadi625@gmail.com')->send(new OrderStoredMail($pesanan));
-        } catch (\Exception $e) {
-            // Log error jika gagal mengirim email
-            Log::error('Gagal mengirim email: ' . $e->getMessage());
-        }
-
-        // Redirect ke halaman create ulang dengan pesan sukses
-        return redirect()->route('pesanan.create', ['id_paket' => $request->id_paket])
-            ->with('success', 'Order saved successfully!');
+    if ($request->hasFile('paspor')) {
+        $pasporPath = $request->file('paspor')->store('paspor', 'public');
+        $validated['paspor'] = $pasporPath;
     }
+
+    $validated['id_guide'] = $request->id_guide;
+
+    // **Tambahkan user_id di sini**
+    $validated['user_id'] = Auth::id();  // <- ini yang harus dipakai
+
+    $validated['order_id'] = 'ORDER' . now()->format('Ymd') . strtoupper(Str::random(4));
+
+    $pesanan = Pesanan::create($validated);
+
+    try {
+        Mail::to('sandipermadi625@gmail.com')->send(new OrderStoredMail($pesanan));
+    } catch (\Exception $e) {
+        Log::error('Gagal mengirim email: ' . $e->getMessage());
+    }
+
+    return redirect()->route('pesanan.create', ['id_paket' => $request->id_paket])
+        ->with('success', 'Order saved successfully!');
+}
+
 
 
 

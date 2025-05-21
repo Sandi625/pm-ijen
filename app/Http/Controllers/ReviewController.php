@@ -18,21 +18,29 @@ class ReviewController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        $reviews = DB::table('reviews')
-            ->join('guides', 'reviews.guide_id', '=', 'guides.id')
-            ->where('reviews.status', 1)
-            ->select('reviews.*', 'guides.nama_guide')
-            ->get();
+public function index()
+{
+    $reviews = DB::table('reviews')
+        ->join('guides', 'reviews.guide_id', '=', 'guides.id')
+        ->where('reviews.status', 1)
+        ->select('reviews.*', 'guides.nama_guide')
+        ->get();
 
-        $guides = DB::table('guides')->get(); // fetch all guides
+    $guides = DB::table('guides')->get();
 
-        return view('review.review', [
-            'reviews' => $reviews,
-            'guides' => $guides
-        ]);
-    }
+    // Ambil pesanan terakhir misal, atau sesuaikan logika user-nya
+    $lastPesanan = DB::table('pesanans')->latest('created_at')->first();
+
+    // Ambil id_guide dari pesanan terakhir, kalau tidak ada pakai guide pertama
+    $selectedGuideId = $lastPesanan ? $lastPesanan->id_guide : ($guides->isNotEmpty() ? $guides->first()->id : null);
+
+    return view('review.review', [
+        'reviews' => $reviews,
+        'guides' => $guides,
+        'selectedGuideId' => $selectedGuideId,
+    ]);
+}
+
 
 
     public function show($id)

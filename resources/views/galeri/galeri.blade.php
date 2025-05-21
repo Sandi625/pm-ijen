@@ -29,6 +29,8 @@
     object-fit: cover;
 }
 
+
+
     </style>
 
     <!-- <link rel="stylesheet" href="bali.css"> -->
@@ -46,27 +48,40 @@
             <img src="{{ asset('assets/img/logo.jpg') }}" alt="Brand Logo" style="height: 40px;">
         </div>
         <div class="nav__toggle" id="nav-toggle">&#9776;</div>
-        <ul class="nav__menu" id="nav-menu">
-            <li class="nav__item">
-                <a href="{{ route('home') }}" class="nav__link active-link">Home</a>
-            </li>
-            <li class="nav__item">
-                <a href="{{ route('home') }}#about" class="nav__link">About</a>
-            </li>
-            <li class="nav__item">
-                <a href="{{ route('home') }}#discover" class="nav__link">Destination</a>
-            </li>
-            <li class="nav__item">
-                <a href="{{ route('home') }}#place" class="nav__link">Tours</a>
-            </li>
-            <li class="nav__item">
-                <a href="{{ route('galeri') }}" class="nav__link">Gallery</a>
-            </li>
-            <li class="nav__item">
-                {{-- <a href="{{ route('page.review') }}" class="nav__link">Review</a> --}}
-            </li>
-            <div class="nav__close" id="nav-close">&times;</div>
-        </ul>
+         <ul class="nav__menu" id="nav-menu">
+        <li class="nav__item">
+            <a href="{{ route('home') }}" class="nav__link active-link">Home</a>
+        </li>
+        <li class="nav__item">
+            <a href="{{ route('home') }}#about" class="nav__link">About</a>
+        </li>
+        <li class="nav__item">
+            <a href="{{ route('home') }}#discover" class="nav__link">Destination</a>
+        </li>
+        <li class="nav__item">
+            <a href="{{ route('customer.packages') }}" class="nav__link">Tours</a>
+        </li>
+        <li class="nav__item">
+            <a href="{{ route('galeri') }}" class="nav__link">Gallery</a>
+        </li>
+        <li class="nav__item">
+            <a href="{{ route('review.review') }}" class="nav__link">Review</a>
+        </li>
+
+        {{-- Logout --}}
+        @auth
+        <li class="nav__item">
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="nav__link" style="background:none; border:none; padding:0; cursor:pointer; color:inherit;">
+                    Logout
+                </button>
+            </form>
+        </li>
+        @endauth
+
+        <div class="nav__close" id="nav-close">&times;</div>
+    </ul>
     </nav>
 
     <!-- Main Section -->
