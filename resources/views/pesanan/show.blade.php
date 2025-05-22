@@ -58,7 +58,13 @@
                     </tr>
                     <tr>
                         <td>Nama Kriteria</td>
-                        <td>{{ $pesanan->kriteria->nama ?? '-' }}</td>
+                        <td>
+                            @if($pesanan->detailPesanans->count())
+                                {{ $pesanan->detailPesanans->pluck('kriteria.nama')->filter()->implode(', ') }}
+                            @else
+                                -
+                            @endif
+                        </td>
                     </tr>
                     <tr>
                         <td>Tanggal Pesan</td>

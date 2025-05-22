@@ -22,10 +22,17 @@ class Guide extends Model
         return $this->hasMany(Penilaian::class, 'guide_id');
     }
 
+
     public function user()
 {
     return $this->belongsTo(User::class);
 }
+
+public function reviews()
+{
+    return $this->hasMany(Review::class, 'guide_id');
+}
+
 
 
     // Relasi ke Kriteria

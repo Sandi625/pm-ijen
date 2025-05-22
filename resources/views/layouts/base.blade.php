@@ -197,11 +197,17 @@
                     <span>Manejemen User</span>
                 </a>
             </li>
-
-            <li class="nav-item">
+              <li class="nav-item">
                 <a class="nav-link" href="{{ route('notif.guide') }}">
                     <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Kirim Notif Guide</span>
+                    <span>Kirim Notif Guide </span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('pilihguide.index') }}">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Pilih Guide</span>
                 </a>
             </li>
 

@@ -9,16 +9,11 @@ class Pesanan extends Model
     use HasFactory;
 
     protected $fillable = [
-        'nama', 'email', 'nomor_telp', 'id_kriteria', 'id_paket', 'id_guide',
-        'tanggal_pesan', 'tanggal_keberangkatan', 'jumlah_peserta','order_id',
-        'negara', 'bahasa', 'riwayat_medis', 'paspor', 'special_request','status', 'user_id', // <--- jangan lupa tambahkan ini
+        'nama', 'email', 'nomor_telp', 'id_paket', 'id_guide',
+        'tanggal_pesan', 'tanggal_keberangkatan', 'jumlah_peserta',
+        'order_id', 'negara', 'bahasa', 'riwayat_medis',
+        'paspor', 'special_request', 'status', 'user_id',
     ];
-
-    // Relasi ke Kriteria
-    public function kriteria()
-    {
-        return $this->belongsTo(Kriteria::class, 'id_kriteria');
-    }
 
     // Relasi ke Paket
     public function paket()
@@ -32,12 +27,56 @@ class Pesanan extends Model
         return $this->belongsTo(Guide::class, 'id_guide');
     }
 
-    // Model Pesanan.php
 
+    // Relasi ke User
     public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    // Relasi ke DetailPesanan (pivot table antara Pesanan dan Kriteria)
+    // public function detailPesanan()
+    // {
+    //     return $this->hasMany(DetailPesanan::class, 'pesanan_id');
+    // }
+
+    // Relasi ke Kriteria melalui DetailPesanan
+    public function kriterias()
 {
-    return $this->belongsTo(User::class, 'user_id');
+    return $this->belongsToMany(Kriteria::class, 'detail_pesanan', 'pesanan_id', 'kriteria_id')
+        ->withPivot('guide_id')
+        ->withTimestamps();
 }
+
+
+public function detailPesanans()
+{
+    return $this->hasMany(DetailPesanan::class, 'pesanan_id');
+}
+
+
+public function reviews()
+{
+    return $this->hasMany(Review::class, 'pesanan_id');
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

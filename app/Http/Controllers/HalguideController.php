@@ -24,7 +24,7 @@ public function index()
 
     \Log::info('Guide ditemukan, ID: ' . $guide->id);
 
-    $pesanans = Pesanan::with(['guide', 'kriteria', 'paket'])
+$pesanans = Pesanan::with(['guide', 'kriterias', 'paket']) // SUKSES
         ->where('id_guide', $guide->id)
         ->where('status', 1) // <-- tambahkan ini jika hanya ingin status tertentu
         ->get();
@@ -44,10 +44,11 @@ public function index()
 
 
 public function showguide($id)
-    {
-        $pesanan = Pesanan::with(['guide', 'paket', 'kriteria'])->findOrFail($id);
-        return view('halamanguide.show', compact('pesanan'));
-    }
+{
+    $pesanan = Pesanan::with(['guide', 'paket', 'kriterias'])->findOrFail($id);
+    return view('halamanguide.show', compact('pesanan'));
+}
+
 
 
 

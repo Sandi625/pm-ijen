@@ -47,7 +47,7 @@
             overflow-x: auto;
         }
 
-             table {
+        table {
             width: 100%;
             border-collapse: separate;
             border-spacing: 0 8px;
@@ -73,7 +73,9 @@
             text-align: left;
         }
 
-        td:nth-child(7), td:nth-child(5), td:nth-child(6) {
+        td:nth-child(7),
+        td:nth-child(5),
+        td:nth-child(6) {
             text-align: center;
         }
 
@@ -115,7 +117,9 @@
             .custom-container {
                 padding: 20px 15px;
             }
-            thead th, tbody td {
+
+            thead th,
+            tbody td {
                 font-size: 12px;
                 padding: 10px 8px;
             }
@@ -154,13 +158,19 @@
                         <tr>
                             <td>{{ $pesanan->nama }}</td>
                             <td>
-                                @if($pesanan->guide && $pesanan->guide->nama_guide)
+                                @if ($pesanan->guide && $pesanan->guide->nama_guide)
                                     <span class="badge-guide">{{ $pesanan->guide->nama_guide }}</span>
                                 @else
                                     <span class="badge-guide empty">-</span>
                                 @endif
                             </td>
-                            <td>{{ $pesanan->kriteria->nama ?? 'N/A' }}</td>
+                            <td>
+                                @forelse ($pesanan->kriterias as $kriteria)
+                                    {{ $kriteria->nama }}{{ !$loop->last ? ',' : '' }}
+                                @empty
+                                    N/A
+                                @endforelse
+                            </td>
                             <td>{{ $pesanan->paket->nama_paket ?? 'N/A' }}</td>
                             <td>{{ \Carbon\Carbon::parse($pesanan->tanggal_pesan)->format('d M Y') }}</td>
                             <td>{{ \Carbon\Carbon::parse($pesanan->tanggal_keberangkatan)->format('d M Y') }}</td>

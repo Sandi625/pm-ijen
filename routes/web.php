@@ -2,24 +2,25 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\GuideController;
 use App\Http\Controllers\PaketController;
 use App\Http\Controllers\GaleriController;
-use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\PesananController;
 use App\Http\Controllers\HalguideController;
 use App\Http\Controllers\KriteriaController;
+use App\Http\Controllers\ShowBlogController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PenilaianController;
+use App\Http\Controllers\NotifGuideController;
+use App\Http\Controllers\PilihGuideController;
+use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\SubKriteriaController;
-use App\Http\Controllers\ShowBlogController;
+
 use App\Http\Controllers\HalPelangganController;
 use App\Http\Controllers\GuideKriteriaController;
-use App\Http\Controllers\NotifGuideController;
-
-use App\Http\Controllers\LandingPageController;
 
 
 
@@ -205,3 +206,14 @@ Route::get('/guide/{id}/send-notif', [NotifGuideController::class, 'sendNotifToG
 // Route::resource('guide_kriteria', GuideKriteriaController::class);
 
 Route::get('/', [LandingPageController::class, 'index'])->name('home');
+
+Route::get('/pilih-guide', [PilihGuideController::class, 'index'])->name('pilihguide.index');
+
+Route::get('/pilihguide/{pesanan}/create', [PilihGuideController::class, 'create'])->name('pilihguide.create');
+Route::post('/pilihguide/{pesanan}', [PilihGuideController::class, 'store'])->name('pilihguide.store');
+
+Route::get('/pilihguide/{pesanan}/edit', [PilihGuideController::class, 'edit'])->name('pilihguide.edit');
+Route::put('/pilihguide/{pesanan}', [PilihGuideController::class, 'update'])->name('pilihguide.update');
+
+
+

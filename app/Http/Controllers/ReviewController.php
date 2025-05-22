@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Guide;
 use App\Models\Review;
+use App\Models\Pesanan;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
+
 
 class ReviewController extends Controller
 {
@@ -20,6 +22,8 @@ class ReviewController extends Controller
      */
 public function index()
 {
+    $user = Auth::user(); // gunakan facade Auth
+
     $reviews = DB::table('reviews')
         ->join('guides', 'reviews.guide_id', '=', 'guides.id')
         ->where('reviews.status', 1)
@@ -28,11 +32,13 @@ public function index()
 
     $guides = DB::table('guides')->get();
 
-    // Ambil pesanan terakhir misal, atau sesuaikan logika user-nya
-    $lastPesanan = DB::table('pesanans')->latest('created_at')->first();
+    // Ambil pesanan berdasarkan email user login
+    $pesanan = null;
+    if ($user) {
+        $pesanan = DB::table('pesanans')->where('email', $user->email)->latest('created_at')->first();
+    }
 
-    // Ambil id_guide dari pesanan terakhir, kalau tidak ada pakai guide pertama
-    $selectedGuideId = $lastPesanan ? $lastPesanan->id_guide : ($guides->isNotEmpty() ? $guides->first()->id : null);
+    $selectedGuideId = $pesanan ? $pesanan->id_guide : ($guides->isNotEmpty() ? $guides->first()->id : null);
 
     return view('review.review', [
         'reviews' => $reviews,
@@ -40,6 +46,18 @@ public function index()
         'selectedGuideId' => $selectedGuideId,
     ]);
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

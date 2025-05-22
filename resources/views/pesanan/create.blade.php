@@ -143,25 +143,22 @@
                     @enderror
                 </div>
 
+<div id="criteria-wrapper">
+  <div class="criteria-item mb-3 flex gap-2 items-center">
+    <select name="id_kriteria[]" class="w-full border px-3 py-2 rounded-md">
+      <option value="">Select Criteria</option>
+      @foreach ($kriterias as $kriteria)
+        <option value="{{ $kriteria->id }}">{{ $kriteria->nama }}</option>
+      @endforeach
+    </select>
+    <button type="button" class="remove-criteria bg-red-500 text-white px-2 rounded-md">&minus;</button>
+  </div>
+</div>
 
-                <!-- Kriteria -->
-                <div class="mb-4">
-                    <label class="block text-gray-700 font-bold mb-2" for="id_kriteria">Guide Criteria that you want</label>
-                    <select name="id_kriteria" id="id_kriteria"
-                        class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        required>
-                        <option value="">Select Criteria</option>
-                        @foreach ($kriterias as $kriteria)
-                            <option value="{{ $kriteria->id }}"
-                                {{ old('id_kriteria') == $kriteria->id ? 'selected' : '' }}>
-                                {{ $kriteria->nama }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('id_kriteria')
-                        <div class="text-red-600 text-sm mt-1">{{ $message }}</div>
-                    @enderror
-                </div>
+<button type="button" id="add-criteria" class="mt-2 bg-blue-600 text-white px-4 py-2 rounded-md">+ Kriteria</button>
+
+
+
 
                 <!-- Paket -->
                 <div class="mb-4">
@@ -375,6 +372,63 @@
             });
         });
     </script>
+
+<script>
+function updateDisabledOptions() {
+  const allSelects = document.querySelectorAll('#criteria-wrapper select');
+  const selectedValues = Array.from(allSelects)
+    .map(select => select.value)
+    .filter(val => val !== "");
+
+  allSelects.forEach(select => {
+    const currentValue = select.value;
+    Array.from(select.options).forEach(option => {
+      if (option.value === "" || option.value === currentValue) {
+        option.disabled = false;
+      } else {
+        option.disabled = selectedValues.includes(option.value);
+      }
+    });
+  });
+}
+
+// Event handler untuk tambah baris
+document.getElementById('add-criteria').addEventListener('click', () => {
+  const wrapper = document.getElementById('criteria-wrapper');
+  const first = wrapper.querySelector('.criteria-item');
+  const clone = first.cloneNode(true);
+
+  // reset select value
+  const select = clone.querySelector('select');
+  select.value = "";
+  clone.querySelector('.remove-criteria').addEventListener('click', removeHandler);
+
+  // Tambahkan event onchange untuk validasi
+  select.addEventListener('change', updateDisabledOptions);
+
+  wrapper.appendChild(clone);
+  updateDisabledOptions();
+});
+
+// Handler tombol hapus
+function removeHandler() {
+  const wrapper = document.getElementById('criteria-wrapper');
+  if (wrapper.children.length > 1) {
+    this.closest('.criteria-item').remove();
+    updateDisabledOptions();
+  }
+}
+
+// Apply handler ke yang pertama
+document.querySelector('.remove-criteria').addEventListener('click', removeHandler);
+document.querySelector('#criteria-wrapper select').addEventListener('change', updateDisabledOptions);
+
+// Inisialisasi
+updateDisabledOptions();
+</script>
+
+
+
 
     <img id="previewPaspor" class="mt-2 max-w-xs hidden" alt="Preview Paspor" />
 

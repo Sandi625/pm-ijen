@@ -19,19 +19,25 @@
                     <input type="email" id="email" name="email" placeholder="Enter your email"
                         value="{{ old('email', Auth::user()->email ?? '') }}" required>
                 </div>
-                <div class="form-group guide-select-wrapper">
-                    <label for="guide_id">Your Guide is</label>
-                    <select name="guide_id_disabled" id="guide_id" class="form-control" disabled>
-                        @foreach ($guides as $guide)
-                            <option value="{{ $guide->id }}"
-                                {{ isset($selectedGuideId) && $selectedGuideId == $guide->id ? 'selected' : '' }}>
-                                {{ $guide->nama_guide }}
-                            </option>
-                        @endforeach
-                    </select>
-                    <!-- Hidden input supaya value tetap terkirim -->
-                    <input type="hidden" name="guide_id" value="{{ $selectedGuideId }}">
-                </div>
+              <div class="form-group guide-select-wrapper">
+    <label for="guide_id">Your Guide is</label>
+    <select id="guide_id" class="form-control" disabled>
+        <option value="" disabled {{ empty($selectedGuideId) ? 'selected' : '' }}>-- Pilih Guide --</option>
+        @foreach ($guides as $guide)
+            <option value="{{ $guide->id }}" {{ $selectedGuideId == $guide->id ? 'selected' : '' }}>
+                {{ $guide->nama_guide }}
+            </option>
+        @endforeach
+    </select>
+
+    {{-- Hidden input supaya id tetap dikirim meskipun select-nya disabled --}}
+    @if(!empty($selectedGuideId))
+        <input type="hidden" name="guide_id" value="{{ $selectedGuideId }}">
+    @endif
+</div>
+
+
+
 
 
 

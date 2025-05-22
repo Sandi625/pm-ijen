@@ -16,6 +16,7 @@ class Review extends Model
      */
     protected $fillable = [
         'guide_id', // tambahkan ini
+        'pesanan_id', // tambahkan ini
         'name',
         'email',
         'rating',
@@ -59,4 +60,9 @@ class Review extends Model
     {
         return $this->belongsTo(Guide::class, 'guide_id');
     }
+    public function pesanan()
+{
+    return $this->belongsTo(Pesanan::class, 'pesanan_id');
+}
+
 }
