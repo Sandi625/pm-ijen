@@ -32,6 +32,14 @@ class DetailPesanan extends Model
     {
         return $this->belongsTo(Guide::class, 'guide_id');
     }
+
+    public function detailPenilaians()
+{
+    return $this->hasMany(DetailPenilaian::class, 'detail_pesanan_id');
+}
+
+
+
 }
 
 

@@ -18,14 +18,13 @@ class Penilaian extends Model
     }
 
     public function guide()
-{
-    return $this->belongsTo(Guide::class, 'guide_id');
-}
+    {
+        return $this->belongsTo(Guide::class, 'guide_id');
+    }
 
-public function detail_penilaians()
+    public function detail_penilaians()
     {
         return $this->hasMany(DetailPenilaian::class, 'penilaian_id');
     }
-
 
 }

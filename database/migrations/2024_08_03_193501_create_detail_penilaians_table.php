@@ -16,6 +16,10 @@ return new class extends Migration
             $table->unsignedBigInteger('penilaian_id')->index('detail_penilaians_penilaian_id_foreign');
             $table->unsignedBigInteger('subkriteria_id')->index('detail_penilaians_subkriteria_id_foreign');
             $table->integer('nilai');
+            $table->unsignedBigInteger('detail_pesanan_id')->nullable();
+            $table->foreign('detail_pesanan_id')->references('id')->on('detail_pesanan')->onDelete('set null');
+
+
             $table->timestamps();
         });
     }

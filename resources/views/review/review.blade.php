@@ -36,6 +36,18 @@
     @endif
 </div>
 
+    @if(!empty($selectedGuideId))
+        <input type="hidden" name="guide_id" value="{{ $selectedGuideId }}">
+    @endif
+
+    @if (!empty($pesanan))
+        <input type="hidden" name="pesanan_id" value="{{ $pesanan->id }}">
+    @endif
+
+
+
+
+
 
 
 

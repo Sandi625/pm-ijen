@@ -13,6 +13,8 @@ class DetailPenilaian extends Model
         'penilaian_id',
         'subkriteria_id',
         'nilai',
+        'detail_pesanan_id', // tambahkan jika kamu menambahkan kolom ini
+
     ];
 
     // Relasi dengan `Penilaian`
@@ -26,6 +28,13 @@ class DetailPenilaian extends Model
     {
         return $this->belongsTo(Subkriteria::class);
     }
+
+     public function detailPesanan()
+    {
+        return $this->belongsTo(DetailPesanan::class, 'detail_pesanan_id');
+    }
+
+
 
 
 }
