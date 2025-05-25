@@ -12,7 +12,10 @@ class DetailPesanan extends Model
     protected $table = 'detail_pesanan';
 
     protected $fillable = [
-        'pesanan_id', 'kriteria_id', 'guide_id',
+        'pesanan_id',
+        'kriteria_id',
+        'guide_id',
+        'prioritas', // ✅ ditambahkan
     ];
 
     public function pesanan()
@@ -30,4 +33,5 @@ class DetailPesanan extends Model
         return $this->belongsTo(Guide::class, 'guide_id');
     }
 }
+
 

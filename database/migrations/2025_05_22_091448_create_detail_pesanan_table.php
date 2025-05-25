@@ -17,6 +17,8 @@ return new class extends Migration
         $table->foreignId('pesanan_id')->constrained('pesanans')->onDelete('cascade');
         $table->foreignId('kriteria_id')->constrained('kriterias')->onDelete('cascade');
         $table->foreignId('guide_id')->nullable()->constrained('guides')->onDelete('cascade');
+        $table->integer('prioritas')->nullable();
+
 
         $table->timestamps();
     });

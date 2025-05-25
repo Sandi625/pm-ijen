@@ -194,11 +194,15 @@ Route::get('/get-guides-by-kriteria/{kriteriaId}', [PesananController::class, 'g
 
 
 Route::get('/notif-guide', [NotifGuideController::class, 'guidesWithPesanan'])->name('notif.guide');
+Route::get('/guides-with-pesanan', [NotifGuideController::class, 'guidesWithPesanan'])->name('guidesWithPesanan');
+Route::get('/notif-guide/{id}', [NotifGuideController::class, 'show'])->name('guide.show');
+
+
 
 // Route::get('/guide/{id}/send-notif', [NotifGuideController::class, 'sendNotifToGuide'])->name('guide.sendNotif');
 // Route::post('/guide/{id}/send-notif', [GuideController::class, 'sendNotif'])->name('guide.sendNotif');
 // Route::post('/guide/{id}/send-notif', [NotifGuideController::class, 'sendNotifToGuide'])->name('guide.send-notif');
-Route::get('/guide/{id}/send-notif', [NotifGuideController::class, 'sendNotifToGuide'])->name('guide.sendNotif');
+Route::get('/guide/{id}/send-notif', [PilihGuideController::class, 'sendNotifToGuide'])->name('guide.sendNotif');
 
 // Route::get('/landing-reviews', [ReviewController::class, 'getActiveReviews'])->name('landing.reviews');
 

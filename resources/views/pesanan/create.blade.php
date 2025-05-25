@@ -108,27 +108,27 @@
             <form action="{{ route('pesanan.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
-               <!-- Nama -->
-<div class="mb-4">
-    <label class="block text-gray-700 font-bold mb-2" for="nama">Name</label>
-    <input type="text" name="nama" id="nama"
-        class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        value="{{ old('nama', Auth::user()->name ?? '') }}" required>
-    @error('nama')
-        <div class="text-red-600 text-sm mt-1">{{ $message }}</div>
-    @enderror
-</div>
+                <!-- Nama -->
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-bold mb-2" for="nama">Name</label>
+                    <input type="text" name="nama" id="nama"
+                        class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        value="{{ old('nama', Auth::user()->name ?? '') }}" required>
+                    @error('nama')
+                        <div class="text-red-600 text-sm mt-1">{{ $message }}</div>
+                    @enderror
+                </div>
 
-<!-- Email -->
-<div class="mb-4">
-    <label class="block text-gray-700 font-bold mb-2" for="email">Email</label>
-    <input type="email" name="email" id="email"
-        class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        value="{{ old('email', Auth::user()->email ?? '') }}" required>
-    @error('email')
-        <div class="text-red-600 text-sm mt-1">{{ $message }}</div>
-    @enderror
-</div>
+                <!-- Email -->
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-bold mb-2" for="email">Email</label>
+                    <input type="email" name="email" id="email"
+                        class="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        value="{{ old('email', Auth::user()->email ?? '') }}" required>
+                    @error('email')
+                        <div class="text-red-600 text-sm mt-1">{{ $message }}</div>
+                    @enderror
+                </div>
 
 
                 <!-- Nomor Telepon -->
@@ -143,19 +143,28 @@
                     @enderror
                 </div>
 
+          <p class="font-semibold mb-2">Select priority criteria for your guide:</p>
+
 <div id="criteria-wrapper">
-  <div class="criteria-item mb-3 flex gap-2 items-center">
-    <select name="id_kriteria[]" class="w-full border px-3 py-2 rounded-md">
-      <option value="">Select Criteria</option>
-      @foreach ($kriterias as $kriteria)
-        <option value="{{ $kriteria->id }}">{{ $kriteria->nama }}</option>
-      @endforeach
-    </select>
-    <button type="button" class="remove-criteria bg-red-500 text-white px-2 rounded-md">&minus;</button>
-  </div>
+    <div class="criteria-item mb-3">
+        <label class="priority-label block font-medium mb-1">Prioritas 1</label>
+        <div class="flex gap-2 items-center">
+            <select name="id_kriteria[]" class="w-full border px-3 py-2 rounded-md">
+                <option value="">Pilih Kriteria</option>
+                @foreach ($kriterias as $kriteria)
+                    <option value="{{ $kriteria->id }}">{{ $kriteria->nama }}</option>
+                @endforeach
+            </select>
+            <button type="button" class="remove-criteria bg-red-500 text-white px-2 rounded-md">&minus;</button>
+        </div>
+    </div>
 </div>
 
 <button type="button" id="add-criteria" class="mt-2 bg-blue-600 text-white px-4 py-2 rounded-md">+ Kriteria</button>
+
+
+
+
 
 
 
@@ -374,58 +383,84 @@
     </script>
 
 <script>
-function updateDisabledOptions() {
-  const allSelects = document.querySelectorAll('#criteria-wrapper select');
-  const selectedValues = Array.from(allSelects)
-    .map(select => select.value)
-    .filter(val => val !== "");
+    function updateDisabledOptions() {
+        const allSelects = document.querySelectorAll('#criteria-wrapper select');
+        const selectedValues = Array.from(allSelects)
+            .map(select => select.value)
+            .filter(val => val !== "");
 
-  allSelects.forEach(select => {
-    const currentValue = select.value;
-    Array.from(select.options).forEach(option => {
-      if (option.value === "" || option.value === currentValue) {
-        option.disabled = false;
-      } else {
-        option.disabled = selectedValues.includes(option.value);
-      }
+        allSelects.forEach(select => {
+            const currentValue = select.value;
+            Array.from(select.options).forEach(option => {
+                if (option.value === "" || option.value === currentValue) {
+                    option.disabled = false;
+                } else {
+                    option.disabled = selectedValues.includes(option.value);
+                }
+            });
+        });
+    }
+
+    function updatePriorityLabels() {
+        const items = document.querySelectorAll('#criteria-wrapper .criteria-item');
+        items.forEach((item, index) => {
+            const label = item.querySelector('.priority-label');
+            if (label) {
+                label.textContent = `Prioritas ${index + 1}`;
+            }
+        });
+    }
+
+    function removeHandler() {
+        const wrapper = document.getElementById('criteria-wrapper');
+        const items = wrapper.querySelectorAll('.criteria-item');
+        if (items.length > 1) {
+            this.closest('.criteria-item').remove();
+            updatePriorityLabels();
+            updateDisabledOptions();
+        }
+    }
+
+    document.getElementById('add-criteria').addEventListener('click', () => {
+        const wrapper = document.getElementById('criteria-wrapper');
+        const first = wrapper.querySelector('.criteria-item');
+        const clone = first.cloneNode(true);
+
+        // Reset value
+        const select = clone.querySelector('select');
+        select.value = "";
+        select.removeEventListener('change', updateDisabledOptions);
+        select.addEventListener('change', updateDisabledOptions);
+
+        // Reset dan pasang ulang event handler tombol hapus
+        const oldRemoveBtn = clone.querySelector('.remove-criteria');
+        const newRemoveBtn = oldRemoveBtn.cloneNode(true);
+        oldRemoveBtn.replaceWith(newRemoveBtn);
+        newRemoveBtn.addEventListener('click', removeHandler);
+
+        wrapper.appendChild(clone);
+        updatePriorityLabels();
+        updateDisabledOptions();
     });
-  });
-}
 
-// Event handler untuk tambah baris
-document.getElementById('add-criteria').addEventListener('click', () => {
-  const wrapper = document.getElementById('criteria-wrapper');
-  const first = wrapper.querySelector('.criteria-item');
-  const clone = first.cloneNode(true);
+    document.addEventListener('DOMContentLoaded', () => {
+        const initialRemoveBtn = document.querySelector('.remove-criteria');
+        if (initialRemoveBtn) {
+            initialRemoveBtn.addEventListener('click', removeHandler);
+        }
 
-  // reset select value
-  const select = clone.querySelector('select');
-  select.value = "";
-  clone.querySelector('.remove-criteria').addEventListener('click', removeHandler);
+        const initialSelect = document.querySelector('#criteria-wrapper select');
+        if (initialSelect) {
+            initialSelect.addEventListener('change', updateDisabledOptions);
+        }
 
-  // Tambahkan event onchange untuk validasi
-  select.addEventListener('change', updateDisabledOptions);
-
-  wrapper.appendChild(clone);
-  updateDisabledOptions();
-});
-
-// Handler tombol hapus
-function removeHandler() {
-  const wrapper = document.getElementById('criteria-wrapper');
-  if (wrapper.children.length > 1) {
-    this.closest('.criteria-item').remove();
-    updateDisabledOptions();
-  }
-}
-
-// Apply handler ke yang pertama
-document.querySelector('.remove-criteria').addEventListener('click', removeHandler);
-document.querySelector('#criteria-wrapper select').addEventListener('change', updateDisabledOptions);
-
-// Inisialisasi
-updateDisabledOptions();
+        updatePriorityLabels();
+        updateDisabledOptions();
+    });
 </script>
+
+
+
 
 
 

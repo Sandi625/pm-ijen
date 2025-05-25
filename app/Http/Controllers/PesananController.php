@@ -121,12 +121,14 @@ class PesananController extends Controller
         $pesanan = Pesanan::create($validated);
 
         // Simpan ke tabel detail_pesanans
-        foreach ($kriteriaList as $kriteria_id) {
+        foreach ($kriteriaList as $index => $kriteria_id) {
             DetailPesanan::create([
                 'pesanan_id' => $pesanan->id,
                 'kriteria_id' => $kriteria_id,
+                'prioritas' => $index + 1, // Urutan sebagai prioritas
             ]);
         }
+
 
         // Kirim email
         try {

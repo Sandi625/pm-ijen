@@ -215,7 +215,7 @@ public function edit(Penilaian $penilaian)
                 $kriteriaResult = $hasil['hasil']['detail'][$kriteria->id] ?? null;
                 if ($kriteriaResult) {
                     $hasilPerKriteria[$kriteria->id]['kandidat_results'][] = [
-                        'nama_guide' => $hasil['penilaian']->guide->nama_guide ?? 'Tidak Diketahui', // Ubah di sini
+                        'nama_guide' => $hasil['penilaian']->guide->nama_guide ?? 'Tidak Diketahui',
                         'nilai_cf' => $kriteriaResult['nilai_cf'],
                         'nilai_sf' => $kriteriaResult['nilai_sf'],
                         'nilai_total' => $kriteriaResult['nilai_total'],

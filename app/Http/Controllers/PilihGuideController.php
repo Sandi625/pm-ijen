@@ -5,10 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\Guide;
 use App\Models\Pesanan;
 
+use App\Models\Notifikasi;
 use App\Models\Subkriteria;
 use Illuminate\Http\Request;
 use App\Models\DetailPesanan;
+use Illuminate\Support\Carbon;
+use App\Jobs\KirimManualNotifGuide;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Http;
 use App\Services\ProfileMatchingService;
 use App\Traits\ProfileMatchingTrait; // Pastikan sudah pakai trait ini di controller!
 
@@ -69,19 +74,28 @@ $pesanans = Pesanan::with(['kriterias', 'detailPesanans.guide'])->get();
         return key($guideScores); // Ambil guide dengan nilai tertinggi
     }
 
-    public function edit($pesananId)
-    {
-        $pesanan = Pesanan::with('kriterias.subkriterias')->findOrFail($pesananId);
-        $kriteriaIds = $pesanan->kriterias->pluck('id');
+ public function edit($pesananId)
+{
+    $pesanan = Pesanan::with(['kriterias.subkriterias', 'detailPesanans.kriteria'])
+                      ->findOrFail($pesananId);
 
-        $subkriteriaIds = Subkriteria::whereIn('kriteria_id', $kriteriaIds)->pluck('id');
+    // Ambil detailPesanans yang punya prioritas, urutkan berdasarkan prioritas naik
+    $detailPesanans = $pesanan->detailPesanans->sortBy('prioritas');
 
-        $kriteriaPesanan = [];
-        foreach ($pesanan->kriterias as $kriteria) {
-            foreach ($kriteria->subkriterias as $sub) {
+    // Siapkan array kriteriaPesanan berdasarkan prioritas
+    $kriteriaPesanan = [];
+    foreach ($detailPesanans as $detail) {
+        if ($detail->kriteria && $detail->kriteria->subkriterias) {
+            foreach ($detail->kriteria->subkriterias as $sub) {
+                // Gunakan profil_standar dari subkriteria untuk bobot,
+                // bisa juga ditambahkan bobot prioritas jika perlu
                 $kriteriaPesanan[$sub->id] = $sub->profil_standar;
+            }
         }
     }
+
+    // Ambil semua subkriteria id yang termasuk di kriteria dengan prioritas
+    $subkriteriaIds = collect(array_keys($kriteriaPesanan));
 
     $rekomendasi = Guide::with('penilaians.detailPenilaians.subkriteria.kriteria')
         ->get()
@@ -111,11 +125,12 @@ $pesanans = Pesanan::with(['kriterias', 'detailPesanans.guide'])->get();
         ->sortByDesc('nilai_total')
         ->values();
 
-        return view('pilihguide.edit', [
+    return view('pilihguide.edit', [
         'pesanan' => $pesanan,
         'rekomendasi' => $rekomendasi,
     ]);
 }
+
 
 
 public function update(Request $request, $pesananId)
@@ -125,15 +140,31 @@ public function update(Request $request, $pesananId)
     ]);
 
     $pesanan = Pesanan::with('kriterias')->findOrFail($pesananId);
+    $tanggalKeberangkatanPesanan = $pesanan->tanggal_keberangkatan;
 
-    // Cek apakah guide sudah dipakai di tanggal yang sama untuk pesanan lain
-    $guideSudahDipakai = Pesanan::where('id_guide', $request->guide_id)
-        ->where('tanggal_keberangkatan', $pesanan->tanggal_keberangkatan)
-        ->where('id', '!=', $pesananId) // selain pesanan ini
+    // Cek apakah guide sudah dipakai di tanggal yang sama untuk pesanan lain (kecuali pesanan ini)
+    $guideSudahDipakaiTanggalSama = Pesanan::where('id_guide', $request->guide_id)
+        ->where('tanggal_keberangkatan', $tanggalKeberangkatanPesanan)
+        ->where('id', '!=', $pesananId)
         ->exists();
 
-    if ($guideSudahDipakai) {
-        return redirect()->back()->withErrors(['guide_id' => 'Guide sudah memiliki pesanan lain di tanggal ini.'])->withInput();
+    if ($guideSudahDipakaiTanggalSama) {
+        return redirect()->back()->withErrors(['guide_id' => 'Guide sudah memiliki pesanan lain di tanggal keberangkatan ini.'])->withInput();
+    }
+
+    // ✅ Tambahkan pengecekan jeda hari antar pesanan
+    $minGapDays = 1; // minimal jeda dalam hari
+
+    $guidePunyaPesananDekat = Pesanan::where('id_guide', $request->guide_id)
+        ->where('id', '!=', $pesananId)
+        ->whereBetween('tanggal_keberangkatan', [
+            Carbon::parse($tanggalKeberangkatanPesanan)->subDays($minGapDays),
+            Carbon::parse($tanggalKeberangkatanPesanan)->addDays($minGapDays)
+        ])
+        ->exists();
+
+    if ($guidePunyaPesananDekat) {
+        return redirect()->back()->withErrors(['guide_id' => "Guide sudah memiliki pesanan terlalu dekat dengan tanggal ini (±{$minGapDays} hari)."])->withInput();
     }
 
     // Update detail pesanan
@@ -152,8 +183,54 @@ public function update(Request $request, $pesananId)
     $pesanan->id_guide = $request->guide_id;
     $pesanan->save();
 
+    // Kirim notifikasi otomatis ke guide
+KirimManualNotifGuide::dispatch($request->guide_id)->delay(now()->addSeconds(5));
+
     return redirect()->route('pilihguide.index')->with('success', 'Pilihan guide berhasil diperbarui.');
 }
+
+
+public function sendNotifToGuide($id)
+{
+    sleep(5); // Delay selama 5 detik (tanpa queue)
+
+    $guide = Guide::findOrFail($id);
+    $phone = preg_replace('/^0/', '62', $guide->nomer_hp);
+
+    // Set locale untuk bahasa Indonesia
+    Carbon::setLocale('id');
+    $waktuIndonesia = Carbon::now()->translatedFormat('d F Y H:i'); // Contoh: 24 Mei 2025 08:34
+
+    // Isi pesan menggunakan waktu Indonesia
+    $isiPesan = "Haloo {$guide->nama_guide}, Anda terpilih untuk melakukan guiding pada {$waktuIndonesia} WIB.\nSilakan login untuk melihat detailnya:\nhttp://localhost:8000/login";
+
+    // Simpan ke database (tanggal_kirim tetap pakai now())
+    $notifikasi = Notifikasi::create([
+        'guide_id'     => $guide->id,
+        'isi'          => $isiPesan,
+        'tanggal_kirim'=> now(),
+        'status'       => 'notif pending masih di proses',
+    ]);
+
+    // Kirim pesan ke Fonnte API
+    $response = Http::withHeaders([
+        'Authorization' => 'HbHggEjszXST3WxTchcd'
+    ])->post('https://api.fonnte.com/send', [
+        'target'  => $phone,
+        'message' => $isiPesan,
+    ]);
+
+    // Update status berdasarkan hasil pengiriman
+    if ($response->successful()) {
+        $notifikasi->update(['status' => 'notif sudah terkirim']);
+    } else {
+        $notifikasi->update(['status' => 'notif belum terkirim']);
+    }
+
+    return;
+}
+
+
 
 
 

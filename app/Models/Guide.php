@@ -74,6 +74,13 @@ public function kriteriaUnggulan()
 //         return $this->belongsToMany(Kriteria::class,'guide_id', 'kriteria_id');
 //     }
 
+// app/Models/Guide.php
+public function notifikasis()
+{
+    return $this->hasMany(Notifikasi::class, 'guide_id');
+}
+
+
 
 
 

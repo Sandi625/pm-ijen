@@ -6,3 +6,9 @@ use Illuminate\Support\Facades\Artisan;
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote')->hourly();
+
+Artisan::command('queue:dev-start', function () {
+    $this->info('Starting queue...');
+    passthru('php artisan queue:work');
+});
+
