@@ -83,22 +83,25 @@ public function show(Penilaian $penilaian)
 
 public function showPenilaianGuide($guideId)
 {
-   $penilaian = Penilaian::with(['guide', 'pesanan.user']) // muat user juga
-                ->where('guide_id', $guideId)
-                ->first();
+    // Ambil semua penilaian guide, bisa lebih dari 1
+    $penilaians = Penilaian::with(['guide', 'pesanan.user'])
+                    ->where('guide_id', $guideId)
+                    ->get();
 
-
-    if (!$penilaian) {
+    if ($penilaians->isEmpty()) {
         return redirect()->route('penilaian.customerList')->with('error', 'Penilaian untuk guide ini tidak ditemukan.');
     }
 
-    $detailPelanggan = DetailPenilaian::with(['subkriteria.kriteria', 'penilaian.pesanan.user']) // ← muat user
-                        ->where('penilaian_id', $penilaian->id)
+    // Ambil semua detail penilaian pelanggan dengan sumber 'pelanggan' dan group by penilaian_id
+    $detailPelangganAll = DetailPenilaian::with(['subkriteria.kriteria', 'penilaian.pesanan.user'])
+                        ->whereIn('penilaian_id', $penilaians->pluck('id'))
                         ->where('sumber', 'pelanggan')
-                        ->get();
+                        ->get()
+                        ->groupBy('penilaian_id');
 
-    return view('penilaiancustomer.show', compact('penilaian', 'detailPelanggan'));
+    return view('penilaiancustomer.show', compact('penilaians', 'detailPelangganAll'));
 }
+
 
 
 

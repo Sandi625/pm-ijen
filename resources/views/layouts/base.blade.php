@@ -203,7 +203,7 @@
               <li class="nav-item">
                 <a class="nav-link" href="{{ route('notif.guide') }}">
                     <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Kirim Notif Guide </span>
+                    <span>Info Notif</span>
                 </a>
             </li>
 

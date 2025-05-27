@@ -74,7 +74,7 @@ use Carbon\Carbon;
 
                         <td class="text-center">
                             <div class="btn-group">
-                                <a href="{{ route('guide.show', $guide->id) }}" class="btn btn-info btn-sm">
+                                <a href="{{ route('guide.detail', $guide->id) }}" class="btn btn-info btn-sm">
                                     <i class="fa-solid fa-eye"></i> Detail
                                 </a>
                             </div>

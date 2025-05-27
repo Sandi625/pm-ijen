@@ -197,7 +197,7 @@ Route::get('/get-guides-by-kriteria/{kriteriaId}', [PesananController::class, 'g
 
 Route::get('/notif-guide', [NotifGuideController::class, 'guidesWithPesanan'])->name('notif.guide');
 Route::get('/guides-with-pesanan', [NotifGuideController::class, 'guidesWithPesanan'])->name('guidesWithPesanan');
-Route::get('/notif-guide/{id}', [NotifGuideController::class, 'show'])->name('guide.show');
+Route::get('/notif-guide/{id}', [NotifGuideController::class, 'show'])->name('guide.detail');
 
 
 
@@ -221,6 +221,7 @@ Route::post('/pilihguide/{pesanan}', [PilihGuideController::class, 'store'])->na
 Route::get('/pilihguide/{pesanan}/edit', [PilihGuideController::class, 'edit'])->name('pilihguide.edit');
 Route::put('/pilihguide/{pesanan}', [PilihGuideController::class, 'update'])->name('pilihguide.update');
 
+Route::get('/chart/penilaian-guide', [DashboardController::class, 'chartPenilaianGuide'])->name('chart.penilaian.guide');
 
 
 

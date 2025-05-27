@@ -220,6 +220,8 @@
 </div>
 
 
+
+
 <style>.card-body {
     max-height: 350px; /* Menyesuaikan tinggi maksimal */
     overflow-y: auto;  /* Menambahkan scroll jika konten lebih panjang */
@@ -290,5 +292,79 @@ ul.list-unstyled {
             });
         });
 </script>
+
+<canvas id="penilaianGuideChart"></canvas>
+
+<div class="col-xl-12 col-lg-12">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Rata-Rata Penilaian Guide (Dari Pelanggan)</h6>
+        </div>
+        <div class="card-body">
+            <canvas id="guideRatingChart"></canvas>
+
+            <!-- Tombol tambahan -->
+            <div class="mt-4">
+                <a href="{{ route('penilaian.customerList') }}"
+                   style="display:inline-block; background-color:#2563eb; color:white; font-weight:600; padding:8px 16px; border-radius:6px; text-decoration:none;">
+                    Lihat Semua Penilaian Customer
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctxGuide = document.getElementById("guideRatingChart").getContext("2d");
+
+    fetch("{{ route('chart.penilaian.guide') }}")
+        .then(res => res.json())
+        .then(({ labels, data, ids }) => {
+            const guideChart = new Chart(ctxGuide, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Rata-Rata Penilaian',
+                        data: data,
+                        backgroundColor: 'rgba(54, 185, 204, 0.5)',
+                        borderColor: 'rgba(54, 185, 204, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Skor (1 - 5)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Nama Guide'
+                            }
+                        }
+                    },
+                    onClick: (evt, elements) => {
+                        if (elements.length > 0) {
+                            const clickedIndex = elements[0].index;
+                            const guideId = ids[clickedIndex];
+                            window.location.href = `{{ url('penilaian/customer') }}/${guideId}`;
+                        }
+                    }
+                }
+            });
+        });
+</script>
+
+
+
+
+
 
 @endsection

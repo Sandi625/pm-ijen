@@ -67,4 +67,29 @@ class DashboardController extends Controller
     ]);
 }
 
+public function chartPenilaianGuide()
+{
+    $guides = Guide::with('penilaians.detailPenilaians')->get();
+
+    $data = collect(); // ini untuk menyimpan hasil akhir
+
+    foreach ($guides as $guide) {
+        $nilai = $guide->penilaians->flatMap->detailPenilaians
+            ->where('sumber', 'pelanggan')
+            ->pluck('nilai');
+
+        $data->push([
+            'guide' => $guide->nama_guide,
+            'rata_rata' => round($nilai->avg() ?? 0, 2)
+        ]);
+    }
+
+    return response()->json([
+        'labels' => $data->pluck('guide'),
+        'data' => $data->pluck('rata_rata'),
+    ]);
+}
+
+
+
 }
