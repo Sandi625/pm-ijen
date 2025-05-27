@@ -46,6 +46,8 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::resource('subkriteria', SubKriteriaController::class);
 
     // Penilaian
+    Route::get('/penilaian/customer', [PenilaianController::class, 'daftarGuide'])->name('penilaian.customerList');
+Route::get('/penilaian/customer/{guideId}', [PenilaianController::class, 'showPenilaianGuide'])->name('penilaian.customerShow');
     Route::get('/penilaian/all', [PenilaianController::class, 'all'])->name('penilaian.all');
     Route::resource('penilaian', PenilaianController::class);
 
@@ -218,6 +220,14 @@ Route::post('/pilihguide/{pesanan}', [PilihGuideController::class, 'store'])->na
 
 Route::get('/pilihguide/{pesanan}/edit', [PilihGuideController::class, 'edit'])->name('pilihguide.edit');
 Route::put('/pilihguide/{pesanan}', [PilihGuideController::class, 'update'])->name('pilihguide.update');
+
+
+
+
+
+
+
+
 
 
 

@@ -6,7 +6,10 @@ use App\Models\Guide;
 use App\Models\Review;
 use App\Models\Pesanan;
 use App\Models\Penilaian;
+use App\Models\Subkriteria;
 use Illuminate\Http\Request;
+use App\Models\DetailPesanan;
+use App\Models\DetailPenilaian;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -115,29 +118,32 @@ public function store(Request $request)
 
     DB::transaction(function () use ($validated, $request) {
         $review = new Review($validated);
+
         if ($request->hasFile('photo')) {
             $review->photo = $request->file('photo')->store('photos', 'public');
         } else {
             $review->photo = 'images/default-avatar.jpg';
         }
+
         $review->save();
 
-        $detailPesanans = \App\Models\DetailPesanan::where('pesanan_id', $review->pesanan_id)->get();
+        // Ambil detail pesanan terkait pesanan_id di review
+        $detailPesanans = DetailPesanan::where('pesanan_id', $review->pesanan_id)->get();
 
-        // Skala nilai prioritas untuk Core Factor dan Secondary Factor
+        // Nilai prioritas core factor dan secondary factor jika rating tertinggi (5)
         $nilaiByPrioritasCore = [
-            1 => 5,  // prioritas 1 untuk Core Factor dapat nilai 5
-            2 => 3,  // prioritas 2 untuk Core Factor dapat nilai 3
-            3 => 1,  // prioritas 3 untuk Core Factor dapat nilai 1
+            1 => 5,
+            2 => 3,
+            3 => 1,
         ];
 
         $nilaiByPrioritasSecondary = [
-            1 => 3,  // prioritas 1 untuk Secondary Factor dapat nilai 3 (lebih kecil dari Core)
-            2 => 2,  // prioritas 2 untuk Secondary Factor dapat nilai 2
-            3 => 1,  // prioritas 3 untuk Secondary Factor dapat nilai 1
+            1 => 3,
+            2 => 2,
+            3 => 1,
         ];
 
-        // Urutkan nilai kriteria sesuai rating review dan tetapkan prioritas
+        // Tetapkan prioritas berdasar rating yang sama untuk semua kriteria
         $nilaiKriteria = [];
         foreach ($detailPesanans as $detail) {
             $nilaiKriteria[$detail->kriteria_id] = $review->rating;
@@ -146,35 +152,39 @@ public function store(Request $request)
 
         $prioritas = 1;
         foreach ($nilaiKriteria as $kriteria_id => $nilai) {
-            \App\Models\DetailPesanan::where('pesanan_id', $review->pesanan_id)
+            DetailPesanan::where('pesanan_id', $review->pesanan_id)
                 ->where('kriteria_id', $kriteria_id)
                 ->update(['prioritas' => $prioritas]);
             $prioritas++;
         }
 
-        $penilaian = \App\Models\Penilaian::firstOrCreate([
+        // Buat atau ambil penilaian
+        $penilaian = Penilaian::firstOrCreate([
             'guide_id' => $review->guide_id,
+            'id_pesanan' => $review->pesanan_id,
         ]);
 
-        // Simpan detail penilaian dengan penyesuaian nilai sesuai jenis faktor dan prioritas
         foreach ($detailPesanans as $detail) {
             $prioritas = $detail->prioritas;
 
-            $subkriterias = \App\Models\Subkriteria::where('kriteria_id', $detail->kriteria_id)->get();
+            $subkriterias = Subkriteria::where('kriteria_id', $detail->kriteria_id)->get();
 
             foreach ($subkriterias as $subkriteria) {
-                // Pilih nilai sesuai jenis faktor dan prioritas
-                if ($subkriteria->jenis_faktor === 'Core Factor') {
-                    $nilaiSub = $nilaiByPrioritasCore[$prioritas] ?? $review->rating;
-                } else {
-                    $nilaiSub = $nilaiByPrioritasSecondary[$prioritas] ?? $review->rating;
-                }
+                // Ambil nilai dasar dari prioritas, default rating user jika tidak ada mapping
+                $nilaiDasar = ($subkriteria->jenis_faktor === 'Core Factor')
+                    ? ($nilaiByPrioritasCore[$prioritas] ?? $review->rating)
+                    : ($nilaiByPrioritasSecondary[$prioritas] ?? $review->rating);
 
-                \App\Models\DetailPenilaian::create([
+                // Skala nilai supaya mengikuti rating user:
+                // Jika rating user < nilaiDasar, turunkan nilaiDasar ke rating user tapi minimal 1
+                $nilaiSub = min($nilaiDasar, max(1, $review->rating));
+
+                DetailPenilaian::create([
                     'penilaian_id' => $penilaian->id,
                     'subkriteria_id' => $subkriteria->id,
                     'nilai' => $nilaiSub,
                     'detail_pesanan_id' => $detail->id,
+                    'sumber' => 'pelanggan',
                 ]);
             }
         }
@@ -182,6 +192,11 @@ public function store(Request $request)
 
     return redirect()->route('review.review')->with('success', 'Review has been created and linked to penilaian.');
 }
+
+
+
+
+
 
 
 

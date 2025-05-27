@@ -9,7 +9,8 @@ class Penilaian extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['guide_id']; // Pastikan ada guide_id
+protected $fillable = ['guide_id', 'id_pesanan'];
+
 
     // Relasi dengan `DetailPenilaian`
     public function detailPenilaians()
@@ -26,5 +27,32 @@ class Penilaian extends Model
     {
         return $this->hasMany(DetailPenilaian::class, 'penilaian_id');
     }
+
+
+    // Penilaian.php
+public function detailPelanggan()
+{
+    return $this->hasMany(DetailPenilaian::class)->where('sumber', 'pelanggan');
+}
+
+public function detailAdmin()
+{
+    return $this->hasMany(DetailPenilaian::class)->where('sumber', 'admin');
+}
+
+public function pesanan()
+{
+    return $this->belongsTo(Pesanan::class, 'id_pesanan'); // sesuaikan jika nama foreign key berbeda
+}
+
+
+
+
+
+
+
+
+
+
 
 }

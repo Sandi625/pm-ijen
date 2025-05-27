@@ -14,6 +14,7 @@ class DetailPenilaian extends Model
         'subkriteria_id',
         'nilai',
         'detail_pesanan_id', // tambahkan jika kamu menambahkan kolom ini
+        'sumber',
 
     ];
 

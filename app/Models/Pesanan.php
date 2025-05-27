@@ -60,6 +60,23 @@ public function reviews()
     return $this->hasMany(Review::class, 'pesanan_id');
 }
 
+// di Penilaian.php
+// public function pesanan()
+// {
+//     return $this->belongsTo(Pesanan::class, 'id_pesanan');
+// }
+
+// di Pesanan.php (misal)
+public function penilaians()
+{
+    return $this->hasMany(Penilaian::class, 'id_pesanan');
+}
+
+
+
+
+
+
 
 
 

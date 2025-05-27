@@ -38,6 +38,30 @@ class DetailPesanan extends Model
     return $this->hasMany(DetailPenilaian::class, 'detail_pesanan_id');
 }
 
+// DetailPenilaian.php
+public function scopeFromAdmin($query)
+{
+    return $query->where('sumber', 'admin');
+}
+
+public function scopeFromCustomer($query)
+{
+    return $query->where('sumber', 'pelanggan');
+}
+
+public function subkriteria()
+{
+    return $this->belongsTo(Subkriteria::class, 'subkriteria_id');
+}
+
+public function penilaian()
+{
+    return $this->belongsTo(Penilaian::class, 'id_penilaian'); // sesuaikan
+}
+
+
+
+
 
 
 }

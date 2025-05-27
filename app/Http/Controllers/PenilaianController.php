@@ -7,6 +7,7 @@ use App\Models\Guide;
 use App\Models\Kriteria;
 use App\Models\Penilaian;
 use Illuminate\Http\Request;
+use App\Models\DetailPenilaian;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Collection;
@@ -62,16 +63,54 @@ public function store(Request $request)
 
 
 
-
 public function show(Penilaian $penilaian)
 {
-    $penilaian->load(['guide', 'detailPenilaians.subkriteria.kriteria']);
+    $penilaian->load([
+        'guide',
+        'detailPenilaians' => function($query) {
+            $query->where('sumber', 'admin');
+        },
+        'detailPenilaians.subkriteria.kriteria'
+    ]);
+
     $hasil = $this->hitungProfileMatching($penilaian);
 
-    $kriteriaUnggulan = $this->tentukanKriteriaUnggulanshow($hasil); // tanpa perlu $kriterias
+    $kriteriaUnggulan = $this->tentukanKriteriaUnggulanshow($hasil);
 
     return view('penilaian.show', compact('penilaian', 'hasil', 'kriteriaUnggulan'));
 }
+
+
+public function showPenilaianGuide($guideId)
+{
+   $penilaian = Penilaian::with(['guide', 'pesanan.user']) // muat user juga
+                ->where('guide_id', $guideId)
+                ->first();
+
+
+    if (!$penilaian) {
+        return redirect()->route('penilaian.customerList')->with('error', 'Penilaian untuk guide ini tidak ditemukan.');
+    }
+
+    $detailPelanggan = DetailPenilaian::with(['subkriteria.kriteria', 'penilaian.pesanan.user']) // ← muat user
+                        ->where('penilaian_id', $penilaian->id)
+                        ->where('sumber', 'pelanggan')
+                        ->get();
+
+    return view('penilaiancustomer.show', compact('penilaian', 'detailPelanggan'));
+}
+
+
+
+
+
+
+public function daftarGuide()
+{
+    $guides = \App\Models\Guide::all(); // Ambil semua guide dari database
+    return view('penilaiancustomer.daftar', compact('guides'));
+}
+
 
 
 

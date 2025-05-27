@@ -18,6 +18,8 @@ return new class extends Migration
             $table->integer('nilai');
             $table->unsignedBigInteger('detail_pesanan_id')->nullable();
             $table->foreign('detail_pesanan_id')->references('id')->on('detail_pesanan')->onDelete('set null');
+            $table->string('sumber')->default('admin'); // atau bisa pakai boolean 'is_from_customer'
+
 
 
             $table->timestamps();

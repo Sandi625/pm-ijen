@@ -1,6 +1,10 @@
 <?php
 
+use App\Http\Middleware\IsAdmin;
 use Illuminate\Foundation\Application;
+use App\Http\Middleware\CheckPelanggan;
+use App\Http\Middleware\IsGuideOrAdmin;
+use App\Console\Commands\SendNotifGuide;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 
@@ -22,6 +26,10 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
     })
-    ->withExceptions(function (Exceptions $exceptions) {
+     ->withExceptions(function (Exceptions $exceptions) {
         //
-    })->create();
+    })
+    ->withCommands([
+        SendNotifGuide::class,  // <-- Daftarkan command di sini
+    ])
+    ->create();
