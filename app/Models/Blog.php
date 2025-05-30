@@ -9,9 +9,9 @@ class Blog extends Model
 {
     use HasFactory;
 
-    protected $table = 'blogs'; // Nama tabel
+    protected $table = 'blogs';
 
-    protected $primaryKey = 'id'; // Primary Key
+    protected $primaryKey = 'id';
 
     protected $fillable = [
         'title',
@@ -23,10 +23,12 @@ class Blog extends Model
         'updated_by',
     ];
 
-    // Jika tidak mau pakai timestamps (created_at, updated_at)
-    // public $timestamps = false;
+    // ⬇️ Tambahkan ini:
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
 
-    // Relasi ke User (opsional kalau nanti ada user)
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');
@@ -37,3 +39,4 @@ class Blog extends Model
         return $this->belongsTo(User::class, 'updated_by');
     }
 }
+

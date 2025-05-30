@@ -100,7 +100,7 @@
                                     <div class="blog-card-title">{{ $blog->title }}</div>
                                     <div class="blog-card-text">{{ Str::limit(strip_tags($blog->content), 100) }}</div>
 
-                                    <a href="{{ route('blogs.show', $blog->id) }}" class="btn btn-primary mt-3">Read More</a>
+<a href="{{ route('blogs.show', $blog) }}" class="btn btn-primary mt-3">Read More</a>
                                 </div>
 
                                 <div class="text-muted text-center py-2" style="font-size: 0.85rem;">

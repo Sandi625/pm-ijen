@@ -24,6 +24,11 @@ class BlogController extends Controller
     {
         return view('blogs.show', compact('blog'));
     }
+    public function getRouteKeyName()
+{
+    return 'slug';
+}
+
 
 
     /**
