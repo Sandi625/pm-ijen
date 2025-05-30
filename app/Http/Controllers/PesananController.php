@@ -27,22 +27,23 @@ use App\Traits\ProfileMatchingTrait; // Pastikan sudah pakai trait ini di contro
 
 class PesananController extends Controller
 {
-    public function index(Request $request)
-    {
-        $query = Pesanan::with(['detailPesanans.kriteria', 'paket', 'guide']);
+  public function index(Request $request)
+{
+    $query = Pesanan::with(['detailPesanans.kriteria', 'paket', 'guide']);
 
-        if ($request->filled('q')) {
-            $search = $request->q;
-            $query->where(function ($q) use ($search) {
-                $q->where('order_id', 'like', '%' . $search . '%')
-                    ->orWhere('nama', 'like', '%' . $search . '%');
-            });
-        }
-
-        $pesanans = $query->orderBy('created_at', 'desc')->get();
-
-        return view('pesanan.index', compact('pesanans'));
+    if ($request->filled('q')) {
+        $search = $request->q;
+        $query->where(function ($q) use ($search) {
+            $q->where('order_id', 'like', '%' . $search . '%')
+              ->orWhere('nama', 'like', '%' . $search . '%');
+        });
     }
+
+    $pesanans = $query->orderBy('created_at', 'desc')->paginate(5); // Ganti get() menjadi paginate()
+
+    return view('pesanan.index', compact('pesanans'));
+}
+
 
 
 

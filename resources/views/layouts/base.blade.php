@@ -157,62 +157,68 @@
             <!-- Nav Item - Charts -->
             <li class="nav-item">
                 <a class="nav-link" href="{{ url('/guide') }}">
-                    <i class="fas fa-fw fa-chart-area"></i>
+                    <i class="fas fa-fw fa-user-tie"></i> <!-- icon guide (orang berdasi) -->
                     <span>Guide</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ url('/paket') }}">
-                    <i class="fas fa-fw fa-chart-area"></i>
+                    <i class="fas fa-fw fa-suitcase-rolling"></i> <!-- icon koper/paket -->
                     <span>Paket Wisata</span>
                 </a>
             </li>
 
-
-
             <!-- Nav Item - Tables -->
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('pesanan.index') }}">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Pesanan</span></a>
+                    <i class="fas fa-fw fa-clipboard-list"></i> <!-- icon daftar pesanan -->
+                    <span>Pesanan</span>
+                </a>
             </li>
 
-              <!-- Nav Item - Tables -->
-              <li class="nav-item">
+            <!-- Nav Item - Gallery -->
+            <li class="nav-item">
                 <a class="nav-link" href="{{ route('galeris.index') }}">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Gallery</span></a>
+                    <i class="fas fa-fw fa-image"></i> <!-- icon gallery/image -->
+                    <span>Gallery</span>
+                </a>
             </li>
 
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('blogs.index') }}">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Blog</span></a>
+                    <i class="fas fa-fw fa-blog"></i> <!-- icon blog -->
+                    <span>Blog</span>
+                </a>
             </li>
+
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('review.all') }}">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Reviews</span></a>
+                    <i class="fas fa-fw fa-star"></i> <!-- icon review bintang -->
+                    <span>Reviews</span>
+                </a>
             </li>
+
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('users.index') }}">
-                    <i class="fas fa-fw fa-chart-area"></i>
+                    <i class="fas fa-fw fa-users-cog"></i> <!-- icon manajemen user -->
                     <span>Manejemen User</span>
                 </a>
             </li>
-              <li class="nav-item">
+
+            <li class="nav-item">
                 <a class="nav-link" href="{{ route('notif.guide') }}">
-                    <i class="fas fa-fw fa-chart-area"></i>
+                    <i class="fas fa-fw fa-bell"></i> <!-- icon notifikasi -->
                     <span>Info Notif</span>
                 </a>
             </li>
 
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('pilihguide.index') }}">
-                    <i class="fas fa-fw fa-chart-area"></i>
+                    <i class="fas fa-fw fa-user-check"></i> <!-- icon pilih guide -->
                     <span>Pilih Guide</span>
                 </a>
             </li>
+
 
 
 
