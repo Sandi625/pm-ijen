@@ -22,12 +22,18 @@ class PenilaianController extends Controller
         $this->profileMatchingService = $profileMatchingService;
     }
 
-    public function index()
-    {
-        $penilaians = Penilaian::with('guide')->get(); // Pastikan relasi di-load
-        return view('penilaian.index', compact('penilaians'));
-    }
+  public function index()
+{
+    $penilaians = Penilaian::with(['guide', 'detail_penilaians' => function ($query) {
+        $query->where('sumber', 'admin');
+    }])
+    ->whereHas('detail_penilaians', function ($query) {
+        $query->where('sumber', 'admin');
+    })
+    ->get();
 
+    return view('penilaian.index', compact('penilaians'));
+}
 
 
     public function create()

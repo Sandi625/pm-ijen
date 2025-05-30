@@ -23,7 +23,10 @@ class SendNotifGuideJob implements ShouldQueue
 
         Carbon::setLocale('id');
         $waktu = Carbon::now()->translatedFormat('d F Y H:i');
-        $pesan = "Haloo {$guide->nama_guide}, Anda terpilih untuk guiding pada {$waktu} WIB.\nSilakan login:\nhttp://localhost:8000/login";
+        $pesan = "Haloo {$guide->nama_guide}, Anda telah terpilih menjadi guide pada tanggal {$waktu} WIB. Silakan login untuk melihat detail pelanggan dan jadwal guiding:\nhttp://localhost:8000/login\n\nTerima kasih 🙏";
+
+
+
 
         $notifikasi = Notifikasi::create([
             'guide_id' => $guide->id,

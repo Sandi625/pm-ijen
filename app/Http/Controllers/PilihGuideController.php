@@ -188,6 +188,7 @@ public function update(Request $request, $pesananId)
 }
 
 
+}
 
 
 
@@ -226,7 +227,6 @@ public function update(Request $request, $pesananId)
 // }
 
 
-}
 //  public function create($pesananId)
 // {
 //     $pesanan = Pesanan::with('kriterias.subkriterias')->findOrFail($pesananId);

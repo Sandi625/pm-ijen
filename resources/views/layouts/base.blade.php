@@ -78,9 +78,9 @@
                         <h6 class="collapse-header">Perhitungan</h6>
                         <a class="collapse-item" href="{{ url('/kriteria') }}">Kriteria</a>
                         <a class="collapse-item" href="{{ url('/subkriteria') }}">Sub Kriteria</a>
-                        <a class="collapse-item" href=" {{ url('/penilaian') }}">Penilaian</a>
-                        <a class="collapse-item" href=" {{ url('/penilaian/all') }}">Hasil Penilaian</a>
+                        <a class="collapse-item" href=" {{ url('/penilaian') }}">Penilaian Admin</a>
                         <a class="collapse-item" href="{{ url('/penilaian/customer') }}">Penilaian dari customer</a>
+                        <a class="collapse-item" href=" {{ url('/penilaian/all') }}">Hasil Penilaian Semua</a>
 
 
 
