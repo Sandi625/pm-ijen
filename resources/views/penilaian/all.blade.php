@@ -193,31 +193,85 @@
         </div>
     @endforeach
 
-    <h2 class="text-xl font-bold mb-4">Ranking Guide Keseluruhan</h2>
-    <div class="overflow-x-auto">
-        <table class="w-full border-collapse border border-gray-300">
-            <thead>
-                <tr class="bg-gray-100">
-                    <th class="border border-gray-300 px-4 py-2">Ranking</th>
-                    <th class="border border-gray-300 px-4 py-2">Nama Guide</th>
-                    <th class="border border-gray-300 px-4 py-2">Nilai Akhir</th>
-                    <th class="border border-gray-300 px-4 py-2">Unggul di Kriteria</th>
+   {{-- <h2 class="text-xl font-bold mb-4">Ranking Guide Berdasarkan Nilai Admin</h2>
+<div class="overflow-x-auto mb-8">
+    <table class="w-full border-collapse border border-gray-300">
+        <thead>
+            <tr class="bg-gray-100">
+                <th class="border border-gray-300 px-4 py-2">Ranking</th>
+                <th class="border border-gray-300 px-4 py-2">Nama Guide</th>
+                <th class="border border-gray-300 px-4 py-2">Nilai Akhir</th>
+                <th class="border border-gray-300 px-4 py-2">Unggul di Kriteria</th>
+            </tr>
+        </thead>
+        <tbody class="text-center">
+            @foreach($rankingAdmin as $index => $item)
+                <tr>
+                    <td class="border border-gray-300 px-4 py-2">{{ $index + 1 }}</td>
+                    <td class="border border-gray-300 px-4 py-2">{{ $item['penilaian']->guide->nama_guide ?? '-' }}</td>
+                    <td class="border border-gray-300 px-4 py-2">{{ number_format($item['hasil']['nilai_akhir'] ?? 0, 2) }}</td>
+                    <td class="border border-gray-300 px-4 py-2 text-blue-700 font-semibold">
+                        {{ $item['kriteria_unggulan'] ?? '-' }}
+                    </td>
                 </tr>
-            </thead>
-            <tbody class="text-center">
-                @foreach($rankingKandidat as $index => $item)
-                    <tr>
-                        <td class="border border-gray-300 px-4 py-2">{{ $index + 1 }}</td>
-                        <td class="border border-gray-300 px-4 py-2">{{ $item['penilaian']->guide->nama_guide ?? '-' }}</td>
-                        <td class="border border-gray-300 px-4 py-2">{{ number_format($item['hasil']['nilai_akhir'], 2) }}</td>
-                        <td class="border border-gray-300 px-4 py-2 text-blue-700 font-semibold">
-                            {{ $item['kriteria_unggulan'] ?? '-' }}
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
+            @endforeach
+        </tbody>
+    </table>
+</div> --}}
+
+<h2 class="text-xl font-bold mb-4">Ranking Guide Dari Admin</h2>
+<div class="overflow-x-auto mb-8">
+    <table class="w-full border-collapse border border-gray-300">
+        <thead>
+            <tr class="bg-gray-100">
+                <th class="border border-gray-300 px-4 py-2">Ranking</th>
+                <th class="border border-gray-300 px-4 py-2">Nama Guide</th>
+                <th class="border border-gray-300 px-4 py-2">Nilai Akhir</th>
+                <th class="border border-gray-300 px-4 py-2">Unggul di Kriteria</th>
+            </tr>
+        </thead>
+        <tbody class="text-center">
+            @foreach($rankingAdmin as $index => $item)
+                <tr>
+                    <td class="border border-gray-300 px-4 py-2">{{ $index + 1 }}</td>
+                    <td class="border border-gray-300 px-4 py-2">{{ $item['penilaian']->guide->nama_guide ?? '-' }}</td>
+                    <td class="border border-gray-300 px-4 py-2">{{ number_format($item['hasil']['nilai_akhir'], 2) }}</td>
+                    <td class="border border-gray-300 px-4 py-2 text-blue-700 font-semibold">
+                        {{ $item['kriteria_unggulan'] ?? '-' }}
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+
+<h2 class="text-xl font-bold mb-4">Ranking Guide Dari Pelanggan</h2>
+<div class="overflow-x-auto">
+    <table class="w-full border-collapse border border-gray-300">
+        <thead>
+            <tr class="bg-gray-100">
+                <th class="border border-gray-300 px-4 py-2">Ranking</th>
+                <th class="border border-gray-300 px-4 py-2">Nama Guide</th>
+                <th class="border border-gray-300 px-4 py-2">Nilai Akhir</th>
+                <th class="border border-gray-300 px-4 py-2">Unggul di Kriteria</th>
+            </tr>
+        </thead>
+        <tbody class="text-center">
+            @foreach($rankingPelanggan as $index => $item)
+                <tr>
+                    <td class="border border-gray-300 px-4 py-2">{{ $index + 1 }}</td>
+                    <td class="border border-gray-300 px-4 py-2">{{ $item['penilaian']->guide->nama_guide ?? '-' }}</td>
+                    <td class="border border-gray-300 px-4 py-2">{{ number_format($item['hasil']['nilai_akhir'], 2) }}</td>
+                    <td class="border border-gray-300 px-4 py-2 text-blue-700 font-semibold">
+                        {{ $item['kriteria_unggulan'] ?? '-' }}
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+
+
 
 
 </div>

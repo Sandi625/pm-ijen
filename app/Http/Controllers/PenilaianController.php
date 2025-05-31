@@ -45,27 +45,30 @@ class PenilaianController extends Controller
 
 public function store(Request $request)
 {
-    // dd($request->all()); // Debugging, cek apakah guide_id terkirim
-
+    // Validasi inputan
     $request->validate([
         'guide_id' => 'required|exists:guides,id',
         'nilai' => 'required|array',
         'nilai.*' => 'required|integer|min:1|max:5',
     ]);
 
+    // Buat penilaian baru
     $penilaian = Penilaian::create([
         'guide_id' => $request->guide_id,
     ]);
 
+    // Simpan detail penilaian dengan sumber 'admin'
     foreach ($request->nilai as $subkriteriaId => $nilai) {
         $penilaian->detailPenilaians()->create([
             'subkriteria_id' => $subkriteriaId,
             'nilai' => $nilai,
+            'sumber' => 'admin', // tanda sumber dari admin
         ]);
     }
 
     return redirect()->route('penilaian.index')->with('success', 'Penilaian berhasil ditambahkan.');
 }
+
 
 
 
@@ -221,34 +224,54 @@ public function edit(Penilaian $penilaian)
         return redirect()->route('penilaian.index')->with('success', 'Penilaian berhasil dihapus.');
     }
 
-    public function all()
+public function all()
 {
-    $penilaians = Penilaian::with(['detailPenilaians.subkriteria.kriteria', 'guide'])->get(); // Tambah guide
+    // Ambil semua penilaian dengan relasi terkait
+    $penilaians = Penilaian::with(['detailPenilaians.subkriteria.kriteria', 'guide', 'pesanan.user'])->get();
+
     $kriterias = Kriteria::with('subkriterias')->get();
 
-    $hasilPenilaians = $penilaians->map(function ($penilaian) use ($kriterias) {
+    // Filter penilaian yang punya detail
+    $penilaiansValid = $penilaians->filter(fn($p) => $p->detailPenilaians && $p->detailPenilaians->count() > 0);
+
+    // Hitung profile matching untuk penilaian valid
+    $hasilPenilaians = $penilaiansValid->map(function ($penilaian) use ($kriterias) {
         $hasil = $this->hitungProfileMatching($penilaian);
         return [
             'penilaian' => $penilaian,
             'hasil' => $hasil,
-            'kriteria_unggulan' => $this->tentukanKriteriaUnggulan([
-                'penilaian' => $penilaian,
-                'hasil' => $hasil,
-            ], $kriterias)
+            'kriteria_unggulan' => $this->tentukanKriteriaUnggulan(['penilaian' => $penilaian, 'hasil' => $hasil], $kriterias)
         ];
     });
 
-
     $hasilPerKriteria = $this->groupHasilByKriteria($hasilPenilaians, $kriterias);
 
-    $rankingKandidat = $hasilPenilaians->sortByDesc(function ($item) {
-        return $item['hasil']['nilai_akhir'];
-    })->values();
+    // Pisahkan ranking berdasarkan sumber admin dan pelanggan
+    // 1. Data penilaian dari admin
+    $rankingAdmin = $hasilPenilaians->filter(function ($item) {
+        // Pastikan di detailPenilaians ada setidaknya 1 sumber admin
+        return $item['penilaian']->detailPenilaians->where('sumber', 'admin')->count() > 0;
+    })->sortByDesc(fn($item) => $item['hasil']['nilai_akhir'] ?? 0)->values();
 
+    // 2. Data penilaian dari pelanggan
+    $rankingPelanggan = $hasilPenilaians->filter(function ($item) {
+        return $item['penilaian']->detailPenilaians->where('sumber', 'pelanggan')->count() > 0;
+    })->sortByDesc(fn($item) => $item['hasil']['nilai_akhir'] ?? 0)->values();
 
-
-    return view('penilaian.all', compact('hasilPerKriteria', 'rankingKandidat', 'kriterias'));
+    return view('penilaian.all', compact(
+        'hasilPerKriteria',
+        'rankingAdmin',
+        'rankingPelanggan',
+        'kriterias',
+    ));
 }
+
+
+
+
+
+
+
 
 
     private function groupHasilByKriteria(Collection $hasilPenilaians, Collection $kriterias)

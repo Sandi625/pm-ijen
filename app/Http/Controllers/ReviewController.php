@@ -105,6 +105,7 @@ class ReviewController extends Controller
      */
 public function store(Request $request)
 {
+    // Validasi input review dan penilaian pelanggan
     $validated = $request->validate([
         'name' => 'required|string|max:100',
         'email' => 'required|string|max:100',
@@ -134,7 +135,7 @@ public function store(Request $request)
             throw new \Exception("Detail pesanan tidak ditemukan.");
         }
 
-        // 3. Set prioritas rating sesuai rating user
+        // 3. Tentukan prioritas rating dari rating user
         $nilaiPrioritasMap = [
             5 => 3,
             4 => 2,
@@ -149,19 +150,20 @@ public function store(Request $request)
             $detail->save();
         }
 
-        // 4. Buat atau ambil penilaian
+        // 4. Buat atau ambil penilaian berdasarkan guide & pesanan
         $penilaian = Penilaian::firstOrCreate([
             'guide_id' => $review->guide_id,
             'id_pesanan' => $review->pesanan_id,
         ]);
 
-        // 5. Simpan detail penilaian untuk subkriteria
+        // 5. Simpan detail penilaian pelanggan per subkriteria
         foreach ($detailPesanans as $detail) {
             $subkriterias = Subkriteria::where('kriteria_id', $detail->kriteria_id)->get();
 
             foreach ($subkriterias as $index => $subkriteria) {
                 $nilai = 1; // default nilai
 
+                // Atur nilai berdasarkan rating dan posisi subkriteria
                 switch ($review->rating) {
                     case 5:
                         $nilai = ($index === 0) ? 3 : 2;
@@ -185,7 +187,7 @@ public function store(Request $request)
                     'subkriteria_id' => $subkriteria->id,
                     'nilai' => $nilai,
                     'detail_pesanan_id' => $detail->id,
-                    'sumber' => 'pelanggan',
+                    'sumber' => 'pelanggan', // tanda sumber dari pelanggan
                 ]);
             }
         }
@@ -193,6 +195,8 @@ public function store(Request $request)
 
     return redirect()->route('review.review')->with('success', 'Review berhasil ditambahkan dan penilaian diperbarui.');
 }
+
+
 
 
 
