@@ -62,7 +62,6 @@ Route::get('/penilaian/customer/{guideId}', [PenilaianController::class, 'showPe
 
     // Galeri
     Route::resource('galeris', GaleriController::class);
-    Route::get('/galeri/video', [GaleriController::class, 'showVideo'])->name('galeri.video');
 
     // Chart pesanan
     Route::get('/chart/pesanan-per-bulan', [DashboardController::class, 'chartPesananPerBulan'])
@@ -228,6 +227,7 @@ Route::get('/chart/penilaian-guide', [DashboardController::class, 'chartPenilaia
 
 
 
+    Route::get('/galeri/video', [GaleriController::class, 'showVideo'])->name('galeri.video');
 
 
 

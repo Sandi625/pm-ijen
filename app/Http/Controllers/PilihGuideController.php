@@ -49,21 +49,26 @@ class PilihGuideController extends Controller
     {
         $guideScores = [];
 
-        // Kamu bisa isi standar nilai kriteria pesanan jika perlu, misal:
+        // Ambil standar nilai kriteria dari DetailPesanan jika diperlukan
         $kriteriaPesanan = [];
+        foreach ($pesanan->detailPesanans as $detail) {
+            if ($detail->kriteria && $detail->kriteria->subkriterias) {
+                foreach ($detail->kriteria->subkriterias as $sub) {
+                    if ($sub->profil_standar > 0) {
+                        $kriteriaPesanan[$sub->id] = $sub->profil_standar;
+                    }
+                }
+            }
+        }
 
-        // Ambil semua guide yang sudah dipilih di detail_pesanan untuk pesanan ini
-        $guideIds = DetailPesanan::where('pesanan_id', $pesanan->id)
-            ->pluck('guide_id')
-            ->unique();
+        // Ambil semua guide yang terlibat dalam pesanan ini
+        $guideIds = $pesanan->detailPesanans->pluck('guide_id')->unique()->filter();
 
         foreach ($guideIds as $guideId) {
-            // Asumsikan ada relasi penilaian di Guide model yang terfilter berdasarkan pesanan
-            $penilaian = Guide::find($guideId)
-                ->penilaian()
-                ->where('pesanan_id', $pesanan->id)
-                ->first();
+            $guide = Guide::find($guideId);
+            if (!$guide) continue;
 
+            $penilaian = $guide->penilaians->firstWhere('pesanan_id', $pesanan->id);
             if (!$penilaian) continue;
 
             $hasil = $this->hitungProfileMatching($penilaian, $kriteriaPesanan);
@@ -74,52 +79,53 @@ class PilihGuideController extends Controller
             return null;
         }
 
-        arsort($guideScores); // Urutkan descending berdasarkan nilai_akhir
-
-        return key($guideScores); // Ambil guide dengan nilai tertinggi
+        arsort($guideScores); // Urutkan dari yang tertinggi
+        return key($guideScores); // Kembalikan guide_id dengan skor tertinggi
     }
+
 
     public function edit($pesananId)
     {
-        $pesanan = Pesanan::with(['kriterias.subkriterias', 'detailPesanans.kriteria'])
-            ->findOrFail($pesananId);
+        $pesanan = Pesanan::with(['kriterias.subkriterias', 'detailPesanans.kriteria.subkriterias'])->findOrFail($pesananId);
 
-        // Ambil detailPesanans yang punya prioritas, urutkan berdasarkan prioritas naik
+        // Siapkan standar kriteria dari detail pesanan
+        $kriteriaPesanan = [];
         $detailPesanans = $pesanan->detailPesanans->sortBy('prioritas');
 
-        // Siapkan array kriteriaPesanan berdasarkan prioritas
-        $kriteriaPesanan = [];
         foreach ($detailPesanans as $detail) {
             if ($detail->kriteria && $detail->kriteria->subkriterias) {
                 foreach ($detail->kriteria->subkriterias as $sub) {
-                    // Gunakan profil_standar dari subkriteria untuk bobot,
-                    // bisa juga ditambahkan bobot prioritas jika perlu
-                    $kriteriaPesanan[$sub->id] = $sub->profil_standar;
+                    if ($sub->profil_standar > 0) {
+                        $kriteriaPesanan[$sub->id] = $sub->profil_standar;
+                    }
                 }
             }
         }
 
-        // Ambil semua subkriteria id yang termasuk di kriteria dengan prioritas
+        // Ambil semua ID subkriteria yang menjadi acuan
         $subkriteriaIds = collect(array_keys($kriteriaPesanan));
 
+        // Ambil semua guide beserta penilaian dan relasinya
         $rekomendasi = Guide::with('penilaians.detailPenilaians.subkriteria.kriteria')
             ->get()
             ->map(function ($guide) use ($subkriteriaIds, $kriteriaPesanan) {
                 $nilaiTerbaik = 0;
 
                 foreach ($guide->penilaians as $penilaian) {
-                    $filteredDetailPenilaians = $penilaian->detailPenilaians->filter(function ($detail) use ($subkriteriaIds) {
+                    // Filter detail penilaian agar hanya subkriteria yang relevan
+                    $filteredDetail = $penilaian->detailPenilaians->filter(function ($detail) use ($subkriteriaIds) {
                         return $subkriteriaIds->contains($detail->subkriteria_id);
                     });
 
+                    // Abaikan jika tidak ada detail yang sesuai
+                    if ($filteredDetail->isEmpty()) continue;
+
+                    // Clone penilaian dan set ulang relasi detail
                     $penilaianFiltered = clone $penilaian;
-                    $penilaianFiltered->setRelation('detailPenilaians', $filteredDetailPenilaians);
+                    $penilaianFiltered->setRelation('detailPenilaians', $filteredDetail);
 
                     $hasil = $this->hitungProfileMatching($penilaianFiltered, $kriteriaPesanan);
-
-                    if ($hasil['nilai_akhir'] > $nilaiTerbaik) {
-                        $nilaiTerbaik = $hasil['nilai_akhir'];
-                    }
+                    $nilaiTerbaik = max($nilaiTerbaik, $hasil['nilai_akhir']);
                 }
 
                 return [
@@ -139,55 +145,55 @@ class PilihGuideController extends Controller
 
 
 
-public function update(Request $request, $pesananId)
-{
-    $request->validate([
-        'guide_id' => 'required|exists:guides,id',
-    ]);
 
-    $pesanan = Pesanan::with('kriterias')->findOrFail($pesananId);
-    $tanggal = $pesanan->tanggal_keberangkatan;
 
-    $bentrok = Pesanan::where('id_guide', $request->guide_id)
-        ->where('tanggal_keberangkatan', $tanggal)
-        ->where('id', '!=', $pesananId)
-        ->exists();
+    public function update(Request $request, $pesananId)
+    {
+        $request->validate([
+            'guide_id' => 'required|exists:guides,id',
+        ]);
 
-    if ($bentrok) {
-        return back()->withErrors(['guide_id' => 'Guide sudah memiliki pesanan di tanggal ini.'])->withInput();
+        $pesanan = Pesanan::with('kriterias')->findOrFail($pesananId);
+        $tanggal = $pesanan->tanggal_keberangkatan;
+
+        $bentrok = Pesanan::where('id_guide', $request->guide_id)
+            ->where('tanggal_keberangkatan', $tanggal)
+            ->where('id', '!=', $pesananId)
+            ->exists();
+
+        if ($bentrok) {
+            return back()->withErrors(['guide_id' => 'Guide sudah memiliki pesanan di tanggal ini.'])->withInput();
+        }
+
+        $minGapDays = 1;
+        $dekat = Pesanan::where('id_guide', $request->guide_id)
+            ->where('id', '!=', $pesananId)
+            ->whereBetween('tanggal_keberangkatan', [
+                Carbon::parse($tanggal)->subDays($minGapDays),
+                Carbon::parse($tanggal)->addDays($minGapDays)
+            ])->exists();
+
+        if ($dekat) {
+            return back()->withErrors(['guide_id' => "Guide memiliki pesanan terlalu dekat (±{$minGapDays} hari)."])->withInput();
+        }
+
+        foreach ($pesanan->kriterias as $kriteria) {
+            DetailPesanan::updateOrCreate(
+                ['pesanan_id' => $pesananId, 'kriteria_id' => $kriteria->id],
+                ['guide_id' => $request->guide_id]
+            );
+        }
+
+        $pesanan->id_guide = $request->guide_id;
+        $pesanan->save();
+
+        // Kirim notifikasi dengan Job Queue dan delay 15 detik
+        // SendNotifGuideJob::dispatch($request->guide_id)->delay(now()->addSeconds(15));
+        SendNotifGuideJob::dispatch($request->guide_id)->delay(now()->addSeconds(15));
+
+
+        return redirect()->route('pilihguide.index')->with('success', 'Pilihan guide berhasil diperbarui.');
     }
-
-    $minGapDays = 1;
-    $dekat = Pesanan::where('id_guide', $request->guide_id)
-        ->where('id', '!=', $pesananId)
-        ->whereBetween('tanggal_keberangkatan', [
-            Carbon::parse($tanggal)->subDays($minGapDays),
-            Carbon::parse($tanggal)->addDays($minGapDays)
-        ])->exists();
-
-    if ($dekat) {
-        return back()->withErrors(['guide_id' => "Guide memiliki pesanan terlalu dekat (±{$minGapDays} hari)."])->withInput();
-    }
-
-    foreach ($pesanan->kriterias as $kriteria) {
-        DetailPesanan::updateOrCreate(
-            ['pesanan_id' => $pesananId, 'kriteria_id' => $kriteria->id],
-            ['guide_id' => $request->guide_id]
-        );
-    }
-
-    $pesanan->id_guide = $request->guide_id;
-    $pesanan->save();
-
-    // Kirim notifikasi dengan Job Queue dan delay 15 detik
-    // SendNotifGuideJob::dispatch($request->guide_id)->delay(now()->addSeconds(15));
-    SendNotifGuideJob::dispatch($request->guide_id)->delay(now()->addSeconds(15));
-
-
-    return redirect()->route('pilihguide.index')->with('success', 'Pilihan guide berhasil diperbarui.');
-}
-
-
 }
 
 

@@ -8,29 +8,33 @@
     </h1>
 
     @php
-        // Array warna background menggunakan HEX warna pastel (bisa diganti sesuka hati)
+        // Array warna background menggunakan HEX warna pastel
         $colors = ['#ebf8ff', '#f0fff4', '#fffff0', '#faf5ff', '#fff5f7'];
+        $filteredIndex = 0;
+        $filteredPenilaian = $penilaianFiltered = $penilaians->filter(fn($p) => isset($p->pesanan->user->name));
+        $totalPenilaian = $penilaianFiltered->count();
     @endphp
 
     {{-- Loop per penilaian --}}
-    @foreach ($penilaians as $index => $penilaian)
+    @foreach ($penilaianFiltered as $penilaian)
         @php
-            $namaPelanggan = $penilaian->pesanan->user->name ?? 'Tidak Diketahui';
+            $namaPelanggan = $penilaian->pesanan->user->name;
             $details = $detailPelangganAll[$penilaian->id] ?? collect();
-
-            // Ambil warna berdasarkan index, jika index lebih dari jumlah warna ulang dari awal
-            $bgColor = $colors[$index % count($colors)];
+            $bgColor = $colors[$filteredIndex % count($colors)];
+            $penilaianKe = $totalPenilaian - $filteredIndex;
+            $filteredIndex++;
         @endphp
 
         <div class="mb-10 p-4 rounded" style="background-color: {{ $bgColor }};">
-            <h2 class="text-xl font-semibold mb-2">
-                Penilaian dari: {{ $namaPelanggan }} (Penilaian ke-{{ $loop->iteration }})
+            <h2 class="text-xl font-semibold mb-1">
+                Penilaian dari: {{ $namaPelanggan }} (Penilaian ke-{{ $penilaianKe }})
             </h2>
+            <p class="text-sm text-gray-500">Tanggal: {{ $penilaian->created_at->format('d M Y H:i') }}</p>
 
             @if($details->isEmpty())
                 <p class="mb-6 text-gray-600 italic">Tidak ada detail penilaian untuk penilaian ini.</p>
             @else
-                <table class="w-full border-collapse border border-gray-300">
+                <table class="w-full border-collapse border border-gray-300 mt-4">
                     <thead>
                         <tr class="bg-gray-200">
                             <th class="border border-gray-300 px-4 py-2 text-left">Kriteria</th>
@@ -41,9 +45,15 @@
                     <tbody>
                         @foreach ($details as $detail)
                             <tr class="hover:bg-gray-100">
-                                <td class="border border-gray-300 px-4 py-2">{{ $detail->subkriteria->kriteria->nama ?? '-' }}</td>
-                                <td class="border border-gray-300 px-4 py-2">{{ $detail->subkriteria->nama ?? '-' }}</td>
-                                <td class="border border-gray-300 px-4 py-2 text-center">{{ $detail->nilai }}</td>
+                                <td class="border border-gray-300 px-4 py-2">
+                                    {{ $detail->subkriteria->kriteria->nama ?? '-' }}
+                                </td>
+                                <td class="border border-gray-300 px-4 py-2">
+                                    {{ $detail->subkriteria->nama ?? '-' }}
+                                </td>
+                                <td class="border border-gray-300 px-4 py-2 text-center">
+                                    {{ $detail->nilai }}
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>

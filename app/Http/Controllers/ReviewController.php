@@ -117,6 +117,7 @@ public function store(Request $request)
     ]);
 
     DB::transaction(function () use ($validated, $request) {
+        // 1. Simpan review
         $review = new Review($validated);
 
         if ($request->hasFile('photo')) {
@@ -127,62 +128,62 @@ public function store(Request $request)
 
         $review->save();
 
-        // Ambil detail pesanan terkait pesanan_id di review
+        // 2. Ambil detail pesanan berdasarkan pesanan_id
         $detailPesanans = DetailPesanan::where('pesanan_id', $review->pesanan_id)->get();
+        if ($detailPesanans->isEmpty()) {
+            throw new \Exception("Detail pesanan tidak ditemukan.");
+        }
 
-        // Nilai prioritas core factor dan secondary factor jika rating tertinggi (5)
-        $nilaiByPrioritasCore = [
-            1 => 5,
-            2 => 3,
-            3 => 1,
+        // 3. Set prioritas rating sesuai rating user
+        $nilaiPrioritasMap = [
+            5 => 3,
+            4 => 2,
+            3 => 1.5,
+            2 => 1,
+            1 => 1,
         ];
+        $nilaiPrioritas = $nilaiPrioritasMap[$review->rating] ?? 1;
 
-        $nilaiByPrioritasSecondary = [
-            1 => 3,
-            2 => 2,
-            3 => 1,
-        ];
-
-        // Tetapkan prioritas berdasar rating yang sama untuk semua kriteria
-        $nilaiKriteria = [];
         foreach ($detailPesanans as $detail) {
-            $nilaiKriteria[$detail->kriteria_id] = $review->rating;
-        }
-        arsort($nilaiKriteria);
-
-        $prioritas = 1;
-        foreach ($nilaiKriteria as $kriteria_id => $nilai) {
-            DetailPesanan::where('pesanan_id', $review->pesanan_id)
-                ->where('kriteria_id', $kriteria_id)
-                ->update(['prioritas' => $prioritas]);
-            $prioritas++;
+            $detail->prioritas = $nilaiPrioritas;
+            $detail->save();
         }
 
-        // Buat atau ambil penilaian
+        // 4. Buat atau ambil penilaian
         $penilaian = Penilaian::firstOrCreate([
             'guide_id' => $review->guide_id,
             'id_pesanan' => $review->pesanan_id,
         ]);
 
+        // 5. Simpan detail penilaian untuk subkriteria
         foreach ($detailPesanans as $detail) {
-            $prioritas = $detail->prioritas;
-
             $subkriterias = Subkriteria::where('kriteria_id', $detail->kriteria_id)->get();
 
-            foreach ($subkriterias as $subkriteria) {
-                // Ambil nilai dasar dari prioritas, default rating user jika tidak ada mapping
-                $nilaiDasar = ($subkriteria->jenis_faktor === 'Core Factor')
-                    ? ($nilaiByPrioritasCore[$prioritas] ?? $review->rating)
-                    : ($nilaiByPrioritasSecondary[$prioritas] ?? $review->rating);
+            foreach ($subkriterias as $index => $subkriteria) {
+                $nilai = 1; // default nilai
 
-                // Skala nilai supaya mengikuti rating user:
-                // Jika rating user < nilaiDasar, turunkan nilaiDasar ke rating user tapi minimal 1
-                $nilaiSub = min($nilaiDasar, max(1, $review->rating));
+                switch ($review->rating) {
+                    case 5:
+                        $nilai = ($index === 0) ? 3 : 2;
+                        break;
+                    case 4:
+                        $nilai = ($index === 0) ? 3 : 1;
+                        break;
+                    case 3:
+                        $nilai = ($index === 0) ? 2 : 1;
+                        break;
+                    case 2:
+                        $nilai = ($index === 0) ? 1 : 1;
+                        break;
+                    case 1:
+                        $nilai = ($index === 0) ? 1 : 0;
+                        break;
+                }
 
                 DetailPenilaian::create([
                     'penilaian_id' => $penilaian->id,
                     'subkriteria_id' => $subkriteria->id,
-                    'nilai' => $nilaiSub,
+                    'nilai' => $nilai,
                     'detail_pesanan_id' => $detail->id,
                     'sumber' => 'pelanggan',
                 ]);
@@ -190,8 +191,16 @@ public function store(Request $request)
         }
     });
 
-    return redirect()->route('review.review')->with('success', 'Review has been created and linked to penilaian.');
+    return redirect()->route('review.review')->with('success', 'Review berhasil ditambahkan dan penilaian diperbarui.');
 }
+
+
+
+
+
+
+
+
 
 
 
@@ -269,18 +278,36 @@ public function store(Request $request)
      * @param int $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy($id)
-    {
-        $review = Review::findOrFail($id);
+ public function destroy($id)
+{
+    $review = Review::findOrFail($id);
 
+    DB::transaction(function () use ($review) {
+        // 1. Hapus file foto jika ada
         if ($review->photo && Storage::disk('public')->exists($review->photo)) {
             Storage::disk('public')->delete($review->photo);
         }
 
-        $review->delete();
+        // 2. Ambil penilaian berdasarkan guide_id dan pesanan_id
+        $penilaian = Penilaian::where('guide_id', $review->guide_id)
+            ->where('id_pesanan', $review->pesanan_id)
+            ->first();
 
-        return redirect()->route('review.all')->with('success', 'Review has been deleted.');
-    }
+        if ($penilaian) {
+            // Hapus semua detail penilaian yang terkait
+            DetailPenilaian::where('penilaian_id', $penilaian->id)->delete();
+
+            // Hapus penilaian itu sendiri
+            $penilaian->delete();
+        }
+
+        // 3. Hapus review
+        $review->delete();
+    });
+
+    return redirect()->route('review.all')->with('success', 'Review has been deleted and related evaluations removed.');
+}
+
 
 
     public function allReviews(Request $request)

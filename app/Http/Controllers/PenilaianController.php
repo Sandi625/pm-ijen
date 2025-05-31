@@ -125,7 +125,7 @@ public function daftarGuide()
 
 
 
-    private function hitungProfileMatching(Penilaian $penilaian)
+private function hitungProfileMatching(Penilaian $penilaian)
 {
     $hasilPerhitungan = [];
     $nilaiTotalKriteria = [];
@@ -171,15 +171,18 @@ public function daftarGuide()
         $hasilPerhitungan[$kriteriaId]['nilai_total'] = $nilaiTotalKriteria[$kriteriaId];
     }
 
-    $nilaiAkhir = $this->profileMatchingService->hitungNilaiAkhir($nilaiTotalKriteria);
-
-
+    // Perhitungan nilai akhir, dengan perlindungan dari pembagian nol
+    $nilaiAkhir = count($nilaiTotalKriteria) > 0
+        ? array_sum($nilaiTotalKriteria) / count($nilaiTotalKriteria)
+        : 0;
 
     return [
         'detail' => $hasilPerhitungan,
         'nilai_akhir' => $nilaiAkhir
     ];
 }
+
+
 
 public function edit(Penilaian $penilaian)
 {
