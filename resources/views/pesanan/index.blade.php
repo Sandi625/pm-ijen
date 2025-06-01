@@ -91,8 +91,8 @@
                             <th>Nama Kriteria</th>
                             {{-- <th>Tanggal Pesan</th> --}}
                             <th>Tanggal Keberangkatan</th>
-                            <th>Jumlah Peserta</th>
-                            <th>Paspor</th>
+                            {{-- <th>Jumlah Peserta</th>
+                            <th>Paspor</th> --}}
                             <th>Status</th>
                             <th class="text-center">Aksi</th>
                         </tr>
@@ -123,8 +123,8 @@
 
                                 {{-- <td>{{ $pesanan->tanggal_pesan }}</td> --}}
                                 <td>{{ $pesanan->tanggal_keberangkatan }}</td>
-                                <td>{{ $pesanan->jumlah_peserta }}</td>
-                                <td>
+                                {{-- <td>{{ $pesanan->jumlah_peserta }}</td> --}}
+                                {{-- <td>
                                     @if ($pesanan->paspor)
                                         <a href="{{ asset('storage/' . $pesanan->paspor) }}" target="_blank">
                                             <img src="{{ asset('storage/' . $pesanan->paspor) }}" alt="Foto Paspor"
@@ -133,7 +133,7 @@
                                     @else
                                         -
                                     @endif
-                                </td>
+                                </td> --}}
                                 <td>
                                     @if ($pesanan->status)
                                         <span class="badge bg-success">Aktif</span>

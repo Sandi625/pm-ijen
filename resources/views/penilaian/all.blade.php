@@ -245,6 +245,42 @@
     </table>
 </div>
 
+@php
+    // Group berdasarkan guide id
+    $grouped = [];
+
+    foreach ($rankingPelanggan as $item) {
+        $guideId = $item['penilaian']->guide->id ?? null;
+        if (!$guideId) continue;
+
+        if (!isset($grouped[$guideId])) {
+            $grouped[$guideId] = [
+                'nama_guide' => $item['penilaian']->guide->nama_guide ?? '-',
+                'nilai_akhir' => 0,
+                'kriteria_unggulan' => [],
+            ];
+        }
+
+        // Jumlahkan nilai akhir
+        $grouped[$guideId]['nilai_akhir'] += $item['hasil']['nilai_akhir'] ?? 0;
+
+        // Gabungkan kriteria unggulan jika belum ada
+        if (!empty($item['kriteria_unggulan']) && !in_array($item['kriteria_unggulan'], $grouped[$guideId]['kriteria_unggulan'])) {
+            $grouped[$guideId]['kriteria_unggulan'][] = $item['kriteria_unggulan'];
+        }
+    }
+
+    // Ubah kriteria unggulan jadi string
+    foreach ($grouped as &$g) {
+        $g['kriteria_unggulan'] = count($g['kriteria_unggulan']) ? implode(', ', $g['kriteria_unggulan']) : '-';
+    }
+
+    // Sort berdasarkan nilai akhir descending
+    usort($grouped, function($a, $b) {
+        return $b['nilai_akhir'] <=> $a['nilai_akhir'];
+    });
+@endphp
+
 <h2 class="text-xl font-bold mb-4">Ranking Guide Dari Pelanggan</h2>
 <div class="overflow-x-auto">
     <table class="w-full border-collapse border border-gray-300">
@@ -257,13 +293,13 @@
             </tr>
         </thead>
         <tbody class="text-center">
-            @foreach($rankingPelanggan as $index => $item)
+            @foreach($grouped as $index => $item)
                 <tr>
                     <td class="border border-gray-300 px-4 py-2">{{ $index + 1 }}</td>
-                    <td class="border border-gray-300 px-4 py-2">{{ $item['penilaian']->guide->nama_guide ?? '-' }}</td>
-                    <td class="border border-gray-300 px-4 py-2">{{ number_format($item['hasil']['nilai_akhir'], 2) }}</td>
+                    <td class="border border-gray-300 px-4 py-2">{{ $item['nama_guide'] }}</td>
+                    <td class="border border-gray-300 px-4 py-2">{{ number_format($item['nilai_akhir'], 2) }}</td>
                     <td class="border border-gray-300 px-4 py-2 text-blue-700 font-semibold">
-                        {{ $item['kriteria_unggulan'] ?? '-' }}
+                        {{ $item['kriteria_unggulan'] }}
                     </td>
                 </tr>
             @endforeach

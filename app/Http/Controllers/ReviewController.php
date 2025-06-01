@@ -105,7 +105,6 @@ class ReviewController extends Controller
      */
 public function store(Request $request)
 {
-    // Validasi input review dan penilaian pelanggan
     $validated = $request->validate([
         'name' => 'required|string|max:100',
         'email' => 'required|string|max:100',
@@ -131,11 +130,12 @@ public function store(Request $request)
 
         // 2. Ambil detail pesanan berdasarkan pesanan_id
         $detailPesanans = DetailPesanan::where('pesanan_id', $review->pesanan_id)->get();
+
         if ($detailPesanans->isEmpty()) {
             throw new \Exception("Detail pesanan tidak ditemukan.");
         }
 
-        // 3. Tentukan prioritas rating dari rating user
+        // 3. Hitung nilai prioritas dari rating
         $nilaiPrioritasMap = [
             5 => 3,
             4 => 2,
@@ -150,20 +150,24 @@ public function store(Request $request)
             $detail->save();
         }
 
-        // 4. Buat atau ambil penilaian berdasarkan guide & pesanan
+        // 4. Ambil atau buat penilaian untuk guide & pesanan
         $penilaian = Penilaian::firstOrCreate([
             'guide_id' => $review->guide_id,
             'id_pesanan' => $review->pesanan_id,
         ]);
 
-        // 5. Simpan detail penilaian pelanggan per subkriteria
+        // 5. Hindari duplikasi dengan menghapus penilaian pelanggan sebelumnya
+        DetailPenilaian::where('penilaian_id', $penilaian->id)
+            ->where('sumber', 'pelanggan')
+            ->delete();
+
+        // 6. Buat ulang detail penilaian pelanggan per subkriteria
         foreach ($detailPesanans as $detail) {
             $subkriterias = Subkriteria::where('kriteria_id', $detail->kriteria_id)->get();
 
             foreach ($subkriterias as $index => $subkriteria) {
-                $nilai = 1; // default nilai
+                $nilai = 1; // default
 
-                // Atur nilai berdasarkan rating dan posisi subkriteria
                 switch ($review->rating) {
                     case 5:
                         $nilai = ($index === 0) ? 3 : 2;
@@ -175,7 +179,7 @@ public function store(Request $request)
                         $nilai = ($index === 0) ? 2 : 1;
                         break;
                     case 2:
-                        $nilai = ($index === 0) ? 1 : 1;
+                        $nilai = 1;
                         break;
                     case 1:
                         $nilai = ($index === 0) ? 1 : 0;
@@ -187,7 +191,7 @@ public function store(Request $request)
                     'subkriteria_id' => $subkriteria->id,
                     'nilai' => $nilai,
                     'detail_pesanan_id' => $detail->id,
-                    'sumber' => 'pelanggan', // tanda sumber dari pelanggan
+                    'sumber' => 'pelanggan',
                 ]);
             }
         }
