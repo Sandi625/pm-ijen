@@ -42,8 +42,10 @@ document.addEventListener('DOMContentLoaded', function () {
         videoItems.forEach(item => item.style.display = 'block');
     }
 
-    // Default to showing images on page load
-    showImages();
+    // ✅ Default to showing images ONLY on image page
+    if (window.location.href.includes('/galeri') && !window.location.href.includes('/galeri/video')) {
+        showImages();
+    }
 
     // Modal Image View
     const modal = document.getElementById("myModal");
@@ -77,3 +79,4 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 </script>
+

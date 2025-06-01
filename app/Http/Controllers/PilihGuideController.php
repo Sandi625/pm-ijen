@@ -147,12 +147,13 @@ class PilihGuideController extends Controller
 
 
 
-    public function update(Request $request, $pesananId)
-    {
-        $request->validate([
-            'guide_id' => 'required|exists:guides,id',
-        ]);
+   public function update(Request $request, $pesananId)
+{
+    $request->validate([
+        'guide_id' => 'required|exists:guides,id',
+    ]);
 
+    try {
         $pesanan = Pesanan::with('kriterias')->findOrFail($pesananId);
         $tanggal = $pesanan->tanggal_keberangkatan;
 
@@ -162,6 +163,7 @@ class PilihGuideController extends Controller
             ->exists();
 
         if ($bentrok) {
+            Log::warning("Guide ID {$request->guide_id} sudah ada pesanan di tanggal {$tanggal}.");
             return back()->withErrors(['guide_id' => 'Guide sudah memiliki pesanan di tanggal ini.'])->withInput();
         }
 
@@ -174,6 +176,7 @@ class PilihGuideController extends Controller
             ])->exists();
 
         if ($dekat) {
+            Log::warning("Guide ID {$request->guide_id} memiliki pesanan terlalu dekat dengan tanggal {$tanggal} (±{$minGapDays} hari).");
             return back()->withErrors(['guide_id' => "Guide memiliki pesanan terlalu dekat (±{$minGapDays} hari)."])->withInput();
         }
 
@@ -187,13 +190,21 @@ class PilihGuideController extends Controller
         $pesanan->id_guide = $request->guide_id;
         $pesanan->save();
 
-        // Kirim notifikasi dengan Job Queue dan delay 15 detik
-        // SendNotifGuideJob::dispatch($request->guide_id)->delay(now()->addSeconds(15));
-        SendNotifGuideJob::dispatch($request->guide_id)->delay(now()->addSeconds(15));
-
+        // Dispatch job notifikasi dengan log
+        try {
+            SendNotifGuideJob::dispatch($request->guide_id)->delay(now()->addSeconds(15));
+            Log::info("Job notifikasi untuk Guide ID {$request->guide_id} berhasil didispatch.");
+        } catch (\Exception $e) {
+            Log::error("Gagal dispatch job notifikasi untuk Guide ID {$request->guide_id}: " . $e->getMessage());
+        }
 
         return redirect()->route('pilihguide.index')->with('success', 'Pilihan guide berhasil diperbarui.');
+
+    } catch (\Exception $e) {
+        Log::error("Error saat update pesanan ID {$pesananId}: " . $e->getMessage());
+        return back()->withErrors(['error' => 'Terjadi kesalahan saat memperbarui pilihan guide.'])->withInput();
     }
+}
 }
 
 

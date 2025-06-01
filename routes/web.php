@@ -74,6 +74,22 @@ Route::get('/penilaian/customer/{guideId}', [PenilaianController::class, 'showPe
     Route::delete('/reviews/{id}', [ReviewController::class, 'destroy'])->name('review.destroy');
     Route::get('/admin/reviews', [ReviewController::class, 'allReviews'])->name('review.all');
     Route::get('/reviews/{id}', [ReviewController::class, 'show'])->name('review.show');
+
+    Route::get('/pilih-guide', [PilihGuideController::class, 'index'])->name('pilihguide.index');
+
+Route::get('/pilihguide/{pesanan}/create', [PilihGuideController::class, 'create'])->name('pilihguide.create');
+Route::post('/pilihguide/{pesanan}', [PilihGuideController::class, 'store'])->name('pilihguide.store');
+
+Route::get('/pilihguide/{pesanan}/edit', [PilihGuideController::class, 'edit'])->name('pilihguide.edit');
+Route::put('/pilihguide/{pesanan}', [PilihGuideController::class, 'update'])->name('pilihguide.update');
+
+Route::get('/chart/penilaian-guide', [DashboardController::class, 'chartPenilaianGuide'])->name('chart.penilaian.guide');
+Route::get('/notif-guide', [NotifGuideController::class, 'guidesWithPesanan'])->name('notif.guide');
+Route::get('/guide/{id}/send-notif', [PilihGuideController::class, 'sendNotifToGuide'])->name('guide.sendNotif');
+
+Route::get('/guides-with-pesanan', [NotifGuideController::class, 'guidesWithPesanan'])->name('guidesWithPesanan');
+Route::get('/notif-guide/{id}', [NotifGuideController::class, 'show'])->name('guide.detail');
+
 });
 
 
@@ -194,16 +210,13 @@ Route::resource('pesanan', PesananController::class)
 Route::get('/get-guides-by-kriteria/{kriteriaId}', [PesananController::class, 'getGuidesByKriteria']);
 
 
-Route::get('/notif-guide', [NotifGuideController::class, 'guidesWithPesanan'])->name('notif.guide');
-Route::get('/guides-with-pesanan', [NotifGuideController::class, 'guidesWithPesanan'])->name('guidesWithPesanan');
-Route::get('/notif-guide/{id}', [NotifGuideController::class, 'show'])->name('guide.detail');
+
 
 
 
 // Route::get('/guide/{id}/send-notif', [NotifGuideController::class, 'sendNotifToGuide'])->name('guide.sendNotif');
 // Route::post('/guide/{id}/send-notif', [GuideController::class, 'sendNotif'])->name('guide.sendNotif');
 // Route::post('/guide/{id}/send-notif', [NotifGuideController::class, 'sendNotifToGuide'])->name('guide.send-notif');
-Route::get('/guide/{id}/send-notif', [PilihGuideController::class, 'sendNotifToGuide'])->name('guide.sendNotif');
 
 // Route::get('/landing-reviews', [ReviewController::class, 'getActiveReviews'])->name('landing.reviews');
 
@@ -212,15 +225,7 @@ Route::get('/guide/{id}/send-notif', [PilihGuideController::class, 'sendNotifToG
 
 Route::get('/', [LandingPageController::class, 'index'])->name('home');
 
-Route::get('/pilih-guide', [PilihGuideController::class, 'index'])->name('pilihguide.index');
 
-Route::get('/pilihguide/{pesanan}/create', [PilihGuideController::class, 'create'])->name('pilihguide.create');
-Route::post('/pilihguide/{pesanan}', [PilihGuideController::class, 'store'])->name('pilihguide.store');
-
-Route::get('/pilihguide/{pesanan}/edit', [PilihGuideController::class, 'edit'])->name('pilihguide.edit');
-Route::put('/pilihguide/{pesanan}', [PilihGuideController::class, 'update'])->name('pilihguide.update');
-
-Route::get('/chart/penilaian-guide', [DashboardController::class, 'chartPenilaianGuide'])->name('chart.penilaian.guide');
 
 
 
