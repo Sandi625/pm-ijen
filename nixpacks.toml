@@ -26,15 +26,10 @@ cmds = [
 ]
 
 [phases.start]
+dependsOn = ["release"]
 cmds = [
-  # Jalankan Laravel server di background
-  "php artisan serve --host=0.0.0.0 --port=${PORT} &",
-
-  # Tunggu beberapa detik agar autoload dan DB siap
-  "sleep 5",
-
-  # Jalankan queue worker
-  "php artisan queue:work --tries=3"
+  # Jalankan Laravel server saja, jangan queue worker di sini
+  "php artisan serve --host=0.0.0.0 --port=${PORT}"
 ]
 
 [staticAssets]
