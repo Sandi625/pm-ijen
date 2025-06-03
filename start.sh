@@ -1,4 +1,11 @@
 #!/bin/bash
+set -e
 
-# Jalankan queue worker dan Vite dev server secara paralel
-npx concurrently "php artisan queue:work --tries=3" "npm run serve"
+# Pastikan vendor sudah ada
+if [ ! -d "vendor" ]; then
+  echo "Vendor folder not found. Running composer install..."
+  composer install --no-dev --optimize-autoloader
+fi
+
+php artisan serve --host=0.0.0.0 --port=${PORT} &
+php artisan queue:work --tries=3

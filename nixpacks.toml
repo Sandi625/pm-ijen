@@ -1,10 +1,9 @@
 [phases.setup]
-# Tambahkan nodejs dan php82 (untuk PHP dan Composer)
 nixPkgs = ["php82", "php82Packages.composer", "nodejs"]
 
 [phases.install]
 cmds = [
-  "composer install --no-dev --optimize-autoloader --verbose",
+  "composer install --no-dev --optimize-autoloader",
   "chmod -R 775 storage bootstrap/cache",
   "chown -R www-data:www-data storage bootstrap/cache",
   "npm install"
@@ -28,8 +27,8 @@ cmds = [
 
 [phases.start]
 cmds = [
-  "chmod +x start.sh",             # Tambahkan izin eksekusi
-  "./start.sh"                     # Jalankan script
+  "php artisan serve --host=0.0.0.0 --port=${PORT} &",
+  "php artisan queue:work --tries=3"
 ]
 
 [staticAssets]
