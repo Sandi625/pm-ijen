@@ -15,6 +15,10 @@ WORKDIR /var/www/html
 # Copy application files with ownership set to www-data
 COPY --chown=www-data:www-data . .
 
+# Install Composer dependencies as root (required access to vendor folder)
+RUN composer install --no-interaction --optimize-autoloader --no-dev --working-dir=/var/www/html \
+    && composer clear-cache
+
 # Switch to www-data user to install npm deps and build assets
 USER www-data
 
@@ -22,11 +26,6 @@ RUN npm ci \
     && npm run build \
     && rm -rf /var/www/html/.npm
 
-# Switch back to root to install composer dependencies
-USER root
+# Set back to root only if needed, or leave as www-data for runtime
+# USER root
 
-RUN composer install --no-interaction --optimize-autoloader --no-dev --working-dir=/var/www/html \
-    && composer clear-cache
-
-# Switch back to www-data user for security
-USER www-data
