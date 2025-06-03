@@ -28,7 +28,8 @@ cmds = [
 
 [phases.start]
 cmds = [
-  "./start.sh"
+  "chmod +x start.sh",             # Tambahkan izin eksekusi
+  "./start.sh"                     # Jalankan script
 ]
 
 [staticAssets]
