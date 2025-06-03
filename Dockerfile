@@ -1,3 +1,4 @@
+# Base image PHP 8.2 + nginx + php-fpm dari serversideup (sesuaikan sesuai kebutuhan)
 FROM serversideup/php:8.2-fpm-nginx
 
 ENV PHP_OPCACHE_ENABLE=1
@@ -10,22 +11,28 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /var/www/html
+WORKDIR /app
 
-# Copy application files with ownership set to www-data
+# Copy source code dengan ownership www-data
 COPY --chown=www-data:www-data . .
 
-# Install Composer dependencies as root (required access to vendor folder)
-RUN composer install --no-interaction --optimize-autoloader --no-dev --working-dir=/var/www/html \
-    && composer clear-cache
+# Install Composer dependencies
+RUN composer install --no-interaction --optimize-autoloader --no-dev
 
-# Switch to www-data user to install npm deps and build assets
+# Set permission storage & cache supaya Laravel bisa write
+RUN chmod -R 775 storage bootstrap/cache \
+    && chown -R www-data:www-data storage bootstrap/cache
+
+# Switch user ke www-data untuk npm dan build assets
 USER www-data
 
-RUN npm ci \
-    && npm run build \
-    && rm -rf /var/www/html/.npm
+RUN npm ci && npm run build && rm -rf /app/.npm
 
-# Set back to root only if needed, or leave as www-data for runtime
-# USER root
+# Switch kembali ke root jika perlu (optional)
+USER root
 
+# Expose port 8000 atau sesuaikan
+EXPOSE 8000
+
+# Jalankan artisan serve dan queue:work secara bersamaan saat container berjalan
+CMD php artisan serve --host=0.0.0.0 --port=8000 & php artisan queue:work --tries=3
