@@ -1,5 +1,5 @@
 [phases.setup]
-nixPkgs = ["php82", "php82Packages.composer", "nodejs"]
+nixPkgs = ["php82", "php82Packages.composer", "nodejs", "php82Packages.php-fpm"]
 
 [phases.install]
 cmds = [
@@ -28,12 +28,9 @@ cmds = [
 [phases.start]
 dependsOn = ["release"]
 cmds = [
-  # Jalankan Nginx dan PHP-FPM secara terpisah; tidak menggunakan `php artisan serve`
-  # Gunakan Nginx sebagai web server (lihat konfigurasi di [staticAssets])
-  # Jalankan PHP-FPM sebagai proses utama, contoh:
-  "php-fpm -R -O -y /etc/php-fpm.conf"  # Contoh, sesuaikan path config PHP-FPM sesuai lingkungan
-  # Jika ingin queue worker, jalankan di container/instance terpisah:
-  # "php artisan queue:work --tries=3"
+  # Jalankan php-fpm dengan opsi minimal (tanpa -y karena config mungkin tidak ada)
+  "php-fpm -R"
+  # Queue worker dijalankan di container/instance terpisah jika diperlukan
 ]
 
 [staticAssets]
