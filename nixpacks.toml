@@ -1,5 +1,5 @@
 [phases.setup]
-nixPkgs = ["php82", "php82Packages.composer", "nodejs", "php82Packages.php-fpm"]
+nixPkgs = ["php82", "php82Packages.composer", "nodejs"]
 
 [phases.install]
 cmds = [
@@ -28,9 +28,9 @@ cmds = [
 [phases.start]
 dependsOn = ["release"]
 cmds = [
-  # Jalankan php-fpm dengan opsi minimal (tanpa -y karena config mungkin tidak ada)
+  # Jalankan php-fpm tanpa opsi -y (karena config mungkin tidak ada)
   "php-fpm -R"
-  # Queue worker dijalankan di container/instance terpisah jika diperlukan
+  # Jika perlu worker queue jalankan di container terpisah
 ]
 
 [staticAssets]
