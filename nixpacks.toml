@@ -1,11 +1,12 @@
 [phases.setup]
-nixPkgs = ["php82", "php82Packages.composer"]
+nixPkgs = ["php82", "php82Packages.composer", "nodejs"]
 
 [phases.install]
 cmds = [
   "composer install --no-dev --optimize-autoloader",
   "chmod -R 775 storage bootstrap/cache",
   "chown -R www-data:www-data storage bootstrap/cache",
+  "npm install"
 ]
 
 [phases.build]
@@ -15,12 +16,18 @@ cmds = [
   "php artisan route:cache",
   "php artisan view:cache",
   "php artisan optimize",
+  "npm run build"
 ]
 
 [phases.release]
 dependsOn = ["build"]
 cmds = [
-  "php artisan migrate --force",
+  "php artisan migrate --force"
+]
+
+[phases.start]
+cmds = [
+  "concurrently \"php artisan queue:work --tries=3\" \"npm run serve\""
 ]
 
 [staticAssets]
