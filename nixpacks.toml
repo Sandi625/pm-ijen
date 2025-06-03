@@ -28,9 +28,12 @@ cmds = [
 [phases.start]
 dependsOn = ["release"]
 cmds = [
-  # Jalankan Laravel built-in server di runtime container
-  "php artisan serve --host=0.0.0.0 --port=${PORT}"
-  # Jika ingin jalankan queue worker, jalankan secara terpisah (misal di container lain)
+  # Jalankan Nginx dan PHP-FPM secara terpisah; tidak menggunakan `php artisan serve`
+  # Gunakan Nginx sebagai web server (lihat konfigurasi di [staticAssets])
+  # Jalankan PHP-FPM sebagai proses utama, contoh:
+  "php-fpm -R -O -y /etc/php-fpm.conf"  # Contoh, sesuaikan path config PHP-FPM sesuai lingkungan
+  # Jika ingin queue worker, jalankan di container/instance terpisah:
+  # "php artisan queue:work --tries=3"
 ]
 
 [staticAssets]
