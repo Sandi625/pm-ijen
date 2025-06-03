@@ -4,6 +4,7 @@ nixPkgs = ["php82", "php82Packages.composer", "nodejs", "nginx"]
 [phases.install]
 cmds = [
   "composer install --no-dev --optimize-autoloader",
+  "mkdir -p /var/log/nginx",  # Tambahkan ini
   "chmod -R 775 storage bootstrap/cache",
   "chown -R www-data:www-data storage bootstrap/cache",
   "npm install"
