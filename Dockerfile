@@ -1,4 +1,3 @@
-# Base image PHP 8.2 + nginx + php-fpm dari serversideup (sesuaikan sesuai kebutuhan)
 FROM serversideup/php:8.2-fpm-nginx
 
 ENV PHP_OPCACHE_ENABLE=1
@@ -16,23 +15,22 @@ WORKDIR /app
 # Copy source code dengan ownership www-data
 COPY --chown=www-data:www-data . .
 
-# Install Composer dependencies
+# Install composer dependencies
 RUN composer install --no-interaction --optimize-autoloader --no-dev
 
-# Set permission storage & cache supaya Laravel bisa write
+# Set permission storage dan cache
 RUN chmod -R 775 storage bootstrap/cache \
     && chown -R www-data:www-data storage bootstrap/cache
 
-# Switch user ke www-data untuk npm dan build assets
+# Switch user untuk npm install dan build assets
 USER www-data
 
 RUN npm ci && npm run build && rm -rf /app/.npm
 
-# Switch kembali ke root jika perlu (optional)
+# Kembali ke root user (optional)
 USER root
 
-# Expose port 8000 atau sesuaikan
 EXPOSE 8000
 
-# Jalankan artisan serve dan queue:work secara bersamaan saat container berjalan
+# Jalankan artisan serve dan queue worker secara runtime (CMD)
 CMD php artisan serve --host=0.0.0.0 --port=8000 & php artisan queue:work --tries=3
