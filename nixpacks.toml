@@ -25,18 +25,6 @@ cmds = [
   "php artisan migrate --force"
 ]
 
-[phases.start]
-cmds = [
-  # Jalankan Laravel server di background
-  "php artisan serve --host=0.0.0.0 --port=${PORT} &",
-
-  # Tunggu beberapa detik agar autoload dan DB siap
-  "sleep 5",
-
-  # Jalankan queue worker
-  "php artisan queue:work --tries=3"
-]
-
 [staticAssets]
 "nginx.template.conf" = '''
 user www-data www-data;
