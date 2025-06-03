@@ -28,8 +28,9 @@ cmds = [
 [phases.start]
 dependsOn = ["release"]
 cmds = [
-  # Jalankan Laravel server saja, jangan queue worker di sini
+  # Jalankan Laravel built-in server di runtime container
   "php artisan serve --host=0.0.0.0 --port=${PORT}"
+  # Jika ingin jalankan queue worker, jalankan secara terpisah (misal di container lain)
 ]
 
 [staticAssets]
