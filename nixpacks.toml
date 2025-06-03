@@ -1,4 +1,5 @@
 [phases.setup]
+# Tambahkan nodejs untuk npm dan php82 untuk PHP
 nixPkgs = ["php82", "php82Packages.composer", "nodejs"]
 
 [phases.install]
@@ -6,7 +7,7 @@ cmds = [
   "composer install --no-dev --optimize-autoloader",
   "chmod -R 775 storage bootstrap/cache",
   "chown -R www-data:www-data storage bootstrap/cache",
-  "npm install"
+  "npm install"               # pastikan semua npm dependencies terinstall (termasuk concurrently)
 ]
 
 [phases.build]
@@ -16,7 +17,7 @@ cmds = [
   "php artisan route:cache",
   "php artisan view:cache",
   "php artisan optimize",
-  "npm run build"
+  "npm run build"             # pastikan ada script build di package.json jika perlu
 ]
 
 [phases.release]
@@ -27,7 +28,8 @@ cmds = [
 
 [phases.start]
 cmds = [
-  "concurrently \"php artisan queue:work --tries=3\" \"npm run serve\""
+  # pakai npx supaya menjalankan concurrently dari node_modules lokal
+  "npx concurrently \"php artisan queue:work --tries=3\" \"npm run serve\""
 ]
 
 [staticAssets]
