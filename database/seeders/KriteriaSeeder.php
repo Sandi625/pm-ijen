@@ -35,6 +35,30 @@ class KriteriaSeeder extends Seeder
                 'created_at' => Carbon::parse('2024-08-01 17:22:22'),
                 'updated_at' => Carbon::parse('2024-08-01 17:22:22'),
             ],
+             [
+        'id' => 9,
+        'kode' => 'K004',
+        'nama' => 'Kepemimpinan',
+        'deskripsi' => 'Kemampuan memimpin dan mengambil keputusan dalam situasi penting.',
+        'created_at' => Carbon::parse('2024-08-03 09:00:00'),
+        'updated_at' => Carbon::parse('2024-08-03 09:00:00'),
+             ],
+    [
+        'id' => 10,
+        'kode' => 'K005',
+        'nama' => 'Komunikasi',
+        'deskripsi' => 'Kemampuan menyampaikan informasi dengan jelas dan efektif.',
+        'created_at' => Carbon::parse('2024-08-03 09:05:00'),
+        'updated_at' => Carbon::parse('2024-08-03 09:05:00'),
+    ],
+    [
+        'id' => 11,
+        'kode' => 'K006',
+        'nama' => 'Pemecahan Masalah',
+        'deskripsi' => 'Kemampuan mengatasi tantangan dan situasi tak terduga secara efisien.',
+        'created_at' => Carbon::parse('2024-08-03 09:10:00'),
+        'updated_at' => Carbon::parse('2024-08-03 09:10:00'),
+    ],
         ];
 
         DB::table('kriterias')->insert($kriterias);

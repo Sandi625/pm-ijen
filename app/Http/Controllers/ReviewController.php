@@ -89,11 +89,14 @@ class ReviewController extends Controller
 
 
     public function create()
-    {
-        $guides = Guide::orderBy('nama_guide')->get();
+{
+    $guides = Guide::orderBy('nama_guide')->get();
+    $pesanans = Pesanan::all();  // ambil data pesanan
 
-        return view('adminreview.create', compact('guides'));
-    }
+    // Kirim kedua variabel ke view:
+    return view('adminreview.create', compact('guides', 'pesanans'));
+}
+
 
 
 

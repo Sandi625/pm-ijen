@@ -44,6 +44,23 @@
                 </select>
             </div>
 
+     <div class="mb-3">
+    <label for="pesanan_id" class="form-label">Pesanan</label>
+    <select name="pesanan_id" class="form-control" required>
+        <option value="">Pilih Pesanan</option>
+        @foreach ($pesanans as $pesanan)
+            <option value="{{ $pesanan->id }}" {{ old('pesanan_id') == $pesanan->id ? 'selected' : '' }}>
+                {{ $pesanan->kode_pesanan ?? 'Pesanan #' . $pesanan->id }}
+                - {{ $pesanan->user->name ?? $pesanan->customer->nama ?? 'Nama pemesan tidak tersedia' }}
+                - {{ $pesanan->paket->nama_paket ?? 'Paket tidak tersedia' }}
+            </option>
+        @endforeach
+    </select>
+</div>
+
+
+
+
             <div class="mb-3">
                 <label for="isi_testimoni" class="form-label">Isi Testimoni</label>
                 <textarea name="isi_testimoni" class="form-control" rows="4" required>{{ old('isi_testimoni') }}</textarea>

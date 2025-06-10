@@ -129,62 +129,76 @@ class PenilaianController extends Controller
 
 
 
-    private function hitungProfileMatching(Penilaian $penilaian)
-    {
-        $hasilPerhitungan = [];
-        $nilaiTotalKriteria = [];
+   private function hitungProfileMatching(Penilaian $penilaian)
+{
+    $hasilPerhitungan = [];
+    $nilaiTotalKriteria = [];
 
-        foreach ($penilaian->detailPenilaians as $detail) {
-            $subkriteria = $detail->subkriteria;
-            $kriteria = $subkriteria->kriteria;
+    foreach ($penilaian->detailPenilaians as $detail) {
+        $subkriteria = $detail->subkriteria;
+        $kriteria = $subkriteria->kriteria;
 
-            $gap = $this->profileMatchingService->hitungGap($detail->nilai, $subkriteria->profil_standar);
-            $bobotNilai = $this->profileMatchingService->konversiGap($gap);
+        // Validasi data penting
+        if (!$subkriteria || !$kriteria) {
+            continue;
+        }
 
-            if (!isset($hasilPerhitungan[$kriteria->id])) {
-                $hasilPerhitungan[$kriteria->id] = [
-                    'nama' => $kriteria->nama,
-                    'core_factor' => [],
-                    'secondary_factor' => [],
-                    'detail' => []
-                ];
-            }
+        $gap = $this->profileMatchingService->hitungGap($detail->nilai, $subkriteria->profil_standar);
+        $bobotNilai = $this->profileMatchingService->konversiGap($gap);
 
-            $faktorKey = $subkriteria->is_core_factor ? 'core_factor' : 'secondary_factor';
-            $hasilPerhitungan[$kriteria->id][$faktorKey][] = $bobotNilai;
-
-            $hasilPerhitungan[$kriteria->id]['detail'][] = [
-                'subkriteria_id' => $subkriteria->id,
-                'nama_subkriteria' => $subkriteria->nama,
-                'nilai' => $detail->nilai,
-                'profil_standar' => $subkriteria->profil_standar,
-                'gap' => $gap,
-                'bobot_nilai' => $bobotNilai,
-                'is_core_factor' => $subkriteria->is_core_factor
+        if (!isset($hasilPerhitungan[$kriteria->id])) {
+            $hasilPerhitungan[$kriteria->id] = [
+                'nama' => $kriteria->nama,
+                'core_factor' => [],
+                'secondary_factor' => [],
+                'detail' => []
             ];
         }
 
-        foreach ($hasilPerhitungan as $kriteriaId => $hasil) {
-            $nilaiCoreFactor = !empty($hasil['core_factor']) ? array_sum($hasil['core_factor']) / count($hasil['core_factor']) : 0;
-            $nilaiSecondaryFactor = !empty($hasil['secondary_factor']) ? array_sum($hasil['secondary_factor']) / count($hasil['secondary_factor']) : 0;
+        // Boolean conversion to make sure is_core_factor is handled correctly
+        $isCore = filter_var($subkriteria->is_core_factor, FILTER_VALIDATE_BOOLEAN);
+        $faktorKey = $isCore ? 'core_factor' : 'secondary_factor';
 
-            $nilaiTotalKriteria[$kriteriaId] = $this->profileMatchingService->hitungNilaiTotalKriteria($nilaiCoreFactor, $nilaiSecondaryFactor);
+        $hasilPerhitungan[$kriteria->id][$faktorKey][] = $bobotNilai;
 
-            $hasilPerhitungan[$kriteriaId]['nilai_cf'] = $nilaiCoreFactor;
-            $hasilPerhitungan[$kriteriaId]['nilai_sf'] = $nilaiSecondaryFactor;
-            $hasilPerhitungan[$kriteriaId]['nilai_total'] = $nilaiTotalKriteria[$kriteriaId];
-        }
-
-        // Perhitungan nilai akhir, dengan perlindungan dari pembagian nol
-        $nilaiAkhir = count($nilaiTotalKriteria) > 0
-            ? array_sum($nilaiTotalKriteria) / count($nilaiTotalKriteria)
-            : 0;
-
-        return [
-            'detail' => $hasilPerhitungan,
-            'nilai_akhir' => $nilaiAkhir
+        $hasilPerhitungan[$kriteria->id]['detail'][] = [
+            'subkriteria_id' => $subkriteria->id,
+            'nama_subkriteria' => $subkriteria->nama,
+            'nilai' => $detail->nilai,
+            'profil_standar' => $subkriteria->profil_standar,
+            'gap' => $gap,
+            'bobot_nilai' => $bobotNilai,
+            'is_core_factor' => $isCore
         ];
     }
+
+    // Proses setiap kriteria
+    foreach ($hasilPerhitungan as $kriteriaId => &$hasil) {
+        $coreValues = $hasil['core_factor'];
+        $secondaryValues = $hasil['secondary_factor'];
+
+        // Jika salah satu kosong, tetap set 0 agar tidak error
+        $nilaiCF = count($coreValues) > 0 ? array_sum($coreValues) / count($coreValues) : 0;
+        $nilaiSF = count($secondaryValues) > 0 ? array_sum($secondaryValues) / count($secondaryValues) : 0;
+
+        $hasil['nilai_cf'] = round($nilaiCF, 2);
+        $hasil['nilai_sf'] = round($nilaiSF, 2);
+        $hasil['nilai_total'] = round($this->profileMatchingService->hitungNilaiTotalKriteria($nilaiCF, $nilaiSF), 2);
+
+        $nilaiTotalKriteria[$kriteriaId] = $hasil['nilai_total'];
+    }
+
+    // Hitung rata-rata semua kriteria sebagai nilai akhir
+    $nilaiAkhir = count($nilaiTotalKriteria) > 0
+        ? round(array_sum($nilaiTotalKriteria) / count($nilaiTotalKriteria), 2)
+        : 0;
+
+    return [
+        'detail' => $hasilPerhitungan,
+        'nilai_akhir' => $nilaiAkhir
+    ];
+}
+
 
 
 
@@ -225,7 +239,7 @@ class PenilaianController extends Controller
         return redirect()->route('penilaian.index')->with('success', 'Penilaian berhasil dihapus.');
     }
 
-  public function all()
+public function all()
 {
     // Ambil semua penilaian dengan relasi terkait
     $penilaians = Penilaian::with(['detailPenilaians.subkriteria.kriteria', 'guide', 'pesanan.user'])->get();
@@ -262,8 +276,8 @@ class PenilaianController extends Controller
         })
         // Ambil hanya 1 penilaian per kombinasi pelanggan & guide
         ->unique(function ($item) {
-            $userId = optional($item['penilaian']->pesanan->user)->id ?? null;
-            $guideId = $item['penilaian']->guide->id_guide ?? null;
+            $userId = optional(optional($item['penilaian']->pesanan)->user)->id ?? null;
+            $guideId = optional($item['penilaian']->guide)->id_guide ?? null;
             return $userId . '-' . $guideId;
         })
         ->sortByDesc(fn($item) => $item['hasil']['nilai_akhir'] ?? 0)
@@ -276,6 +290,7 @@ class PenilaianController extends Controller
         'kriterias',
     ));
 }
+
 
 
 

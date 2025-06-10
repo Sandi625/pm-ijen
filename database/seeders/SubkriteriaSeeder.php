@@ -124,6 +124,118 @@ class SubkriteriaSeeder extends Seeder
             'created_at' => Carbon::parse('2024-08-02 15:29:17'),
             'updated_at' => Carbon::parse('2024-08-02 16:00:13'),
         ],
+         [
+        'kriteria_id' => 9,
+        'nama' => 'Kemampuan Mengambil Keputusan',
+        'deskripsi' => '1. Tidak Mampu
+2. Kurang Mampu
+3. Cukup Mampu
+4. Sangat Mampu',
+        'profil_standar' => 4,
+        'is_core_factor' => 1,
+        'created_at' => Carbon::parse('2024-08-03 09:11:00'),
+        'updated_at' => Carbon::parse('2024-08-03 09:11:00'),
+    ],
+    [
+        'kriteria_id' => 9,
+        'nama' => 'Kemampuan Mengatur Tim',
+        'deskripsi' => '1. Tidak Bisa
+2. Kurang Baik
+3. Cukup Baik
+4. Sangat Baik',
+        'profil_standar' => 3,
+        'is_core_factor' => 1,
+        'created_at' => Carbon::parse('2024-08-03 09:12:00'),
+        'updated_at' => Carbon::parse('2024-08-03 09:12:00'),
+    ],
+    [
+        'kriteria_id' => 9,
+        'nama' => 'Ketegasan dalam Bertindak',
+        'deskripsi' => '1. Tidak Tegas
+2. Kurang Tegas
+3. Cukup Tegas
+4. Sangat Tegas',
+        'profil_standar' => 3,
+        'is_core_factor' => 0,
+        'created_at' => Carbon::parse('2024-08-03 09:13:00'),
+        'updated_at' => Carbon::parse('2024-08-03 09:13:00'),
+    ],
+
+    // Komunikasi (kriteria_id = 10)
+    [
+        'kriteria_id' => 10,
+        'nama' => 'Kemampuan Berbicara di Depan Umum',
+        'deskripsi' => '1. Tidak Mampu
+2. Kurang Mampu
+3. Cukup Mampu
+4. Sangat Mampu',
+        'profil_standar' => 4,
+        'is_core_factor' => 1,
+        'created_at' => Carbon::parse('2024-08-03 09:14:00'),
+        'updated_at' => Carbon::parse('2024-08-03 09:14:00'),
+    ],
+    [
+        'kriteria_id' => 10,
+        'nama' => 'Kemampuan Menyampaikan Informasi',
+        'deskripsi' => '1. Tidak Jelas
+2. Kurang Jelas
+3. Cukup Jelas
+4. Sangat Jelas',
+        'profil_standar' => 4,
+        'is_core_factor' => 1,
+        'created_at' => Carbon::parse('2024-08-03 09:15:00'),
+        'updated_at' => Carbon::parse('2024-08-03 09:15:00'),
+    ],
+    [
+        'kriteria_id' => 10,
+        'nama' => 'Kemampuan Mendengarkan',
+        'deskripsi' => '1. Tidak Mendengarkan
+2. Kadang Mendengarkan
+3. Cukup Baik
+4. Sangat Baik',
+        'profil_standar' => 3,
+        'is_core_factor' => 0,
+        'created_at' => Carbon::parse('2024-08-03 09:16:00'),
+        'updated_at' => Carbon::parse('2024-08-03 09:16:00'),
+    ],
+
+    // Pemecahan Masalah (kriteria_id = 11)
+    [
+        'kriteria_id' => 11,
+        'nama' => 'Identifikasi Masalah',
+        'deskripsi' => '1. Tidak Bisa
+2. Kurang Baik
+3. Cukup Baik
+4. Sangat Baik',
+        'profil_standar' => 4,
+        'is_core_factor' => 1,
+        'created_at' => Carbon::parse('2024-08-03 09:17:00'),
+        'updated_at' => Carbon::parse('2024-08-03 09:17:00'),
+    ],
+    [
+        'kriteria_id' => 11,
+        'nama' => 'Pengambilan Keputusan Cepat',
+        'deskripsi' => '1. Sangat Lambat
+2. Lambat
+3. Cukup Cepat
+4. Sangat Cepat',
+        'profil_standar' => 3,
+        'is_core_factor' => 1,
+        'created_at' => Carbon::parse('2024-08-03 09:18:00'),
+        'updated_at' => Carbon::parse('2024-08-03 09:18:00'),
+    ],
+    [
+        'kriteria_id' => 11,
+        'nama' => 'Kreativitas dalam Solusi',
+        'deskripsi' => '1. Tidak Kreatif
+2. Kurang Kreatif
+3. Cukup Kreatif
+4. Sangat Kreatif',
+        'profil_standar' => 3,
+        'is_core_factor' => 0,
+        'created_at' => Carbon::parse('2024-08-03 09:19:00'),
+        'updated_at' => Carbon::parse('2024-08-03 09:19:00'),
+    ],
     ];
 
     DB::table('subkriterias')->insert($subkriterias);

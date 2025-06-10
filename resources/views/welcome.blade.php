@@ -354,7 +354,7 @@
                 <div class="video__content">
                     <div id="video-container"
                         style="position: relative; width: 100%; height: 0; padding-bottom: 56.25%;">
-                        <iframe id="youtube-video" src="https://www.youtube.com/embed/eR41b6MNsdc"
+                            <iframe id="youtube-video" src="https://www.youtube.com/embed/o4xyKSEWgcM"
                             title="YouTube video player" frameborder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                             allowfullscreen

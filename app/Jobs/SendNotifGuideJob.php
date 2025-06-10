@@ -37,7 +37,7 @@ public function handle(): void
 
     try {
         $res = Http::withHeaders([
-            'Authorization' => 'HbHggEjszXST3WxTchcd'
+            // 'Authorization' => 'HbHggEjszXST3WxTchcd'
         ])->post('https://api.fonnte.com/send', [
             'target' => $phone,
             'message' => $pesan,
